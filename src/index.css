@@ -1,0 +1,172 @@
+/* EMERGENCY CSS RECOVERY - BUILT-IN RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html, #root {
+  width: 100%;
+  min-height: 100vh;
+  background: black;
+  color: white;
+  font-family: 'Inter', sans-serif, system-ui;
+  overflow-x: hidden;
+}
+
+/* Home Section Styles */
+.hero-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 10; /* Hero on top */
+  background: black;
+}
+
+.video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1; /* Moved to z-index 1 */
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+.overlay-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2; /* Text on top of video */
+  pointer-events: none;
+}
+
+.jurassic-text {
+  font-size: clamp(3rem, 15vw, 10rem);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  color: #df1f26; /* Jurassic Red */
+  -webkit-text-stroke: 3px #f9d423; /* Jurassic Gold */
+  text-shadow: 4px 4px 0px #000, 8px 8px 0px rgba(0,0,0,0.5);
+  transform: skewX(-15deg);
+  filter: drop-shadow(0 0 20px rgba(223,31,38,0.3));
+  
+  /* Stability Fixes for Extreme Zoom */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Timeline Section Styles */
+.timeline-section {
+  position: relative;
+  min-height: 100vh;
+  background: #050505;
+  padding: 4rem 2rem;
+  border-top: 1px solid rgba(223, 31, 38, 0.2);
+}
+
+.timeline-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.timeline-title {
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  color: #df1f26;
+  text-shadow: 4px 4px 0px #000;
+}
+
+.highlight-text {
+  color: #f9d423;
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.countdown-box {
+  background: rgba(223, 31, 38, 0.1);
+  border: 1px solid rgba(223, 31, 38, 0.3);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: 900;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.countdown-label {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  color: rgba(249, 212, 35, 0.6);
+}
+
+/* Timeline Track */
+.timeline-track {
+  position: relative;
+  max-width: 1200px;
+  margin: 8rem auto 0;
+}
+
+.central-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, #df1f26, rgba(249, 212, 35, 0.2), transparent);
+}
+
+.event-card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6rem;
+}
+
+.event-content {
+  width: 50%;
+  padding: 0 2rem;
+}
+
+.event-dot {
+  position: relative;
+  z-index: 10;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f9d423;
+  border: 4px solid #df1f26;
+  box-shadow: 0 0 20px rgba(223, 31, 38, 0.8);
+}
+
+.event-empty {
+  width: 50%;
+}
+
+.text-left { text-align: left; }
+.text-right { text-align: right; }
