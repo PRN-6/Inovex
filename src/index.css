@@ -5,7 +5,9 @@
   box-sizing: border-box;
 }
 
-body, html, #root {
+body,
+html,
+#root {
   width: 100%;
   min-height: 100vh;
   background: black;
@@ -20,7 +22,8 @@ body, html, #root {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  z-index: 10; /* Hero on top */
+  z-index: 10;
+  /* Hero on top */
   background: black;
 }
 
@@ -30,7 +33,8 @@ body, html, #root {
   left: 0;
   width: 100%;
   height: 100vh;
-  z-index: 1; /* Moved to z-index 1 */
+  z-index: 1;
+  /* Moved to z-index 1 */
   object-fit: cover;
   filter: brightness(0.7);
 }
@@ -41,7 +45,8 @@ body, html, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2; /* Text on top of video */
+  z-index: 2;
+  /* Text on top of video */
   pointer-events: none;
 }
 
@@ -51,12 +56,14 @@ body, html, #root {
   font-style: italic;
   text-transform: uppercase;
   letter-spacing: -0.05em;
-  color: #df1f26; /* Jurassic Red */
-  -webkit-text-stroke: 3px #f9d423; /* Jurassic Gold */
-  text-shadow: 4px 4px 0px #000, 8px 8px 0px rgba(0,0,0,0.5);
+  color: #df1f26;
+  /* Jurassic Red */
+  -webkit-text-stroke: 3px #f9d423;
+  /* Jurassic Gold */
+  text-shadow: 4px 4px 0px #000, 8px 8px 0px rgba(0, 0, 0, 0.5);
   transform: skewX(-15deg);
-  filter: drop-shadow(0 0 20px rgba(223,31,38,0.3));
-  
+  filter: drop-shadow(0 0 20px rgba(223, 31, 38, 0.3));
+
   /* Stability Fixes for Extreme Zoom */
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -67,9 +74,9 @@ body, html, #root {
 .timeline-section {
   position: relative;
   min-height: 100vh;
-  background: #050505;
+  background: black;
   padding: 4rem 2rem;
-  border-top: 1px solid rgba(223, 31, 38, 0.2);
+  /* border-top: 1px solid rgba(223, 31, 38, 0.2); */
 }
 
 .timeline-header {
@@ -168,5 +175,10 @@ body, html, #root {
   width: 50%;
 }
 
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}

@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 /**
  * Home Component - Jurassic Park Theme
- * Features a seamless layered reveal for a premium scroll experience.
+ * Optimized for seamless transition to the Timeline section.
  */
 const Home = () => {
   const containerRef = useRef(null)
@@ -15,43 +15,36 @@ const Home = () => {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // LAYERED REVEAL:
-      // Removed pinSpacing so the next section is revealed behind.
+      // TIGHTENED TRANSITION:
+      // The section is pinned only for 30% of a viewport.
+      // This eliminates the "dead air" after the zoom.
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=100%', 
+          end: '+=30%',
           scrub: 1,
           pin: true,
-          pinSpacing: false // Critical for the "Reveal" effect
+          pinSpacing: true
         }
       })
 
       // Logo Zoom Animation
+      // Completes precisely as the section unpins
       tl.to(textRef.current, {
         scale: 90,
         opacity: 0,
         force3D: true,
         ease: 'power1.in',
-        duration: 0.8
+        duration: 1
       }, 0)
 
       // Background Video Fade Animation
       tl.to(videoRef.current, {
         opacity: 0,
         ease: 'none',
-        duration: 0.6
-      }, 0.2)
-
-      // Container Fade (The Reveal)
-      // As the logo swallows the screen, the entire Home layer disappears.
-      tl.to(containerRef.current, {
-        opacity: 0,
-        pointerEvents: 'none',
-        ease: 'none',
-        duration: 0.2
-      }, 0.8)
+        duration: 0.9
+      }, 0.1)
     })
 
     return () => ctx.revert()
