@@ -5,7 +5,7 @@ const Home = () => {
     <div 
       className="relative min-h-screen w-full flex flex-col justify-end p-8 md:p-16 lg:p-24 overflow-hidden bg-black"
       style={{ 
-        backgroundImage: 'url(/images/hero.png)', 
+        backgroundImage: 'url(/images/hero1.png)', 
         backgroundSize: 'cover', 
         backgroundPosition: 'top right', 
         backgroundPositionX: '82%'
