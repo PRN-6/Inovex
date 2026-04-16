@@ -1,15 +1,15 @@
 import Home from './pages/Home'
-import Timeline from './pages/Timeline'
+import Navbar from './components/Navbar'
 
 /**
  * Main App Component
- * Simple wrapper for the cinematic Hero and Countdown experience.
+ * Includes the sidebar navigation and main content area.
  */
 const App = () => {
   return (
     <div className="main-app-container">
+      <Navbar />
       <Home />
-      <Timeline />
     </div>
   )
 }
