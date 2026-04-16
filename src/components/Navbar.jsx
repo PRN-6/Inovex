@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   
   // GSAP refs
   const desktopSidebarRef = useRef(null);
@@ -54,11 +55,29 @@ const Navbar = () => {
     }
   }, [isMobileMenuOpen]);
 
+  // Scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      
+      // If scrolled past first screen, set Events as active
+      if (scrollPosition >= windowHeight * 0.5) {
+        setActiveSection('events');
+      } else {
+        setActiveSection('home');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const mainNavItems = [
-    { icon: Home, label: 'Home', active: true },
-    { icon: Users, label: 'About', active: false },
+    { icon: Home, label: 'Home', active: activeSection === 'home' },
+    { icon: Calendar, label: 'Events', active: activeSection === 'events' },
     { icon: BookOpen, label: 'Team', active: false },
-    { icon: Calendar, label: 'Events', active: false },
+    { icon: Users, label: 'About', active: false },
   ];
 
   
@@ -96,6 +115,14 @@ const Navbar = () => {
               <li key={index} ref={el => navItemsRef.current[index] = el}>
                 <a
                   href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (item.label === 'Home') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else if (item.label === 'Events') {
+                      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                    }
+                  }}
                   className={`flex items-center gap-3 px-3 py-3 transition-colors ${
                     item.active
                       ? 'bg-red-900/50 text-white border-l-2 border-red-500'
@@ -154,6 +181,15 @@ const Navbar = () => {
               <a
                 key={index}
                 href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (item.label === 'Home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else if (item.label === 'Events') {
+                    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                  }
+                  setIsMobileMenuOpen(false);
+                }}
                 className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
                   item.active
                     ? 'bg-red-900/50 text-white border-l-4 border-red-500'
@@ -173,7 +209,7 @@ const Navbar = () => {
         </div>
 
         {/* Social Icons */}
-        <div className="p-6 border-t border-red-900/30">
+        {/* <div className="p-6 border-t border-red-900/30">
           <div className="flex justify-around">
             <a href="#" className="p-2 text-gray-400 hover:text-white transition-colors">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -201,7 +237,7 @@ const Navbar = () => {
               </svg>
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
 
     </>

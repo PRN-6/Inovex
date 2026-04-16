@@ -49,6 +49,11 @@ const Home = () => {
               </span>
             ))}
           </div>
+          <div className="flex flex-wrap gap-2 md:gap-4">
+            <span className="text-[10px] md:text-xs font-bold text-white/50 border border-white/20 px-3 py-1 tracking-widest hover:border-jurassic-yellow hover:text-white transition-colors cursor-default">
+              (HACKATHON)
+            </span>
+          </div>
           <p className="text-sm md:text-xl font-medium text-white/70 italic tracking-[0.1em] mt-2">
             The Ultimate Cinematic College Fest Experience
           </p>
@@ -57,7 +62,7 @@ const Home = () => {
 
      
     </div>
-  )
-}
+  );
+};
 
 export default Home

@@ -1,5 +1,6 @@
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
+import Events from './pages/Events'
 
 /**
  * Main App Component
@@ -10,6 +11,7 @@ const App = () => {
     <div className="main-app-container">
       <Navbar />
       <Home />
+      <Events />
     </div>
   )
 }
