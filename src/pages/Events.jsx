@@ -124,10 +124,10 @@ const Events = () => {
               mobilePosition = { x: 0, scale: 1, opacity: 1, zIndex: 20 };
             } else if (offset === 1) {
               // Right card
-              mobilePosition = { x: 99, scale: 0.8, opacity: 0.9, zIndex: 15 };
+              mobilePosition = { x: 70, scale: 0.8, opacity: 0.9, zIndex: 15 };
             } else if (offset === allCards.length - 1) {
               // Left card (when offset wraps around)
-              mobilePosition = { x: -99, scale: 0.8, opacity: 0.9, zIndex: 15 };
+              mobilePosition = { x: -70, scale: 0.8, opacity: 0.9, zIndex: 15 };
             } else {
               return null; // Hide any other cards
             }
