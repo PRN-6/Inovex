@@ -17,7 +17,7 @@ const Home = () => {
       {/* Arknights-inspired Bottom Left Branding Container */}
       <div className="relative z-10 flex flex-col max-w-5xl md:mx-18">
         
-        {/* Top Tagline / Category Tag */}
+        {/* Top Tagline / Category Tag */} 
         <div className="hidden md:flex items-center gap-4 mb-6 md:mb-8 bg-black/40 backdrop-blur-md w-fit px-4 py-1 border-l-2 border-jurassic-yellow">
           <div className="w-2 h-2 rounded-full bg-jurassic-yellow shadow-[0_0_8px_#f9d423] animate-pulse"></div>
           <p className="text-[10px] md:text-sm font-black tracking-[0.4em] text-white/90 uppercase">
@@ -55,7 +55,7 @@ const Home = () => {
             </span>
           </div>
           <p className="text-sm md:text-xl font-medium text-white/70 italic tracking-[0.1em] mt-2">
-            The Ultimate Cinematic College Fest Experience
+            
           </p>
         </div>
       </div>

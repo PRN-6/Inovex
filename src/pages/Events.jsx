@@ -5,7 +5,8 @@ import Card from '../components/Card';
 const Events = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
   const [selectedCircle, setSelectedCircle] = useState(0);
-  const [visibleCards, setVisibleCards] = useState([true, false, false, false]);
+  const [cardVisible, setCardVisible] = useState(true);
+  const [shouldSpin, setShouldSpin] = useState(false);
   
   const desktopRectangleRef = useRef(null);
   const mobileRectangleRef = useRef(null);
@@ -160,10 +161,16 @@ const Events = () => {
             <div 
               className={`size-18 ${selectedCircle === 0 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 0 ? null : 0);
-                const newCards = [false, false, false, false];
-                newCards[0] = !visibleCards[0];
-                setVisibleCards(newCards);
+                if (selectedCircle === 0) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(0);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-14 bg-gray-100 rounded-full flex items-center justify-center">
@@ -173,10 +180,16 @@ const Events = () => {
             <div 
               className={`size-18 ${selectedCircle === 1 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 1 ? null : 1);
-                const newCards = [false, false, false, false];
-                newCards[1] = !visibleCards[1];
-                setVisibleCards(newCards);
+                if (selectedCircle === 1) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(1);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-14 bg-gray-100 rounded-full flex items-center justify-center">
@@ -186,10 +199,16 @@ const Events = () => {
             <div 
               className={`size-18 ${selectedCircle === 2 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 2 ? null : 2);
-                const newCards = [false, false, false, false];
-                newCards[2] = !visibleCards[2];
-                setVisibleCards(newCards);
+                if (selectedCircle === 2) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(2);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-14 bg-gray-100 rounded-full flex items-center justify-center">
@@ -199,10 +218,16 @@ const Events = () => {
             <div 
               className={`size-18 ${selectedCircle === 3 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 3 ? null : 3);
-                const newCards = [false, false, false, false];
-                newCards[3] = !visibleCards[3];
-                setVisibleCards(newCards);
+                if (selectedCircle === 3) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(3);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-14 bg-gray-100 rounded-full flex items-center justify-center">
@@ -220,10 +245,16 @@ const Events = () => {
             <div 
               className={`size-12 ${selectedCircle === 0 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 0 ? null : 0);
-                const newCards = [false, false, false, false];
-                newCards[0] = !visibleCards[0];
-                setVisibleCards(newCards);
+                if (selectedCircle === 0) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(0);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-9 bg-gray-100 rounded-full flex items-center justify-center">
@@ -233,10 +264,16 @@ const Events = () => {
             <div 
               className={`size-12 ${selectedCircle === 1 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 1 ? null : 1);
-                const newCards = [false, false, false, false];
-                newCards[1] = !visibleCards[1];
-                setVisibleCards(newCards);
+                if (selectedCircle === 1) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(1);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-9 bg-gray-100 rounded-full flex items-center justify-center">
@@ -246,10 +283,16 @@ const Events = () => {
             <div 
               className={`size-12 ${selectedCircle === 2 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 2 ? null : 2);
-                const newCards = [false, false, false, false];
-                newCards[2] = !visibleCards[2];
-                setVisibleCards(newCards);
+                if (selectedCircle === 2) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(2);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-9 bg-gray-100 rounded-full flex items-center justify-center">
@@ -259,10 +302,16 @@ const Events = () => {
             <div 
               className={`size-12 ${selectedCircle === 3 ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300'} rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-2`}
               onClick={() => {
-                setSelectedCircle(selectedCircle === 3 ? null : 3);
-                const newCards = [false, false, false, false];
-                newCards[3] = !visibleCards[3];
-                setVisibleCards(newCards);
+                if (selectedCircle === 3) {
+                  setSelectedCircle(null);
+                  setCardVisible(false);
+                } else {
+                  if (cardVisible && selectedCircle !== null) {
+                    setShouldSpin(true);
+                  }
+                  setSelectedCircle(3);
+                  setCardVisible(true);
+                }
               }}
             >
               <div className="size-9 bg-gray-100 rounded-full flex items-center justify-center">
@@ -273,11 +322,8 @@ const Events = () => {
         </div>
       </div>
 
-      {/* Cards - one for each circle */}
-      <Card isVisible={visibleCards[0]} index={0} />
-      <Card isVisible={visibleCards[1]} index={1} />
-      <Card isVisible={visibleCards[2]} index={2} />
-      <Card isVisible={visibleCards[3]} index={3} />
+      {/* Single Card - changes content based on selected circle */}
+      <Card isVisible={cardVisible} selectedIndex={selectedCircle} shouldSpin={shouldSpin} setShouldSpin={setShouldSpin} />
     </div>
   );
 };
