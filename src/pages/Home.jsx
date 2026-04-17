@@ -31,9 +31,13 @@ const Home = () => {
         </div>
 
         {/* Main Cinematic Title */}
-        <h1 className="text-7xl md:text-9xl lg:text-[6rem] font-black text-white leading-[0.85] tracking-tighter uppercase mb-8 drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-          INOVEX
-        </h1>
+        <div className="mb-8 drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+          <img 
+            src="/images/logo.svg" 
+            alt="INOVEX Logo" 
+            className="w-64 md:w-96 lg:w-lg h-auto object-contain"
+          />
+        </div>
 
         {/* Red Thick Accent Line with Shimmer */}
         <div className="w-full md:w-100 h-3 md:h-5 bg-jurassic-red relative overflow-hidden mb-10 shadow-[0_0_20px_rgba(223,31,38,0.4)]">
