@@ -93,7 +93,7 @@ const Events = () => {
     >
       {/* Background INOVEX Text */}
       <div className="absolute inset-0 flex items-center justify-center md:pr-20 md:justify-end overflow-hidden">
-        <h1 className="text-[15rem] font-black text-white/5 tracking-tighter uppercase select-none">
+        <h1 className="text-[15rem] font-black text-white/5 tracking-tighter uppercase select-none md:rotate-0 rotate-90">
           INOVEX
         </h1>
       </div>

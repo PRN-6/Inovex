@@ -177,7 +177,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
           {/* Card image from public folder */}
           <div className="absolute inset-0">
             <img 
-              src={`/images/card${currentImageIndex + 1}.png`} 
+              src={`/images/cards/card${currentImageIndex + 1}.png`} 
               alt="Event card" 
               className="w-full h-full object-cover"
             />
@@ -202,7 +202,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
           {/* Card image from public folder */}
           <div className="absolute inset-0">
             <img 
-              src={`/images/card${currentImageIndex + 1}.png`} 
+              src={`/images/cards/card${currentImageIndex + 1}.png`} 
               alt="Event card" 
               className="w-full h-full object-cover"
             />
