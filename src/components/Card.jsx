@@ -7,6 +7,13 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
   const [hasAnimated, setHasAnimated] = React.useState(false);
   const [currentImageIndex, setCurrentImageIndex] = React.useState(selectedIndex !== null ? selectedIndex : 0);
 
+  // Update currentImageIndex when selectedIndex changes
+  React.useEffect(() => {
+    if (selectedIndex !== null && !shouldSpin) {
+      setCurrentImageIndex(selectedIndex);
+    }
+  }, [selectedIndex, shouldSpin]);
+
   // Handle tilt animation on hover
   const handleMouseMove = (e, cardElement) => {
     if (!cardElement) return;
@@ -158,7 +165,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       {/* Mobile Card */}
       <div
         ref={mobileCardRef}
-        className="md:hidden absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64"
+        className="md:hidden relative w-64"
         style={{ 
           transformStyle: 'preserve-3d',
           perspective: '1000px'
@@ -183,7 +190,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       {/* Desktop Card */}
       <div
         ref={cardRef}
-        className="hidden md:block absolute left-auto right-40 top-1/2 transform -translate-y-1/2 w-96"
+        className="hidden md:block relative w-96"
         style={{ 
           transformStyle: 'preserve-3d',
           perspective: '1000px'
