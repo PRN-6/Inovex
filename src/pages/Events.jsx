@@ -95,10 +95,10 @@ const Events = () => {
 
   return (
     <div 
-      className="min-h-screen relative flex items-center justify-center overflow-hidden" 
+      className="min-h-screen relative flex items-center justify-center overflow-x-hidden overflow-y-auto" 
       style={{ 
         background: 'linear-gradient(180deg, #05070D, #0A0F1C)', 
-        touchAction: 'none'
+        touchAction: 'pan-y'
       }} 
       onTouchStart={handleTouchStart} 
       onTouchMove={handleTouchMove}
