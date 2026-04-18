@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings } from 'lucide-react';
 import { gsap } from 'gsap';
 
 const Navbar = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  
+  // Hide navbar on event details page
+  if (location.pathname.startsWith('/event/')) {
+    return null;
+  }
   
   // GSAP refs
   const desktopSidebarRef = useRef(null);
@@ -73,6 +81,13 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Update active section based on current route (for event details)
+  useEffect(() => {
+    if (location.pathname.startsWith('/event/')) {
+      setActiveSection('events');
+    }
+  }, [location.pathname]);
+
   const mainNavItems = [
     { icon: Home, label: 'Home', active: activeSection === 'home' },
     { icon: Calendar, label: 'Events', active: activeSection === 'events' },
@@ -118,9 +133,17 @@ const Navbar = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     if (item.label === 'Home') {
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      if (location.pathname === '/') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      } else {
+                        navigate('/');
+                      }
                     } else if (item.label === 'Events') {
-                      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                      if (location.pathname === '/') {
+                        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                      } else {
+                        navigate('/events');
+                      }
                     }
                   }}
                   className={`flex items-center gap-3 px-3 py-3 transition-colors ${
@@ -184,9 +207,17 @@ const Navbar = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   if (item.label === 'Home') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    if (location.pathname === '/') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                      navigate('/');
+                    }
                   } else if (item.label === 'Events') {
-                    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                    if (location.pathname === '/') {
+                      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                    } else {
+                      navigate('/events');
+                    }
                   }
                   setIsMobileMenuOpen(false);
                 }}

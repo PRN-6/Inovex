@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Card from '../components/Card';
 import MobileCard from '../components/MobileCard';
+import EventModal from '../components/EventModal';
+import { eventsData } from '../data/eventsData';
 
 const Events = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -8,7 +10,9 @@ const Events = () => {
   const [isSwiping, setIsSwiping] = useState(false);
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [lastScrollY, setLastScrollY] = useState(0);
-  
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const allCards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   // Calculate card positions based on current index
@@ -43,11 +47,25 @@ const Events = () => {
     return () => clearInterval(interval);
   }, [allCards.length]);
 
-  // Handle card click to bring it to center
+  // Handle card click to open modal
   const handleCardClick = (cardIndex) => {
-    setCurrentCardIndex(cardIndex);
+    // Only open modal if clicking the center card
+    if (cardIndex === currentCardIndex) {
+      const eventId = (cardIndex % 6) + 1; // Map to event IDs 1-6
+      setSelectedEvent(eventsData[eventId]);
+      setIsModalOpen(true);
+    } else {
+      // Bring clicked card to center
+      setCurrentCardIndex(cardIndex);
+    }
   };
-  
+
+  // Close modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedEvent(null), 300);
+  };
+
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);
     setIsSwiping(true);
@@ -105,6 +123,13 @@ const Events = () => {
         <div className="absolute top-1/2 left-1/3 w-24 h-24 border border-white/10 rotate-45"></div>
         <div className="absolute top-1/3 right-1/4 w-16 h-16 border border-white/5 rotate-12"></div>
         <div className="absolute bottom-1/3 left-1/4 w-20 h-20 border border-white/10 rotate-45"></div>
+      </div>
+
+      {/* Events Title */}
+      <div className="absolute top-8 left-8 md:left-40 z-20">
+        <h1 className="text-4xl md:text-5xl font-black text-yellow-400 tracking-normal uppercase">
+          Events
+        </h1>
       </div>
 
       {/* Cards Container */}
@@ -175,6 +200,43 @@ const Events = () => {
           })}
         </div>
       </div>
+      
+      {/* Card Selector */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-xs text-white/60 font-medium">Select the card</p>
+          <div className="flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-full px-4 py-2 border border-white/20">
+            {allCards.map((_, index) => {
+              const isActive = index === currentCardIndex;
+              const isEventCard = index < 6; // Only first 6 cards have events
+              
+              return (
+                <button
+                  key={index}
+                  onClick={() => setCurrentCardIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    isActive 
+                      ? isEventCard 
+                        ? 'bg-jurassic-red scale-150' 
+                        : 'bg-jurassic-yellow scale-150'
+                      : isEventCard
+                        ? 'bg-white/40 hover:bg-white/60'
+                        : 'bg-white/20 hover:bg-white/40'
+                  }`}
+                  title={isEventCard ? `Event ${index + 1}` : `Card ${index + 1}`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      
+      {/* Event Modal */}
+      <EventModal 
+        event={selectedEvent}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
     </div>
   );
 };
