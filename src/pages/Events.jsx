@@ -98,8 +98,7 @@ const Events = () => {
       className="min-h-screen relative flex items-center justify-center overflow-hidden" 
       style={{ 
         background: 'linear-gradient(180deg, #05070D, #0A0F1C)', 
-        transform: `translateX(${swipeOffset}px)`,
-        transition: isSwiping ? 'none' : 'transform 0.3s ease-out'
+        touchAction: 'none'
       }} 
       onTouchStart={handleTouchStart} 
       onTouchMove={handleTouchMove}
@@ -127,7 +126,13 @@ const Events = () => {
       </div>
 
       {/* Cards Container */}
-      <div className="relative flex items-center justify-center w-full">
+      <div 
+        className="relative flex items-center justify-center w-full"
+        style={{
+          transform: `translateX(${swipeOffset}px)`,
+          transition: isSwiping ? 'none' : 'transform 0.3s ease-out'
+        }}
+      >
         {/* Mobile Version */}
         <div className="md:hidden relative z-20 w-full h-96">
           {allCards.map((cardIndex) => {
