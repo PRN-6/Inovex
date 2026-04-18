@@ -115,7 +115,17 @@ const Home = () => {
         </div>
       </div>
 
-     
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="flex flex-col items-center gap-1 animate-bounce">
+          <span className="text-white/50 text-[10px] font-medium tracking-widest uppercase">
+            Scroll
+          </span>
+          <div className="w-4 h-8 border border-white/30 rounded-full flex justify-center">
+            <div className="w-0.5 h-2 bg-white/50 rounded-full mt-1.5 animate-scroll"></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
