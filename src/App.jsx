@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
 import Events from './pages/Events'
+import Media from './pages/Media'
 import './styles/globals.css'
 
 /**
@@ -18,9 +19,11 @@ const App = () => {
             <>
               <Home />
               <Events />
+              <Media />
             </>
           } />
           <Route path="/events" element={<Events />} />
+          <Route path="/media" element={<Media />} />
         </Routes>
       </div>
     </Router>
