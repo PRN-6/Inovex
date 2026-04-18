@@ -9,6 +9,9 @@ const EventModal = ({ event, isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen && event) {
+      console.log('Modal opened with event:', event);
+      console.log('Event image:', event.image);
+      
       // Set initial states
       gsap.set(backdropRef.current, { opacity: 0 });
       gsap.set(contentRef.current, { 

@@ -124,5 +124,131 @@ export const eventsData = {
     coordinator: "Alex Chen",
     contact: "9876543215",
     image: "/images/cards/card6.png"
+  },
+  7: {
+    id: 7,
+    title: "Photography",
+    category: "Creative",
+    date: "March 22, 2026",
+    time: "9:00 AM - 5:00 PM",
+    location: "Campus Grounds",
+    participants: "Individual",
+    prize: "₹7,000",
+    description: "Capture the essence of college life through your lens. Showcase your photography skills in this creative competition.",
+    rules: [
+      "Individual participation only",
+      "Bring your own camera/phone",
+      "Theme will be revealed on spot",
+      "Basic editing allowed",
+      "Submit 5 best photos"
+    ],
+    coordinator: "Emma Wilson",
+    contact: "9876543216",
+    image: "/images/cards/card7.png"
+  },
+  8: {
+    id: 8,
+    title: "Debate Competition",
+    category: "Literary",
+    date: "March 23, 2026",
+    time: "2:00 PM - 6:00 PM",
+    location: "Seminar Hall",
+    participants: "Individual/Team of 2",
+    prize: "₹8,500",
+    description: "Test your argumentative skills and logical reasoning. Engage in thought-provoking debates on contemporary topics.",
+    rules: [
+      "Individual or team participation",
+      "Topics provided 30 minutes before",
+      "5 minutes for each speaker",
+      "Rebuttal round included",
+      "Judges' decision final"
+    ],
+    coordinator: "Robert Brown",
+    contact: "9876543217",
+    image: "/images/cards/card8.png"
+  },
+  9: {
+    id: 9,
+    title: "Music Battle",
+    category: "Cultural",
+    date: "March 24, 2026",
+    time: "6:00 PM - 10:00 PM",
+    location: "Auditorium",
+    participants: "Individual/Group",
+    prize: "₹12,000",
+    description: "Showcase your musical talent in this electrifying competition. Solo artists and bands welcome to compete.",
+    rules: [
+      "Solo or group participation (max 6 members)",
+      "Any genre allowed",
+      "5 minutes performance time",
+      "Bring your own instruments/backing track",
+      "Original compositions preferred"
+    ],
+    coordinator: "Sarah Johnson",
+    contact: "9876543218",
+    image: "/images/cards/card9.png"
+  },
+  10: {
+    id: 10,
+    title: "Quiz Master",
+    category: "Academic",
+    date: "March 25, 2026",
+    time: "11:00 AM - 2:00 PM",
+    location: "Conference Room",
+    participants: "Team of 3",
+    prize: "₹9,000",
+    description: "Challenge your knowledge across various domains. From science to pop culture, test your trivia skills.",
+    rules: [
+      "Teams of 3 participants",
+      "Multiple rounds with different topics",
+      "Written and oral rounds",
+      "No electronic devices allowed",
+      "Negative marking for wrong answers"
+    ],
+    coordinator: "Michael Davis",
+    contact: "9876543219",
+    image: "/images/cards/card10.png"
+  },
+  11: {
+    id: 11,
+    title: "Dance Showdown",
+    category: "Cultural",
+    date: "March 26, 2026",
+    time: "5:00 PM - 9:00 PM",
+    location: "Open Air Stage",
+    participants: "Individual/Group",
+    prize: "₹15,000",
+    description: "Express yourself through dance. Any style welcome - from classical to contemporary, hip-hop to traditional.",
+    rules: [
+      "Solo or group participation (max 8 members)",
+      "Any dance style allowed",
+      "4-6 minutes performance",
+      "Props allowed if self-managed",
+      "Costume and choreography judged"
+    ],
+    coordinator: "Lisa Anderson",
+    contact: "9876543220",
+    image: "/images/cards/card11.png"
+  },
+  12: {
+    id: 12,
+    title: "Art Exhibition",
+    category: "Creative",
+    date: "March 27-28, 2026",
+    time: "10:00 AM - 6:00 PM",
+    location: "Art Gallery",
+    participants: "Individual",
+    prize: "₹10,000",
+    description: "Display your artistic talent in this two-day exhibition. Paintings, sketches, digital art, and sculptures welcome.",
+    rules: [
+      "Individual participation only",
+      "Maximum 3 artworks per participant",
+      "Artwork should be original",
+      "All mediums allowed",
+      "Setup on day 1, removal on day 2"
+    ],
+    coordinator: "David Martinez",
+    contact: "9876543221",
+    image: "/images/cards/card12.png"
   }
 };

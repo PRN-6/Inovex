@@ -51,7 +51,9 @@ const Events = () => {
   const handleCardClick = (cardIndex) => {
     // Only open modal if clicking the center card
     if (cardIndex === currentCardIndex) {
-      const eventId = (cardIndex % 6) + 1; // Map to event IDs 1-6
+      // Direct mapping: card index should match event ID (0→1, 1→2, ..., 11→12)
+      const eventId = cardIndex + 1;
+      console.log(`Card ${cardIndex} → Event ${eventId}`, eventsData[eventId]);
       setSelectedEvent(eventsData[eventId]);
       setIsModalOpen(true);
     } else {
@@ -208,7 +210,6 @@ const Events = () => {
           <div className="flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-full px-4 py-2 border border-white/20">
             {allCards.map((_, index) => {
               const isActive = index === currentCardIndex;
-              const isEventCard = index < 6; // Only first 6 cards have events
               
               return (
                 <button
@@ -216,14 +217,10 @@ const Events = () => {
                   onClick={() => setCurrentCardIndex(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     isActive 
-                      ? isEventCard 
-                        ? 'bg-jurassic-red scale-150' 
-                        : 'bg-jurassic-yellow scale-150'
-                      : isEventCard
-                        ? 'bg-white/40 hover:bg-white/60'
-                        : 'bg-white/20 hover:bg-white/40'
+                      ? 'bg-jurassic-red scale-150' 
+                      : 'bg-white/40 hover:bg-white/60'
                   }`}
-                  title={isEventCard ? `Event ${index + 1}` : `Card ${index + 1}`}
+                  title={`Event ${index + 1}`}
                 />
               );
             })}
