@@ -4,16 +4,15 @@ import MobileCard from '../components/MobileCard';
 import EventModal from '../components/EventModal';
 import { eventsData } from '../data/eventsData';
 
+const allCards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
 const Events = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
   const [swipeOffset, setSwipeOffset] = useState(0);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const allCards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   // Calculate card positions based on current index
   const getCardPosition = (cardIndex, centerIndex) => {
@@ -42,22 +41,18 @@ const Events = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentCardIndex((prev) => (prev + 1) % allCards.length);
-    }, 3000); // Change card every 3 seconds
+    }, 4000); // Increased interval slightly for better UX
 
     return () => clearInterval(interval);
-  }, [allCards.length]);
+  }, []);
 
   // Handle card click to open modal
   const handleCardClick = (cardIndex) => {
-    // Only open modal if clicking the center card
     if (cardIndex === currentCardIndex) {
-      // Direct mapping: card index should match event ID (0→1, 1→2, ..., 11→12)
       const eventId = cardIndex + 1;
-      console.log(`Card ${cardIndex} → Event ${eventId}`, eventsData[eventId]);
       setSelectedEvent(eventsData[eventId]);
       setIsModalOpen(true);
     } else {
-      // Bring clicked card to center
       setCurrentCardIndex(cardIndex);
     }
   };
@@ -90,10 +85,8 @@ const Events = () => {
     
     if (Math.abs(swipeDistance) > 50) {
       if (swipeDistance > 0) {
-        // Swipe left - next card
         setCurrentCardIndex((prev) => (prev + 1) % allCards.length);
       } else {
-        // Swipe right - previous card
         setCurrentCardIndex((prev) => (prev - 1 + allCards.length) % allCards.length);
       }
     }
@@ -102,29 +95,28 @@ const Events = () => {
 
   return (
     <div 
-      className="min-h-screen relative flex items-center justify-center" 
+      className="min-h-screen relative flex items-center justify-center overflow-hidden" 
       style={{ 
         background: 'linear-gradient(180deg, #05070D, #0A0F1C)', 
-        transform: `translateX(${swipeOffset}px)`
+        transform: `translateX(${swipeOffset}px)`,
+        transition: isSwiping ? 'none' : 'transform 0.3s ease-out'
       }} 
       onTouchStart={handleTouchStart} 
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {/* Background INOVEX Text */}
-      <div className="absolute inset-0 flex items-center justify-center md:pr-20 md:justify-end overflow-hidden">
+      <div className="absolute inset-0 flex items-center justify-center md:pr-20 md:justify-end overflow-hidden pointer-events-none">
         <h1 className="text-[15rem] font-black text-white/5 tracking-tighter uppercase select-none md:rotate-0 rotate-90">
           INOVEX
         </h1>
       </div>
 
       {/* Geometric Shapes Background */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-32 h-32 border border-white/10 rotate-45"></div>
         <div className="absolute bottom-20 right-20 w-48 h-48 border border-white/5 rotate-12"></div>
         <div className="absolute top-1/2 left-1/3 w-24 h-24 border border-white/10 rotate-45"></div>
-        <div className="absolute top-1/3 right-1/4 w-16 h-16 border border-white/5 rotate-12"></div>
-        <div className="absolute bottom-1/3 left-1/4 w-20 h-20 border border-white/10 rotate-45"></div>
       </div>
 
       {/* Events Title */}
@@ -135,38 +127,25 @@ const Events = () => {
       </div>
 
       {/* Cards Container */}
-      <div className="relative flex items-center justify-center gap-8 md:gap-16">
-        {/* Mobile Version - Only 3 Cards */}
-        <div className="md:hidden relative z-20 transition-all duration-300 ease-in-out transform">
+      <div className="relative flex items-center justify-center w-full">
+        {/* Mobile Version */}
+        <div className="md:hidden relative z-20 w-full h-96">
           {allCards.map((cardIndex) => {
             const offset = (cardIndex - currentCardIndex + allCards.length) % allCards.length;
-            
-            // Only show center card and immediate neighbors
             if (offset > 1 && offset < allCards.length - 1) return null;
             
-            // Mobile positions for 3 cards only
-            let mobilePosition;
-            if (offset === 0) {
-              // Center card
-              mobilePosition = { x: 0, scale: 1, opacity: 1, zIndex: 20 };
-            } else if (offset === 1) {
-              // Right card
-              mobilePosition = { x: 70, scale: 0.8, opacity: 0.9, zIndex: 15 };
-            } else if (offset === allCards.length - 1) {
-              // Left card (when offset wraps around)
-              mobilePosition = { x: -70, scale: 0.8, opacity: 0.9, zIndex: 15 };
-            } else {
-              return null; // Hide any other cards
-            }
+            let mobileX = 0;
+            if (offset === 1) mobileX = 70;
+            else if (offset === allCards.length - 1) mobileX = -70;
             
             return (
               <div
                 key={cardIndex}
                 className="absolute top-1/2 left-1/2 transition-all duration-500 ease-out cursor-pointer"
                 style={{
-                  transform: `translate(-50%, -50%) translateX(${mobilePosition.x}px) scale(${mobilePosition.scale})`,
-                  opacity: mobilePosition.opacity,
-                  zIndex: mobilePosition.zIndex,
+                  transform: `translate(-50%, -50%) translateX(${mobileX}px) scale(${offset === 0 ? 1 : 0.8})`,
+                  opacity: offset === 0 ? 1 : 0.7,
+                  zIndex: offset === 0 ? 20 : 15,
                 }}
                 onClick={() => handleCardClick(cardIndex)}
               >
@@ -176,7 +155,7 @@ const Events = () => {
           })}
         </div>
         
-        {/* Desktop Version - Moving Cards */}
+        {/* Desktop Version */}
         <div className="hidden md:block relative w-full h-96">
           {allCards.map((cardIndex) => {
             const position = getCardPosition(cardIndex, currentCardIndex);
@@ -191,49 +170,32 @@ const Events = () => {
                 }}
                 onClick={() => handleCardClick(cardIndex)}
               >
-                <Card 
-                  isVisible={true} 
-                  selectedIndex={cardIndex} 
-                  shouldSpin={false} 
-                  setShouldSpin={() => {}} 
-                />
+                <Card isVisible={true} selectedIndex={cardIndex} shouldSpin={false} setShouldSpin={() => {}} />
               </div>
             );
           })}
         </div>
       </div>
       
-      {/* Card Selector */}
+      {/* Card Selector dots */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
         <div className="flex flex-col items-center gap-2">
-          <p className="text-xs text-white/60 font-medium">Select the card</p>
+          <p className="text-xs text-white/60 font-medium">Browse Events</p>
           <div className="flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-full px-4 py-2 border border-white/20">
-            {allCards.map((_, index) => {
-              const isActive = index === currentCardIndex;
-              
-              return (
-                <button
-                  key={index}
-                  onClick={() => setCurrentCardIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-jurassic-red scale-150' 
-                      : 'bg-white/40 hover:bg-white/60'
-                  }`}
-                  title={`Event ${index + 1}`}
-                />
-              );
-            })}
+            {allCards.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentCardIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentCardIndex ? 'bg-jurassic-red scale-150 shadow-[0_0_8px_#df1f26]' : 'bg-white/40 hover:bg-white/60'
+                }`}
+              />
+            ))}
           </div>
         </div>
       </div>
       
-      {/* Event Modal */}
-      <EventModal 
-        event={selectedEvent}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-      />
+      <EventModal event={selectedEvent} isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };
