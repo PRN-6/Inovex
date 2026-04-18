@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 
 const backgrounds = [
-  '/images/hero1.webp',
-  '/images/hero2.webp'
+  '/images/heros/hero1.webp',
+  '/images/heros/hero2.webp'
 ];
 
 const Home = () => {

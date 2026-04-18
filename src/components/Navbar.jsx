@@ -6,6 +6,7 @@ import { gsap } from 'gsap';
 const mainNavItems = [
   { icon: Home, label: 'Home', path: 'home' },
   { icon: Calendar, label: 'Events', path: 'events' },
+  { icon: Film, label: 'Media', path: 'media' },
   { icon: BookOpen, label: 'Team', path: 'team' },
   { icon: Users, label: 'About', path: 'about' },
 ];
@@ -19,12 +20,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  
+
   // Hide navbar on event details page
   if (location.pathname.startsWith('/event/')) {
     return null;
   }
-  
+
   // GSAP refs
   const desktopSidebarRef = useRef(null);
   const mobileMenuRef = useRef(null);
@@ -39,7 +40,7 @@ const Navbar = () => {
     }
 
     // Animate desktop sidebar on load
-    gsap.fromTo(desktopSidebarRef.current, 
+    gsap.fromTo(desktopSidebarRef.current,
       { x: -100, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
     );
@@ -75,13 +76,17 @@ const Navbar = () => {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
+          if (location.pathname !== '/') return;
+
           const scrollPosition = window.scrollY;
           const windowHeight = window.innerHeight;
-          
-          if (scrollPosition >= windowHeight * 0.5) {
+
+          if (scrollPosition < windowHeight * 0.5) {
+            setActiveSection('home');
+          } else if (scrollPosition >= windowHeight * 0.5 && scrollPosition < windowHeight * 1.5) {
             setActiveSection('events');
           } else {
-            setActiveSection('home');
+            setActiveSection('media');
           }
           ticking = false;
         });
@@ -91,12 +96,16 @@ const Navbar = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   // Update active section based on current route
   useEffect(() => {
-    if (location.pathname.startsWith('/event/')) {
+    if (location.pathname === '/media') {
+      setActiveSection('media');
+    } else if (location.pathname === '/events') {
       setActiveSection('events');
+    } else if (location.pathname === '/' && activeSection === 'media') {
+        // preserve if scrolled there
     }
   }, [location.pathname]);
 
@@ -114,6 +123,12 @@ const Navbar = () => {
       } else {
         navigate('/events');
       }
+    } else if (item.label === 'Media') {
+      if (location.pathname === '/') {
+        window.scrollTo({ top: window.innerHeight * 2, behavior: 'smooth' });
+      } else {
+        navigate('/media');
+      }
     }
     setIsMobileMenuOpen(false);
   };
@@ -130,7 +145,7 @@ const Navbar = () => {
       </button>
 
       {/* Desktop Sidebar */}
-      <div 
+      <div
         ref={desktopSidebarRef}
         className="group fixed left-0 top-0 h-full bg-black/80 backdrop-blur-md text-white z-40 hidden md:flex flex-col transition-all duration-300 ease-in-out w-16 hover:w-40 border-r border-red-900/30"
       >
@@ -149,11 +164,10 @@ const Navbar = () => {
                 <a
                   href={`#${item.path}`}
                   onClick={(e) => handleNavClick(e, item)}
-                  className={`flex items-center gap-3 px-3 py-3 transition-colors ${
-                    activeSection === item.path
+                  className={`flex items-center gap-3 px-3 py-3 transition-colors ${activeSection === item.path
                       ? 'bg-red-900/50 text-white border-l-2 border-red-500'
                       : 'hover:bg-red-900/30 text-gray-300'
-                  }`}
+                    }`}
                 >
                   <item.icon size={20} />
                   <span className="text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 w-0 group-hover:w-auto overflow-hidden whitespace-nowrap">
@@ -207,11 +221,10 @@ const Navbar = () => {
                 key={index}
                 href={`#${item.path}`}
                 onClick={(e) => handleNavClick(e, item)}
-                className={`flex items-center justify-between px-6 py-4 rounded-xl transition-all ${
-                  activeSection === item.path
+                className={`flex items-center justify-between px-6 py-4 rounded-xl transition-all ${activeSection === item.path
                     ? 'bg-red-900/60 text-white border-l-4 border-red-500'
                     : 'bg-white/5 text-gray-300 hover:bg-white/10'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-4">
                   <item.icon size={24} />
