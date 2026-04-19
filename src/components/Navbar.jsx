@@ -8,7 +8,7 @@ const mainNavItems = [
   { icon: Calendar, label: 'Events', path: 'events' },
   { icon: Activity, label: 'Timeline', path: 'timeline' },
   { icon: Film, label: 'Media', path: 'media' },
-  { icon: BookOpen, label: 'Team', path: 'team' },
+  { icon: Users, label: 'Team', path: 'team' },
   { icon: Users, label: 'About', path: 'about' },
 ];
 
@@ -112,6 +112,8 @@ const Navbar = () => {
       setActiveSection('events');
     } else if (location.pathname === '/timeline') {
       setActiveSection('timeline');
+    } else if (location.pathname === '/team') {
+      setActiveSection('team');
     } else if (location.pathname === '/' && activeSection === 'media') {
       // preserve if scrolled there
     }
@@ -119,7 +121,7 @@ const Navbar = () => {
 
   const handleNavClick = (e, item) => {
     e.preventDefault();
-    if (location.pathname === '/') {
+    if (location.pathname === '/' && item.path !== 'team') {
       const element = document.getElementById(item.path);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -127,10 +129,24 @@ const Navbar = () => {
       } else {
         // Fallback for sections not yet rendered or missing IDs
         if (item.label === 'Home') window.scrollTo({ top: 0, behavior: 'smooth' });
-        else navigate(`/${item.path}`);
       }
     } else {
-      navigate(item.label === 'Home' ? '/' : `/${item.path}`);
+      if (item.path === 'team') {
+        navigate('/team');
+      } else {
+        // Navigate to home and scroll to section after mount
+        navigate('/');
+        setTimeout(() => {
+          const element = document.getElementById(item.path);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            setActiveSection(item.path);
+          } else if (item.label === 'Home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setActiveSection('home');
+          }
+        }, 100);
+      }
     }
     setIsMobileMenuOpen(false);
   };
@@ -167,8 +183,8 @@ const Navbar = () => {
                   href={`#${item.path}`}
                   onClick={(e) => handleNavClick(e, item)}
                   className={`flex items-center gap-3 px-3 py-3 transition-colors ${activeSection === item.path
-                      ? 'bg-red-900/50 text-white border-l-2 border-red-500'
-                      : 'hover:bg-red-900/30 text-gray-300'
+                    ? 'bg-red-900/50 text-white border-l-2 border-red-500'
+                    : 'hover:bg-red-900/30 text-gray-300'
                     }`}
                 >
                   <item.icon size={20} />
@@ -224,8 +240,8 @@ const Navbar = () => {
                 href={`#${item.path}`}
                 onClick={(e) => handleNavClick(e, item)}
                 className={`flex items-center justify-between px-6 py-4 rounded-xl transition-all ${activeSection === item.path
-                    ? 'bg-red-900/60 text-white border-l-4 border-red-500'
-                    : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                  ? 'bg-red-900/60 text-white border-l-4 border-red-500'
+                  : 'bg-white/5 text-gray-300 hover:bg-white/10'
                   }`}
               >
                 <div className="flex items-center gap-4">

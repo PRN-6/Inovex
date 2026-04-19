@@ -1,7 +1,37 @@
 import React from 'react';
 import { Home, Calendar, Activity, Film, BookOpen, Users, MessageSquare } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    if (location.pathname === '/' && path !== 'team' && path !== 'about') {
+      const element = document.getElementById(path);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      } else if (path === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      if (path === 'team' || path === 'about') {
+        navigate(`/${path}`);
+      } else {
+        navigate('/');
+        setTimeout(() => {
+          const element = document.getElementById(path);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          } else if (path === 'home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 100);
+      }
+    }
+  };
+
   const protocolLinks = [
     { label: 'Home', path: 'home', icon: Home },
     { label: 'Events', path: 'events', icon: Calendar },
@@ -61,7 +91,8 @@ const Footer = () => {
                 {protocolLinks.map((link) => (
                   <li key={link.label}>
                     <a
-                      href={`/#${link.path}`}
+                      href={`#${link.path}`}
+                      onClick={(e) => handleNavClick(e, link.path)}
                       className="text-xs font-black tracking-widest text-gray-400 hover:text-red-500 transition-all flex items-center gap-3"
                     >
                       <link.icon className="w-3.5 h-3.5 opacity-40" />
@@ -81,7 +112,8 @@ const Footer = () => {
                 {resourceLinks.map((link) => (
                   <li key={link.label}>
                     <a
-                      href={`/#${link.path}`}
+                      href={`#${link.path}`}
+                      onClick={(e) => handleNavClick(e, link.path)}
                       className="text-xs font-black tracking-widest text-gray-400 hover:text-red-500 transition-all flex items-center gap-3"
                     >
                       <link.icon className="w-3.5 h-3.5 opacity-40" />
