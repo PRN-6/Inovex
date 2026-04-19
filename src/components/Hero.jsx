@@ -80,6 +80,23 @@ const Hero = () => {
       {/* Cinematic dark gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-tr from-black/95 via-black/40 to-transparent pointer-events-none"></div>
 
+      {/* College Logo - Top Left */}
+      <div className="absolute top-6 left-10 md:top-5 md:left-28 lg:left-48 z-30 drop-shadow-2xl">
+        <img
+          src="/images/college-logo.webp"
+          alt="College Logo"
+          className="h-12 md:h-16 lg:h-20 w-auto object-contain transition-transform hover:scale-105"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        {/* Placeholder if image isn't available yet */}
+        <div className="hidden items-center justify-center px-4 py-2 border border-white/10 bg-black/40 backdrop-blur-md rounded-lg text-xs font-bold tracking-widest text-white/50 uppercase">
+          College Logo
+        </div>
+      </div>
+
       {/* Branding Container */}
       <div className="relative z-10 flex flex-col max-w-5xl md:mx-18">
 

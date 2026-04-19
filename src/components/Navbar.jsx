@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity } from 'lucide-react';
+import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity, Info } from 'lucide-react';
 import { gsap } from 'gsap';
 
 const mainNavItems = [
@@ -9,7 +9,7 @@ const mainNavItems = [
   { icon: Activity, label: 'Timeline', path: 'timeline' },
   { icon: Film, label: 'Media', path: 'media' },
   { icon: Users, label: 'Team', path: 'team' },
-  { icon: Users, label: 'About', path: 'about' },
+  { icon: Info, label: 'About', path: 'about' },
 ];
 
 const socialIcons = [
@@ -114,6 +114,8 @@ const Navbar = () => {
       setActiveSection('timeline');
     } else if (location.pathname === '/team') {
       setActiveSection('team');
+    } else if (location.pathname === '/about') {
+      setActiveSection('about');
     } else if (location.pathname === '/' && activeSection === 'media') {
       // preserve if scrolled there
     }
@@ -121,7 +123,7 @@ const Navbar = () => {
 
   const handleNavClick = (e, item) => {
     e.preventDefault();
-    if (location.pathname === '/' && item.path !== 'team') {
+    if (location.pathname === '/' && item.path !== 'team' && item.path !== 'about') {
       const element = document.getElementById(item.path);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -133,6 +135,8 @@ const Navbar = () => {
     } else {
       if (item.path === 'team') {
         navigate('/team');
+      } else if (item.path === 'about') {
+        navigate('/about');
       } else {
         // Navigate to home and scroll to section after mount
         navigate('/');
