@@ -160,6 +160,35 @@ const EventModal = ({ event, isOpen, onClose }) => {
                 </p>
               </div>
 
+              {/* Rounds Data */}
+              {event.roundsData && event.roundsData.length > 0 && (
+                <div className="mb-6">
+                  <h2 className="text-xl font-bold mb-4 flex items-center justify-between text-jurassic-yellow">
+                    <span>Event Rounds</span>
+                    <span className="text-sm font-normal text-white/50 bg-white/10 px-3 py-1 rounded-full border border-white/10">
+                      Total: {event.roundsConducted || event.roundsData.length}
+                    </span>
+                  </h2>
+                  <div className="space-y-4">
+                    {event.roundsData.map((round, index) => (
+                      <div key={index} className="bg-black/40 border border-white/10 rounded-xl p-4 relative overflow-hidden group hover:border-jurassic-yellow/50 transition-colors">
+                        <div className="absolute top-0 left-0 w-1 h-full bg-jurassic-yellow/50 group-hover:bg-jurassic-yellow transition-colors"></div>
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2 pl-2">
+                          <h3 className="font-bold text-white text-md">{round.name}</h3>
+                          {round.time && round.time !== "TBA" && (
+                            <span className="text-xs px-2 py-1 bg-jurassic-yellow/10 text-jurassic-yellow border border-jurassic-yellow/20 rounded-md whitespace-nowrap flex items-center gap-1 shrink-0">
+                              <Clock className="w-3 h-3" />
+                              {round.time}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-white/70 text-sm pl-2 leading-relaxed">{round.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Rules */}
               <div className="mb-6">
                 <h2 className="text-xl font-bold mb-3 text-jurassic-yellow">Rules & Regulations</h2>

@@ -6,6 +6,7 @@ import InovexSection from './components/InovexSection'
 import Media from './pages/Media'
 import Team from './pages/Team'
 import Footer from './components/Footer'
+import About from './pages/About'
 import './styles/globals.css'
 
 /**
@@ -28,6 +29,7 @@ const App = () => {
             </>
           } />
           <Route path="/team" element={<Team />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </div>
     </Router>

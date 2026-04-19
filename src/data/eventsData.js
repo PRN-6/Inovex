@@ -17,7 +17,30 @@ export const eventsData = {
     ],
     coordinator: "Swathi Naik",
     contact: "9876543210",
-    image: "/images/cards/card1.png"
+    image: "/images/cards/card1.png",
+    roundsConducted: 4,
+    roundsData: [
+      {
+        name: "Round 1: Aptitude Test",
+        time: "11:30 AM – 12:30 PM",
+        desc: "Participants will be given an aptitude test to evaluate logical reasoning and problem-solving skills."
+      },
+      {
+        name: "Round 2: Group Task",
+        time: "2:00 PM – 4:00 PM (Duration: 2 Hours)",
+        desc: "Participants will be divided into teams and assigned a group task to assess teamwork, communication, and leadership abilities."
+      },
+      {
+        name: "Round 3: Presentation",
+        time: "11:00 AM – 12:00 PM",
+        desc: "Each participant presents their ideas on a given topic to evaluate confidence, clarity, and technical understanding."
+      },
+      {
+        name: "Round 4: Stress Interview",
+        time: "TBA",
+        desc: "Final shortlisted candidates will attend a stress interview to assess decision-making, composure, and managerial skills under pressure."
+      }
+    ]
   },
   2: {
     id: 2,
@@ -39,6 +62,7 @@ export const eventsData = {
     coordinator: "Jane Smith",
     contact: "9876543211",
     image: "/images/cards/card2.png"
+
   },
   3: {
     id: 3,
