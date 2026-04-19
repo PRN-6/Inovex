@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Events from './pages/Events'
 import InovexSection from './components/InovexSection'
 import Media from './pages/Media'
+import Footer from './components/Footer'
 import './styles/globals.css'
 
 /**
@@ -22,6 +23,7 @@ const App = () => {
               <Events />
               <InovexSection />
               <Media />
+              <Footer />
             </>
           } />
           <Route path="/events" element={<Events />} />
