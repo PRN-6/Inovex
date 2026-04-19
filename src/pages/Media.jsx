@@ -1,13 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Play, ChevronLeft, ChevronRight, Share2, Plus, Info } from 'lucide-react';
-
-const mediaData = [
-  { id: 1, type: 'Event Highlight', date: '2026-03-12', title: 'INOVEX: The Grand Opening [Night at the Museum]', image: '/images/cards/card1.png', videoUrl: '/videos/media1.webm' },
-  { id: 2, type: 'Guest Showcase', date: '2026-03-13', title: 'Cyber Realm: Electro Performance by SynthWave', image: '/images/cards/card2.png', videoUrl: '/videos/media2.webm' },
-  { id: 3, type: 'Tech Expo', date: '2026-03-14', title: 'Digital Pulse: Future of AI Panel Discussion', image: '/images/cards/card3.png', videoUrl: '/videos/media1.webm' },
-  { id: 4, type: 'Gaming Arena', date: '2026-03-15', title: 'Apex Warriors: Pro Gaming League Finals', image: '/images/cards/card4.png', videoUrl: '/videos/media1.webm' },
-];
+import { mediaData } from '../data/mediaData';
 
 const Media = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -27,41 +21,41 @@ const Media = () => {
       nextIndex = (activeIndex - 1 + mediaData.length) % mediaData.length;
     }
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setActiveIndex(nextIndex);
-        setIsAnimating(false);
-      }
-    });
-
-    tl.to([bgRef.current, infoRef.current], {
+    gsap.to([bgRef.current, infoRef.current], {
       opacity: 0,
       x: direction === 'next' ? -50 : 50,
       duration: 0.4,
-      ease: 'power2.in'
+      ease: 'power2.in',
+      onComplete: () => {
+        setActiveIndex(nextIndex);
+        setTimeout(() => {
+          gsap.fromTo([bgRef.current, infoRef.current],
+            { opacity: 0, x: direction === 'next' ? 50 : -50 },
+            { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out', onComplete: () => setIsAnimating(false) }
+          );
+        }, 50);
+      }
     });
-
-    tl.fromTo([bgRef.current, infoRef.current],
-      { opacity: 0, x: direction === 'next' ? 50 : -50 },
-      { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }
-    );
   };
 
   const jumpToMedia = (index) => {
     if (isAnimating || index === activeIndex) return;
     setIsAnimating(true);
 
-    const tl = gsap.timeline({
+    gsap.to([bgRef.current, infoRef.current], {
+      opacity: 0,
+      y: 20,
+      duration: 0.3,
       onComplete: () => {
         setActiveIndex(index);
-        setIsAnimating(false);
+        setTimeout(() => {
+          gsap.fromTo([bgRef.current, infoRef.current],
+            { opacity: 0, y: -20 },
+            { opacity: 1, y: 0, duration: 0.5, onComplete: () => setIsAnimating(false) }
+          );
+        }, 50);
       }
     });
-
-    tl.to(infoRef.current, { opacity: 0, y: 20, duration: 0.3 });
-    tl.to(bgRef.current, { opacity: 0, duration: 0.3 }, "<");
-    tl.to(bgRef.current, { opacity: 1, duration: 0.5 });
-    tl.to(infoRef.current, { opacity: 1, y: 0, duration: 0.5 }, "<");
   };
 
   return (

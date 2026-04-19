@@ -4,10 +4,9 @@ export const eventsData = {
     title: "IT Manager",
     category: "Technical",
     date: "March 15-17, 2026",
-    time: "9:00 AM - 6:00 PM",
+    time: "11:30 AM - 12:30 PM",
     location: "Tech Hub, Building A",
     participants: "Individual",
-    prize: "₹10,000",
     description: "Test your IT management skills in this challenging competition. Participants will face real-world scenarios involving network management, system administration, and IT infrastructure planning.",
     rules: [
       "Individual participation only",
@@ -16,7 +15,7 @@ export const eventsData = {
       "No external storage devices allowed",
       "Decision of judges will be final"
     ],
-    coordinator: "John Doe",
+    coordinator: "Swathi Naik",
     contact: "9876543210",
     image: "/images/cards/card1.png"
   },
