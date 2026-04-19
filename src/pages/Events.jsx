@@ -95,6 +95,7 @@ const Events = () => {
 
   return (
     <div 
+      id="events"
       className="min-h-screen relative flex items-center justify-center overflow-x-hidden overflow-y-auto" 
       style={{ 
         background: 'linear-gradient(180deg, #000000, #030303)', 

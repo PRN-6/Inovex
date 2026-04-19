@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings } from 'lucide-react';
+import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity } from 'lucide-react';
 import { gsap } from 'gsap';
 
 const mainNavItems = [
   { icon: Home, label: 'Home', path: 'home' },
   { icon: Calendar, label: 'Events', path: 'events' },
+  { icon: Activity, label: 'Timeline', path: 'timeline' },
   { icon: Film, label: 'Media', path: 'media' },
   { icon: BookOpen, label: 'Team', path: 'team' },
   { icon: Users, label: 'About', path: 'about' },
@@ -78,16 +79,21 @@ const Navbar = () => {
         window.requestAnimationFrame(() => {
           if (location.pathname !== '/') return;
 
-          const scrollPosition = window.scrollY;
           const windowHeight = window.innerHeight;
+          const sections = ['home', 'events', 'timeline', 'media'];
+          let currentSection = 'home';
 
-          if (scrollPosition < windowHeight * 0.5) {
-            setActiveSection('home');
-          } else if (scrollPosition >= windowHeight * 0.5 && scrollPosition < windowHeight * 1.5) {
-            setActiveSection('events');
-          } else {
-            setActiveSection('media');
+          for (const sectionId of sections) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              // If the top of the section is near the top of the viewport
+              if (rect.top <= windowHeight * 0.4) {
+                currentSection = sectionId;
+              }
+            }
           }
+          setActiveSection(currentSection);
           ticking = false;
         });
         ticking = true;
@@ -104,31 +110,27 @@ const Navbar = () => {
       setActiveSection('media');
     } else if (location.pathname === '/events') {
       setActiveSection('events');
+    } else if (location.pathname === '/timeline') {
+      setActiveSection('timeline');
     } else if (location.pathname === '/' && activeSection === 'media') {
-        // preserve if scrolled there
+      // preserve if scrolled there
     }
   }, [location.pathname]);
 
   const handleNavClick = (e, item) => {
     e.preventDefault();
-    if (item.label === 'Home') {
-      if (location.pathname === '/') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (location.pathname === '/') {
+      const element = document.getElementById(item.path);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setActiveSection(item.path);
       } else {
-        navigate('/');
+        // Fallback for sections not yet rendered or missing IDs
+        if (item.label === 'Home') window.scrollTo({ top: 0, behavior: 'smooth' });
+        else navigate(`/${item.path}`);
       }
-    } else if (item.label === 'Events') {
-      if (location.pathname === '/') {
-        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-      } else {
-        navigate('/events');
-      }
-    } else if (item.label === 'Media') {
-      if (location.pathname === '/') {
-        window.scrollTo({ top: window.innerHeight * 2, behavior: 'smooth' });
-      } else {
-        navigate('/media');
-      }
+    } else {
+      navigate(item.label === 'Home' ? '/' : `/${item.path}`);
     }
     setIsMobileMenuOpen(false);
   };
@@ -147,7 +149,7 @@ const Navbar = () => {
       {/* Desktop Sidebar */}
       <div
         ref={desktopSidebarRef}
-        className="group fixed left-0 top-0 h-full bg-black/80 backdrop-blur-md text-white z-40 hidden md:flex flex-col transition-all duration-300 ease-in-out w-16 hover:w-40 border-r border-red-900/30"
+        className="group fixed left-0 top-0 h-full bg-black/80 backdrop-blur-md text-white z-40 hidden md:flex flex-col transition-all duration-300 ease-in-out w-16 hover:w-40 border-r border-red-900/30 shadow-[10px_0_30px_rgba(0,0,0,0.8)] shadow-red-950/20"
       >
         {/* Logo */}
         <div className="p-4 border-b border-red-900/30 flex items-center h-16">
@@ -199,7 +201,7 @@ const Navbar = () => {
       {/* Mobile Menu - Full Screen */}
       <div
         ref={mobileMenuRef}
-        className="fixed inset-0 bg-black/90 backdrop-blur-md text-white z-40 md:hidden flex flex-col"
+        className="fixed inset-0 bg-black/90 backdrop-blur-md text-white z-40 md:hidden flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.9)] shadow-red-950/40"
         style={{ transform: 'translateX(100%)' }}
       >
         {/* Header */}
