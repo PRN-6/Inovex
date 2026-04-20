@@ -18,7 +18,7 @@ const Team = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-20 overflow-hidden relative">
+    <div className="min-h-screen bg-black text-white pt-24 pb-20 overflow-hidden relative md:pl-16 flex flex-col items-center">
 
       {/* Background Grid & Scanlines */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
@@ -35,7 +35,7 @@ const Team = () => {
         PERSONNEL
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10" ref={containerRef}>
+      <div className="w-full max-w-7xl px-6 lg:px-12 relative z-10" ref={containerRef}>
 
         {/* Header */}
         <div className="mb-16 border-l-4 border-red-600 pl-6">
