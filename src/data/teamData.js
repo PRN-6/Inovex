@@ -47,7 +47,7 @@ export const teamData = [
     category: "student",
     image: "/images/team/member5.jpg",
     socials: {
-      linkedin: "#",
+      linkedin: "https://www.linkedin.com/in/venisha-rizal-dsouza-633161364?trk=contact-info",
       instagram: "https://www.instagram.com/_venisha_rizal_?igsh=MW9xenFmNjBmNHhubw==",
     }
   },
@@ -69,7 +69,7 @@ export const teamData = [
     category: "student",
     image: "/images/team/member7.jpg",
     socials: {
-      linkedin: "#",
+      linkedin: "https://www.linkedin.com/in/deeksha-shetty-24b30a39a/",
       instagram: "https://www.instagram.com/deeksha_shetty21?igsh=OHp0MnQ5cmR0aWVo",
     }
   },
@@ -135,7 +135,7 @@ export const teamData = [
     category: "student",
     image: "/images/team/member13.jpg",
     socials: {
-      linkedin: "#",
+      linkedin: "https://www.linkedin.com/in/harshita-acharya-375a24326",
       instagram: "https://www.instagram.com/haarsshiiitaa?igsh=MTVrdDUyb3J5bTUwbQ==",
     }
   },
@@ -146,7 +146,7 @@ export const teamData = [
     category: "student",
     image: "/images/team/member14.jpg",
     socials: {
-      linkedin: "#",
+      linkedin: "https://www.linkedin.com/in/deeksha-shetty-24b30a39a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
       instagram: "https://www.instagram.com/shettyy_shree?igsh=bmYzZGMzZDRuZXpp",
     }
   },
@@ -179,7 +179,7 @@ export const teamData = [
     category: "student",
     image: "/images/team/member17.jpg",
     socials: {
-      linkedin: "#",
+      linkedin: "https://www.linkedin.com/in/joycil-britto/",
       instagram: "https://www.instagram.com/_.itzz.__.joyy._?utm_source=qr&igsh=b2EzYmtmcnY1NXJt",
     }
   }
