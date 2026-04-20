@@ -148,7 +148,7 @@ const Team = () => {
               {/* Event & Student Heads Section */}
               <div>
                 <h2 className="text-2xl md:text-3xl font-black italic tracking-wide text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">
-                  Event & Student <span className="text-white/40">Heads</span>
+                  Core <span className="text-white/40">Committee</span>
                 </h2>
                 {/* Standard grid for students */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">

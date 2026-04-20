@@ -75,7 +75,7 @@ export const teamData = [
   },
   {
     id: 8,
-    name: "Ruchita Jadhav",
+    name: "Ruchita R Jadhav",
     role: "Treasurer",
     category: "student",
     image: "/images/team/member8.jpg",
@@ -86,7 +86,7 @@ export const teamData = [
   },
   {
     id: 9,
-    name: "Sanjana Salian",
+    name: "Sanjana S R",
     role: "Treasurer",
     category: "student",
     image: "/images/team/member9.jpg",
@@ -108,18 +108,18 @@ export const teamData = [
   },
   {
     id: 11,
-    name: "Shreyas",
+    name: "Harshith",
     role: "Technical Coordinator",
     category: "student",
     image: "/images/team/member11.jpg",
     socials: {
       linkedin: "#",
-      instagram: "https://www.instagram.com/abhiram_abhi_018?igsh=MTZ3Z2l0cjd4ODUzMA==",
+      instagram: "https://www.instagram.com/hxrsh__06_?igsh=MWM5MWYzaTFwbDA4eA==",
     }
   },
   {
     id: 12,
-    name: "Kushi",
+    name: "Kushi P",
     role: "Cultural Coordinator",
     category: "student",
     image: "/images/team/member12.jpg",
@@ -130,7 +130,7 @@ export const teamData = [
   },
   {
     id: 13,
-    name: "Harshita",
+    name: "Harshita A",
     role: "Cultural Coordinator",
     category: "student",
     image: "/images/team/member13.jpg",
@@ -142,7 +142,7 @@ export const teamData = [
   {
     id: 14,
     name: "Durgashree S",
-    role: "Sports Incharge",
+    role: "Sports Coordinator",
     category: "student",
     image: "/images/team/member14.jpg",
     socials: {
@@ -152,8 +152,8 @@ export const teamData = [
   },
   {
     id: 15,
-    name: "Niyam",
-    role: "Sports Incharge",
+    name: "Niyam Shetty",
+    role: "Sports Coordinator",
     category: "student",
     image: "/images/team/member15.jpg",
     socials: {
