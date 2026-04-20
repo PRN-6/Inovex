@@ -38,7 +38,7 @@ const Media = () => {
   };
 
   return (
-    <div id="media" className="h-screen w-screen bg-black text-white overflow-hidden relative font-['Inter',sans-serif]">
+    <div id="media" className="h-screen w-screen bg-black text-white overflow-hidden relative font-['Inter',sans-serif] md:pl-16">
       {/* Background Video Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
