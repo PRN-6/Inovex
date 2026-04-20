@@ -134,7 +134,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       >
         <div className="bg-white rounded-2xl shadow-2xl h-96 relative overflow-hidden">
           <img 
-            src={`/images/cards/card${currentImageIndex + 1}.png`} 
+            src={`/images/cards/card${currentImageIndex + 1}.webp`} 
             alt="Event card" 
             className="w-full h-full object-cover"
             loading="lazy"
@@ -153,7 +153,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       >
         <div className="bg-white rounded-2xl shadow-2xl h-144 relative overflow-hidden">
           <img 
-            src={`/images/cards/card${currentImageIndex + 1}.png`} 
+            src={`/images/cards/card${currentImageIndex + 1}.webp`} 
             alt="Event card" 
             className="w-full h-full object-cover"
             loading="lazy"

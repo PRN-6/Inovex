@@ -9,6 +9,7 @@ const Team = () => {
   const cardsRef = useRef([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     // Initial entrance animation
     gsap.fromTo(cardsRef.current,
       { y: 50, opacity: 0, scale: 0.95 },
@@ -18,14 +19,14 @@ const Team = () => {
 
   return (
     <div className="min-h-screen bg-black text-white pt-24 pb-20 overflow-hidden relative">
-      
+
       {/* Background Grid & Scanlines */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
-           style={{
-             backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        style={{
+          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
                                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
-             backgroundSize: '40px 40px'
-           }}
+          backgroundSize: '40px 40px'
+        }}
       />
       <div className="absolute inset-0 z-0 pointer-events-none bg-[url('/scanlines.png')] mix-blend-overlay opacity-20"></div>
 
@@ -35,7 +36,7 @@ const Team = () => {
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10" ref={containerRef}>
-        
+
         {/* Header */}
         <div className="mb-16 border-l-4 border-red-600 pl-6">
           <div className="flex items-center gap-3 text-red-600 mb-2">
@@ -46,9 +47,9 @@ const Team = () => {
             Personnel <br /> <span className="text-white/40">Database</span>
           </h1>
           <div className="flex items-center gap-6 text-xs font-black tracking-widest text-white/30 uppercase">
-             <span className="flex items-center gap-2"><Activity size={14} className="text-jurassic-yellow" /> Status: Active</span>
-             <span className="hidden md:inline">|</span>
-             <span>Access Level: Omega</span>
+            <span className="flex items-center gap-2"><Activity size={14} className="text-jurassic-yellow" /> Status: Active</span>
+            <span className="hidden md:inline">|</span>
+            <span>Access Level: Omega</span>
           </div>
         </div>
 
@@ -57,73 +58,69 @@ const Team = () => {
           const renderMemberCard = (member, customClass = "") => {
             const index = teamData.findIndex(m => m.id === member.id);
             return (
-              <div 
+              <div
                 key={member.id}
                 ref={el => cardsRef.current[index] = el}
                 className={`group relative bg-[#0a0a0a] border border-white/10 overflow-hidden hover:border-red-600/50 transition-all duration-300 ${customClass}`}
               >
-                
+
                 {/* Image Container */}
                 <div className="relative aspect-[3/4] overflow-hidden bg-black/50">
-                   {/* ID Badge Overlay */}
-                   <div className="absolute top-4 right-4 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black/60 border border-white/20 backdrop-blur-md">
-                     <Shield size={14} className="text-jurassic-yellow opacity-80" />
-                   </div>
-                   
-                   {/* Placeholder / Actual Image */}
-                   <div className="w-full h-full relative">
-                      <img 
-                        src={member.image} 
-                        alt={member.name}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                        className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-105"
-                      />
-                      {/* Fallback pattern if image is missing */}
-                      <div className="absolute inset-0 bg-[#111] hidden flex-col items-center justify-center p-6 text-center border-b border-white/5">
-                        <Fingerprint size={48} className="text-white/10 mb-4 group-hover:text-red-500/30 transition-colors" />
-                        <span className="text-[10px] font-black tracking-widest text-white/20 uppercase">No Bio-Data</span>
-                      </div>
-                   </div>
 
-                   {/* Internal Gradient for Text Readability */}
-                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                  {/* Placeholder / Actual Image */}
+                  <div className="w-full h-full relative">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                      className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-105"
+                    />
+                    {/* Fallback pattern if image is missing */}
+                    <div className="absolute inset-0 bg-[#111] hidden flex-col items-center justify-center p-6 text-center border-b border-white/5">
+                      <Fingerprint size={48} className="text-white/10 mb-4 group-hover:text-red-500/30 transition-colors" />
+                      <span className="text-[10px] font-black tracking-widest text-white/20 uppercase">No Bio-Data</span>
+                    </div>
+                  </div>
+
+                  {/* Internal Gradient for Text Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                 </div>
 
                 {/* Data Context */}
                 <div className="p-5 relative z-10">
-                   <div className="mb-4">
-                     <h3 className="text-lg font-black italic tracking-wide text-white group-hover:text-white transition-colors">{member.name}</h3>
-                     <span className="text-[10px] font-black tracking-widest text-red-500 uppercase block mt-1">{member.role}</span>
-                   </div>
-                   
-                   {/* Social Feed Links */}
-                   {member.socials && Object.keys(member.socials).length > 0 && (
-                     <div className="mt-4 pt-3 border-t border-white/5 flex gap-2 justify-end">
-                       {member.socials.linkedin && (
-                         <a href={member.socials.linkedin} target="_blank" rel="noreferrer" className="text-[12px] text-[#0a66c2] hover:text-white bg-[#0a66c2]/10 hover:bg-[#0a66c2] p-1.5 rounded-sm transition-all flex items-center justify-center">
-                           <FaLinkedin />
-                         </a>
-                       )}
-                       {member.socials.github && (
-                         <a href={member.socials.github} target="_blank" rel="noreferrer" className="text-[12px] text-white hover:text-black bg-white/10 hover:bg-white p-1.5 rounded-sm transition-all flex items-center justify-center">
-                           <FaGithub />
-                         </a>
-                       )}
-                       {member.socials.instagram && (
-                         <a href={member.socials.instagram} target="_blank" rel="noreferrer" className="text-[12px] text-[#E1306C] hover:text-white bg-[#E1306C]/10 hover:bg-[#E1306C] p-1.5 rounded-sm transition-all flex items-center justify-center">
-                           <FaInstagram />
-                         </a>
-                       )}
-                       {member.socials.twitter && (
-                         <a href={member.socials.twitter} target="_blank" rel="noreferrer" className="text-[12px] text-[#1DA1F2] hover:text-white bg-[#1DA1F2]/10 hover:bg-[#1DA1F2] p-1.5 rounded-sm transition-all flex items-center justify-center">
-                           <FaTwitter />
-                         </a>
-                       )}
-                     </div>
-                   )}
+                  <div className="mb-4">
+                    <h3 className="text-lg font-black italic tracking-wide text-white group-hover:text-white transition-colors">{member.name}</h3>
+                    <span className="text-[10px] font-black tracking-widest text-red-500 uppercase block mt-1">{member.role}</span>
+                  </div>
+
+                  {/* Social Feed Links */}
+                  {member.socials && Object.keys(member.socials).length > 0 && (
+                    <div className="mt-4 pt-3 border-t border-white/5 flex gap-2 justify-end">
+                      {member.socials.linkedin && (
+                        <a href={member.socials.linkedin} target="_blank" rel="noreferrer" className="text-[12px] text-[#0a66c2] hover:text-white bg-[#0a66c2]/10 hover:bg-[#0a66c2] p-1.5 rounded-sm transition-all flex items-center justify-center">
+                          <FaLinkedin />
+                        </a>
+                      )}
+                      {member.socials.github && (
+                        <a href={member.socials.github} target="_blank" rel="noreferrer" className="text-[12px] text-white hover:text-black bg-white/10 hover:bg-white p-1.5 rounded-sm transition-all flex items-center justify-center">
+                          <FaGithub />
+                        </a>
+                      )}
+                      {member.socials.instagram && (
+                        <a href={member.socials.instagram} target="_blank" rel="noreferrer" className="text-[12px] text-[#E1306C] hover:text-white bg-[#E1306C]/10 hover:bg-[#E1306C] p-1.5 rounded-sm transition-all flex items-center justify-center">
+                          <FaInstagram />
+                        </a>
+                      )}
+                      {member.socials.twitter && (
+                        <a href={member.socials.twitter} target="_blank" rel="noreferrer" className="text-[12px] text-[#1DA1F2] hover:text-white bg-[#1DA1F2]/10 hover:bg-[#1DA1F2] p-1.5 rounded-sm transition-all flex items-center justify-center">
+                          <FaTwitter />
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Decorative Corner Brackets */}
@@ -142,7 +139,7 @@ const Team = () => {
                 </h2>
                 {/* Flex container to center few faculty members, or match grid if many */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-6">
-                  {teamData.filter(m => m.category === 'faculty').map(member => 
+                  {teamData.filter(m => m.category === 'faculty').map(member =>
                     renderMemberCard(member, "w-[calc(50%-6px)] md:w-[calc(33.333%-16px)] lg:w-[calc(20%-19.2px)]")
                   )}
                 </div>
@@ -155,7 +152,7 @@ const Team = () => {
                 </h2>
                 {/* Standard grid for students */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
-                  {teamData.filter(m => m.category === 'student').map(member => 
+                  {teamData.filter(m => m.category === 'student').map(member =>
                     renderMemberCard(member)
                   )}
                 </div>

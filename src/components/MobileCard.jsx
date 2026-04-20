@@ -82,7 +82,7 @@ const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => 
     >
       <div className="bg-white rounded-2xl shadow-2xl h-80 relative overflow-hidden pointer-events-none">
         <img 
-          src={`/images/cards/card${currentImageIndex + 1}.png`} 
+          src={`/images/cards/card${currentImageIndex + 1}.webp`} 
           alt="Event card" 
           className="w-full h-full object-cover"
           loading="lazy"
