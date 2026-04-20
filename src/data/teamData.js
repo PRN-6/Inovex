@@ -1,35 +1,32 @@
 export const teamData = [
   {
     id: 1,
-    name: "Dr. Henry Wu",
+    name: "Dr.Vijesh Krishnan",
     role: "Faculty Coordinator",
     category: "faculty",
     image: "/images/team/member1.jpg",
     socials: {
-      linkedin: "#",
-      instagram: "#",
+      instagram: "https://www.instagram.com/viju._caz?igsh=MXNpamV2bmQ4NXY2Ng==",
     }
   },
   {
     id: 2,
-    name: "John Hammond",
+    name: "Mr.Ragesh Raju",
     role: "Faculty Coordinator",
     category: "faculty",
     image: "/images/team/member2.jpg",
     socials: {
-      linkedin: "#",
-      instagram: "#",
+      instagram: "https://www.instagram.com/rageshraju?igsh=dHhneWZjd2w5M21z",
     }
   },
   {
     id: 3,
-    name: "John Hammond",
+    name: "Mrs.Jayashree J",
     role: "Faculty Coordinator",
     category: "faculty",
     image: "/images/team/member3.jpg",
     socials: {
-      linkedin: "#",
-      instagram: "#",
+      instagram: "https://www.instagram.com/____shree.gowda____?igsh=MXYxY3NhdTIwcDBx",
     }
   },
   {
@@ -111,7 +108,7 @@ export const teamData = [
   },
   {
     id: 11,
-    name: "person",
+    name: "Shreyas",
     role: "Technical Coordinator",
     category: "student",
     image: "/images/team/member11.jpg",
