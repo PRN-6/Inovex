@@ -4,7 +4,7 @@ import MobileCard from '../components/MobileCard';
 import EventModal from '../components/EventModal';
 import { eventsData } from '../data/eventsData';
 
-const allCards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+const allCards = [0, 1, 2, 3, 4, 5, 6, 7];
 
 const Events = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -20,18 +20,14 @@ const Events = () => {
     
     // Define positions for cards relative to center
     const positions = {
-      0: { x: 0, scale: 1, opacity: 1, zIndex: 20 },           // Center
-      1: { x: 200, scale: 0.9, opacity: 1, zIndex: 15 },      // Right
-      2: { x: 350, scale: 0.8, opacity: 0.9, zIndex: 10 },    // Far right
-      3: { x: 450, scale: 0.7, opacity: 0.8, zIndex: 5 },     // Far far right
-      4: { x: 520, scale: 0.65, opacity: 0.7, zIndex: 3 },    // Extra far right
-      5: { x: 580, scale: 0.65, opacity: 0.6, zIndex: 1 },    // Extra far right
-      11: { x: -200, scale: 0.9, opacity: 1, zIndex: 15 },     // Left
-      10: { x: -350, scale: 0.8, opacity: 0.9, zIndex: 10 },   // Far left
-      9: { x: -450, scale: 0.7, opacity: 0.8, zIndex: 5 },     // Far far left
-      8: { x: -520, scale: 0.65, opacity: 0.7, zIndex: 3 },    // Extra far left
-      7: { x: -580, scale: 0.65, opacity: 0.6, zIndex: 1 },    // Extra far left
-      6: { x: -620, scale: 0.6, opacity: 0.5, zIndex: 1 }      // Extra far left
+      0: { x: 0,    scale: 1,    opacity: 1,   zIndex: 20 }, // Center
+      1: { x: 200,  scale: 0.9,  opacity: 1,   zIndex: 15 }, // Right
+      2: { x: 350,  scale: 0.8,  opacity: 0.9, zIndex: 10 }, // Far right
+      3: { x: 460,  scale: 0.7,  opacity: 0.7, zIndex: 5  }, // Extra far right
+      7: { x: -200, scale: 0.9,  opacity: 1,   zIndex: 15 }, // Left
+      6: { x: -350, scale: 0.8,  opacity: 0.9, zIndex: 10 }, // Far left
+      5: { x: -460, scale: 0.7,  opacity: 0.7, zIndex: 5  }, // Extra far left
+      4: { x: -580, scale: 0.6,  opacity: 0.5, zIndex: 1  }  // Hidden
     };
     
     return positions[offset] || { x: -700, scale: 0.6, opacity: 0, zIndex: 1 };
