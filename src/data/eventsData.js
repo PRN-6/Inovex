@@ -15,8 +15,9 @@ export const eventsData = {
       "No external storage devices allowed",
       "Decision of judges will be final"
     ],
-    coordinator: "Swathi Naik",
-    contact: "9876543210",
+    coordinators: [
+      { name: "Swathi Naik", contact: "9876543210" }
+    ],
     image: "/images/cards/card1.webp",
     roundsConducted: 4,
     roundsData: [
@@ -59,8 +60,9 @@ export const eventsData = {
       "Complete the checkpoint task to receive the next QR clue",
       "Assemble all QR fragments at the finale"
     ],
-    coordinator: "Jane Smith",
-    contact: "9876543211",
+    coordinators: [
+      { name: "Jane Smith", contact: "9876543211" }
+    ],
     image: "/images/cards/card2.webp",
     roundsConducted: 2,
     roundsData: [
@@ -93,8 +95,10 @@ export const eventsData = {
       "Judges decision is final",
       "Teams must report on time"
     ],
-    coordinator: "Harshita & Shraddha",
-    contact: "TBD",
+    coordinators: [
+      { name: "Harshita", contact: "TBD" },
+      { name: "Shraddha", contact: "TBD" }
+    ],
     image: "/images/cards/card3.webp",
     roundsConducted: 3,
     // roundsData: [
@@ -130,10 +134,12 @@ export const eventsData = {
       "Reel duration: minimum 30 seconds, maximum 60 seconds",
       "Theme revealed on the spot; shoot must be done entirely inside campus",
       "Vulgar, violent, or political content is strictly prohibited",
-      "Judges' decision on creativity, editing, storytelling, and theme relevance is final"
+      "Judges' decision on creativity, editing, and theme relevance is final"
     ],
-    coordinator: "Darshan Acharya & Joycil Britto",
-    contact: "TBD",
+    coordinators: [
+      { name: "Darshan Acharya", contact: "TBD" },
+      { name: "Joycil Britto", contact: "TBD" }
+    ],
     image: "/images/cards/card4.webp",
     roundsConducted: 1,
     roundsData: [
@@ -161,8 +167,10 @@ export const eventsData = {
       "Systems will be provided by the college (using VS Code)",
       "Evaluation is strictly based on design accuracy, creativity, code quality, and time management"
     ],
-    coordinator: "Shreyas & Swathi",
-    contact: "TBD",
+    coordinators: [
+      { name: "Shreyas", contact: "TBD" },
+      { name: "Swathi", contact: "TBD" }
+    ],
     image: "/images/cards/card5.webp",
     roundsConducted: 2,
     roundsData: [
@@ -195,8 +203,10 @@ export const eventsData = {
       "Problem statements/themes are announced at the beginning of the hackathon",
       "Final evaluation is based on a live presentation and functionality demonstration"
     ],
-    coordinator: "Ruchita Jadhav & Prinson",
-    contact: "TBD",
+    coordinators: [
+      { name: "Ruchita Jadhav", contact: "TBD" },
+      { name: "Prinson", contact: "TBD" }
+    ],
     image: "/images/cards/card6.webp",
     roundsConducted: 2,
     roundsData: [
@@ -229,8 +239,9 @@ export const eventsData = {
       "Report to the Computer Lab 10 minutes prior to the match",
       "Organizer's decision is final and maps will be decided on the spot"
     ],
-    coordinator: "Mike Johnson",
-    contact: "9876543212",
+    coordinators: [
+      { name: "Mike Johnson", contact: "9876543212" }
+    ],
     image: "/images/cards/card7.webp",
     roundsConducted: 2,
     roundsData: [
@@ -263,8 +274,9 @@ export const eventsData = {
       "Opposing teams can ask up to 3 cross-questions during the final battle",
       "Judging panel decisions are final; any misbehavior leads to disqualification"
     ],
-    coordinator: "Sarah Wilson",
-    contact: "9876543213",
+    coordinators: [
+      { name: "Sarah Wilson", contact: "9876543213" }
+    ],
     image: "/images/cards/card8.webp",
     roundsConducted: 3,
     roundsData: [
@@ -302,8 +314,9 @@ export const eventsData = {
       "Bring your own instruments/backing track",
       "Original compositions preferred"
     ],
-    coordinator: "Sarah Johnson",
-    contact: "9876543218",
+    coordinators: [
+      { name: "Sarah Johnson", contact: "9876543218" }
+    ],
     image: "/images/cards/card9.webp"
   },
   10: {
@@ -323,8 +336,9 @@ export const eventsData = {
       "No electronic devices allowed",
       "Negative marking for wrong answers"
     ],
-    coordinator: "Michael Davis",
-    contact: "9876543219",
+    coordinators: [
+      { name: "Michael Davis", contact: "9876543219" }
+    ],
     image: "/images/cards/card10.webp"
   },
   11: {
@@ -344,8 +358,9 @@ export const eventsData = {
       "Props allowed if self-managed",
       "Costume and choreography judged"
     ],
-    coordinator: "Lisa Anderson",
-    contact: "9876543220",
+    coordinators: [
+      { name: "Lisa Anderson", contact: "9876543220" }
+    ],
     image: "/images/cards/card11.webp"
   },
   12: {
@@ -365,8 +380,9 @@ export const eventsData = {
       "All mediums allowed",
       "Setup on day 1, removal on day 2"
     ],
-    coordinator: "David Martinez",
-    contact: "9876543221",
+    coordinators: [
+      { name: "David Martinez", contact: "9876543221" }
+    ],
     image: "/images/cards/card12.webp"
   }
 };

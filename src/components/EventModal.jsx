@@ -206,10 +206,23 @@ const EventModal = ({ event, isOpen, onClose }) => {
 
               {/* Coordinator */}
               <div className="bg-black/30 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-                <h3 className="text-lg font-bold mb-3 text-jurassic-yellow">Event Coordinator</h3>
-                <div>
-                  <p className="font-semibold text-white">{event.coordinator}</p>
-                  <p className="text-white/60 text-sm">Contact: {event.contact}</p>
+                <h3 className="text-lg font-bold mb-3 text-jurassic-yellow">
+                  {event.coordinators && event.coordinators.length > 1 ? "Event Coordinators" : "Event Coordinator"}
+                </h3>
+                <div className="space-y-4">
+                  {event.coordinators ? (
+                    event.coordinators.map((coord, idx) => (
+                      <div key={idx} className={idx !== 0 ? "pt-4 border-t border-white/5" : ""}>
+                        <p className="font-semibold text-white">{coord.name}</p>
+                        <p className="text-white/60 text-sm">Contact: {coord.contact}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div>
+                      <p className="font-semibold text-white">{event.coordinator}</p>
+                      <p className="text-white/60 text-sm">Contact: {event.contact}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
