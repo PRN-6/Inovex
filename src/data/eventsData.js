@@ -97,23 +97,23 @@ export const eventsData = {
     contact: "TBD",
     image: "/images/cards/card3.webp",
     roundsConducted: 3,
-    roundsData: [
-      {
-        name: "Round 1: Tech Bingo",
-        time: "10:30 AM – 11:45 AM",
-        desc: "Play bingo using tech-related words. Accuracy and speed are key - first to shout 'Bingo' wins the pattern!"
-      },
-      {
-        name: "Round 2: Tech Snake & Ladders",
-        time: "12:00 PM – 1:45 PM",
-        desc: "A tech twist on the classic game. Roll the dice to move, but answer tech questions to climb ladders or avoid sliding down snakes."
-      },
-      {
-        name: "Round 3: Tech Relay (Final)",
-        time: "2:45 PM – 3:45 PM",
-        desc: "A fast-paced relay where team members alternate between technical questions and fun tasks. Tests coordination and quick thinking."
-      }
-    ]
+    // roundsData: [
+    //   {
+    //     name: "Round 1: Tech Bingo",
+    //     time: "10:30 AM – 11:45 AM",
+    //     desc: "Play bingo using tech-related words. Accuracy and speed are key - first to shout 'Bingo' wins the pattern!"
+    //   },
+    //   {
+    //     name: "Round 2: Tech Snake & Ladders",
+    //     time: "12:00 PM – 1:45 PM",
+    //     desc: "A tech twist on the classic game. Roll the dice to move, but answer tech questions to climb ladders or avoid sliding down snakes."
+    //   },
+    //   {
+    //     name: "Round 3: Tech Relay (Final)",
+    //     time: "2:45 PM – 3:45 PM",
+    //     desc: "A fast-paced relay where team members alternate between technical questions and fun tasks. Tests coordination and quick thinking."
+    //   }
+    // ]
   },
   4: {
     id: 4,

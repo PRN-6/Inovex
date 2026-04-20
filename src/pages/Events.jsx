@@ -17,19 +17,19 @@ const Events = () => {
   // Calculate card positions based on current index
   const getCardPosition = (cardIndex, centerIndex) => {
     const offset = (cardIndex - centerIndex + allCards.length) % allCards.length;
-    
+
     // Define positions for cards relative to center
     const positions = {
-      0: { x: 0,    scale: 1,    opacity: 1,   zIndex: 20 }, // Center
-      1: { x: 200,  scale: 0.9,  opacity: 1,   zIndex: 15 }, // Right
-      2: { x: 350,  scale: 0.8,  opacity: 0.9, zIndex: 10 }, // Far right
-      3: { x: 460,  scale: 0.7,  opacity: 0.7, zIndex: 5  }, // Extra far right
-      7: { x: -200, scale: 0.9,  opacity: 1,   zIndex: 15 }, // Left
-      6: { x: -350, scale: 0.8,  opacity: 0.9, zIndex: 10 }, // Far left
-      5: { x: -460, scale: 0.7,  opacity: 0.7, zIndex: 5  }, // Extra far left
-      4: { x: -580, scale: 0.6,  opacity: 0.5, zIndex: 1  }  // Hidden
+      0: { x: 0, scale: 1, opacity: 1, zIndex: 20 }, // Center
+      1: { x: 200, scale: 0.9, opacity: 1, zIndex: 15 }, // Right
+      2: { x: 350, scale: 0.8, opacity: 0.9, zIndex: 10 }, // Far right
+      3: { x: 460, scale: 0.7, opacity: 0.7, zIndex: 5 }, // Extra far right
+      7: { x: -200, scale: 0.9, opacity: 1, zIndex: 15 }, // Left
+      6: { x: -350, scale: 0.8, opacity: 0.9, zIndex: 10 }, // Far left
+      5: { x: -460, scale: 0.7, opacity: 0.7, zIndex: 5 }, // Extra far left
+      4: { x: -580, scale: 0.6, opacity: 0.5, zIndex: 1 }  // Hidden
     };
-    
+
     return positions[offset] || { x: -700, scale: 0.6, opacity: 0, zIndex: 1 };
   };
 
@@ -64,21 +64,21 @@ const Events = () => {
     setIsSwiping(true);
     setSwipeOffset(0);
   };
-  
+
   const handleTouchMove = (e) => {
     if (!isSwiping) return;
     const currentTouch = e.targetTouches[0].clientX;
     const offset = currentTouch - touchStart;
     setSwipeOffset(offset);
   };
-  
+
   const handleTouchEnd = (e) => {
     if (!isSwiping) return;
     const touchEnd = e.changedTouches[0].clientX;
     const swipeDistance = touchStart - touchEnd;
-    
+
     setIsSwiping(false);
-    
+
     if (Math.abs(swipeDistance) > 50) {
       if (swipeDistance > 0) {
         setCurrentCardIndex((prev) => (prev + 1) % allCards.length);
@@ -90,14 +90,14 @@ const Events = () => {
   };
 
   return (
-    <div 
+    <div
       id="events"
-      className="min-h-screen relative flex items-center justify-center overflow-x-hidden overflow-y-auto" 
-      style={{ 
-        background: 'linear-gradient(180deg, #000000, #030303)', 
+      className="min-h-screen relative flex items-center justify-center overflow-x-hidden overflow-y-auto"
+      style={{
+        background: 'linear-gradient(180deg, #000000, #030303)',
         touchAction: 'pan-y'
-      }} 
-      onTouchStart={handleTouchStart} 
+      }}
+      onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
@@ -123,7 +123,7 @@ const Events = () => {
       </div>
 
       {/* Cards Container */}
-      <div 
+      <div
         className="relative flex items-center justify-center w-full"
         style={{
           transform: `translateX(${swipeOffset}px)`,
@@ -135,11 +135,11 @@ const Events = () => {
           {allCards.map((cardIndex) => {
             const offset = (cardIndex - currentCardIndex + allCards.length) % allCards.length;
             if (offset > 1 && offset < allCards.length - 1) return null;
-            
+
             let mobileX = 0;
             if (offset === 1) mobileX = 70;
             else if (offset === allCards.length - 1) mobileX = -70;
-            
+
             return (
               <div
                 key={cardIndex}
@@ -151,12 +151,12 @@ const Events = () => {
                 }}
                 onClick={() => handleCardClick(cardIndex)}
               >
-                <MobileCard isVisible={true} selectedIndex={cardIndex} shouldSpin={false} setShouldSpin={() => {}} />
+                <MobileCard isVisible={true} selectedIndex={cardIndex} shouldSpin={false} setShouldSpin={() => { }} />
               </div>
             );
           })}
         </div>
-        
+
         {/* Desktop Version */}
         <div className="hidden md:block relative w-full h-96">
           {allCards.map((cardIndex) => {
@@ -172,13 +172,13 @@ const Events = () => {
                 }}
                 onClick={() => handleCardClick(cardIndex)}
               >
-                <Card isVisible={true} selectedIndex={cardIndex} shouldSpin={false} setShouldSpin={() => {}} />
+                <Card isVisible={true} selectedIndex={cardIndex} shouldSpin={false} setShouldSpin={() => { }} />
               </div>
             );
           })}
         </div>
       </div>
-      
+
       {/* Card Selector dots */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
         <div className="flex flex-col items-center gap-2">
@@ -188,15 +188,14 @@ const Events = () => {
               <button
                 key={index}
                 onClick={() => setCurrentCardIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentCardIndex ? 'bg-jurassic-red scale-150 shadow-[0_0_8px_#df1f26]' : 'bg-white/40 hover:bg-white/60'
-                }`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentCardIndex ? 'bg-jurassic-red scale-150 shadow-[0_0_8px_#df1f26]' : 'bg-white/40 hover:bg-white/60'
+                  }`}
               />
             ))}
           </div>
         </div>
       </div>
-      
+
       <EventModal event={selectedEvent} isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );

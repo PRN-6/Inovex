@@ -4,7 +4,7 @@ export const mediaData = [
     type: 'Event Highlight',
     date: '2026-03-12',
     title: 'INOVEX: The Grand Opening [Night at the Museum]',
-    image: '/images/cards/card1.png',
+    image: '/images/cards/card1.webp',
     videoUrl: '/videos/media1.webm',
   },
   {
@@ -12,7 +12,7 @@ export const mediaData = [
     type: 'Guest Showcase',
     date: '2026-03-13',
     title: 'Cyber Realm: Electro Performance by SynthWave',
-    image: '/images/cards/card2.png',
+    image: '/images/cards/card2.webp',
     videoUrl: '/videos/media2.webm',
   },
   {
@@ -20,7 +20,7 @@ export const mediaData = [
     type: 'Tech Expo',
     date: '2026-03-14',
     title: 'Digital Pulse: Future of AI Panel Discussion',
-    image: '/images/cards/card3.png',
+    image: '/images/cards/card3.webp',
     videoUrl: '/videos/media1.webm',
   },
   {
@@ -28,7 +28,39 @@ export const mediaData = [
     type: 'Gaming Arena',
     date: '2026-03-15',
     title: 'Apex Warriors: Pro Gaming League Finals',
-    image: '/images/cards/card4.png',
+    image: '/images/cards/card4.webp',
     videoUrl: '/videos/media1.webm',
   },
+  {
+    id: 5,
+    type: 'Cultural Fest',
+    date: '2026-03-16',
+    title: 'Neon Nights: After Party Highlights',
+    image: '/images/cards/card5.webp',
+    videoUrl: '/videos/media1.webm',
+  },
+  {
+    id: 6,
+    type: 'Hackathon',
+    date: '2026-03-17',
+    title: 'RexHack: Solving the Future',
+    image: '/images/cards/card6.webp',
+    videoUrl: '/videos/media1.webm',
+  },
+  {
+    id: 7,
+    type: 'Web Design',
+    date: '2026-03-18',
+    title: 'Dinox: Pixel Perfect Creations',
+    image: '/images/cards/card7.webp',
+    videoUrl: '/videos/media1.webm',
+  },
+  {
+    id: 8,
+    type: 'Art Showcase',
+    date: '2026-03-19',
+    title: 'Creative Minds: Art Gallery Tour',
+    image: '/images/cards/card8.webp',
+    videoUrl: '/videos/media1.webm',
+  }
 ];

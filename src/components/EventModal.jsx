@@ -11,73 +11,73 @@ const EventModal = ({ event, isOpen, onClose }) => {
     if (isOpen && event) {
       // Set initial states
       gsap.set(backdropRef.current, { opacity: 0 });
-      gsap.set(contentRef.current, { 
-        scale: 0.3, 
-        rotation: 15, 
-        x: -200, 
+      gsap.set(contentRef.current, {
+        scale: 0.3,
+        rotation: 15,
+        x: -200,
         y: -200,
-        opacity: 0 
+        opacity: 0
       });
       gsap.set(modalRef.current, { display: 'flex' });
 
       // Create timeline
       const ctx = gsap.context(() => {
         const tl = gsap.timeline();
-        
-        tl.to(backdropRef.current, { 
-          opacity: 1, 
-          duration: 0.3, 
-          ease: "power2.out" 
+
+        tl.to(backdropRef.current, {
+          opacity: 1,
+          duration: 0.3,
+          ease: "power2.out"
         })
-        .to(contentRef.current, { 
-          scale: 1, 
-          rotation: 0, 
-          x: 0, 
-          y: 0,
-          opacity: 1, 
-          duration: 0.8, 
-          ease: "back.out(1.2)" 
-        }, "-=0.2");
+          .to(contentRef.current, {
+            scale: 1,
+            rotation: 0,
+            x: 0,
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "back.out(1.2)"
+          }, "-=0.2");
       });
       return () => ctx.revert();
     } else if (!isOpen) {
       // Close animation
       const tl = gsap.timeline();
-      
-      tl.to(contentRef.current, { 
-        scale: 0.3, 
-        rotation: -15, 
-        x: 200, 
+
+      tl.to(contentRef.current, {
+        scale: 0.3,
+        rotation: -15,
+        x: 200,
         y: -200,
-        opacity: 0, 
-        duration: 0.5, 
-        ease: "back.in(1.2)" 
+        opacity: 0,
+        duration: 0.5,
+        ease: "back.in(1.2)"
       })
-      .to(backdropRef.current, { 
-        opacity: 0, 
-        duration: 0.3, 
-        ease: "power2.in" 
-      }, "-=0.3")
-      .set(modalRef.current, { display: 'none' });
+        .to(backdropRef.current, {
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.in"
+        }, "-=0.3")
+        .set(modalRef.current, { display: 'none' });
     }
   }, [isOpen, event]);
 
   if (!event) return null;
 
   return (
-    <div 
+    <div
       ref={modalRef}
       className="fixed inset-0 z-50 hidden items-center justify-center p-4"
     >
       {/* Transparent Backdrop */}
-      <div 
+      <div
         ref={backdropRef}
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Modal Content */}
-      <div 
+      <div
         ref={contentRef}
         className="relative max-w-7xl w-full max-h-[95vh] overflow-y-auto bg-black/80 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl mx-4 md:mx-0 scrollbar-hide"
       >
@@ -91,7 +91,7 @@ const EventModal = ({ event, isOpen, onClose }) => {
 
         {/* Header */}
         <div className="sticky top-0 bg-black/80 backdrop-blur-md border-b border-white/10 p-6 z-10">
-          <button 
+          <button
             onClick={onClose}
             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
           >
@@ -106,8 +106,8 @@ const EventModal = ({ event, isOpen, onClose }) => {
             {/* Left Column - Image and Basic Info */}
             <div>
               <div className="mb-6 rounded-2xl overflow-hidden shadow-2xl">
-                <img 
-                  src={event.image} 
+                <img
+                  src={event.image}
                   alt={event.title}
                   className="w-full h-full md:h-full object-cover"
                   loading="lazy"
