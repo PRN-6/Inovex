@@ -1,7 +1,7 @@
 export const eventsData = {
   1: {
     id: 1,
-    title: "IT Manager",
+    title: "Techsaurus",
     category: "Technical",
     date: "March 15-17, 2026",
     time: "11:30 AM - 12:30 PM",
