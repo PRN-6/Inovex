@@ -30,9 +30,9 @@ app.post('/api/register', async (req, res) => {
 
         // Basic validation check
         if (!name || !email || !phone || !usn || !event) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Please provide all required fields" 
+            return res.status(400).json({
+                success: false,
+                message: "Please provide all required fields"
             });
         }
 
@@ -48,22 +48,22 @@ app.post('/api/register', async (req, res) => {
         });
 
         await newUser.save();
-        
+
         // Trigger Email Dispatch
         await sendConfirmationEmail(newUser);
-        
+
         console.log(`New Registration: ${name} for ${event}`);
-        
-        res.status(201).json({ 
-            success: true, 
-            message: "Registration successful! Good luck, Legend." 
+
+        res.status(201).json({
+            success: true,
+            message: "Registration successful! Good luck, Legend."
         });
 
     } catch (error) {
         console.error('Registration Error:', error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Server Error. Please try again later." 
+        res.status(500).json({
+            success: false,
+            message: "Server Error. Please try again later."
         });
     }
 });
