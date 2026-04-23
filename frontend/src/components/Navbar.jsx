@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity, Info } from 'lucide-react';
+import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity, Info, UserPlus } from 'lucide-react';
 import { gsap } from 'gsap';
 
 const mainNavItems = [
@@ -10,6 +10,7 @@ const mainNavItems = [
   { icon: Film, label: 'Media', path: 'media' },
   { icon: Users, label: 'Team', path: 'team' },
   { icon: Info, label: 'About', path: 'about' },
+  { icon: UserPlus, label: 'Register', path: 'register' },
 ];
 
 const socialIcons = [
@@ -116,6 +117,8 @@ const Navbar = () => {
       setActiveSection('team');
     } else if (location.pathname === '/about') {
       setActiveSection('about');
+    } else if (location.pathname === '/register') {
+      setActiveSection('register');
     } else if (location.pathname === '/' && activeSection === 'media') {
       // preserve if scrolled there
     }
@@ -123,7 +126,7 @@ const Navbar = () => {
 
   const handleNavClick = (e, item) => {
     e.preventDefault();
-    if (location.pathname === '/' && item.path !== 'team' && item.path !== 'about') {
+    if (location.pathname === '/' && item.path !== 'team' && item.path !== 'about' && item.path !== 'register') {
       const element = document.getElementById(item.path);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -137,6 +140,8 @@ const Navbar = () => {
         navigate('/team');
       } else if (item.path === 'about') {
         navigate('/about');
+      } else if (item.path === 'register') {
+        navigate('/register');
       } else {
         // Navigate to home and scroll to section after mount
         navigate('/');
@@ -161,7 +166,11 @@ const Navbar = () => {
       <button
         ref={mobileMenuButtonRef}
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="fixed top-4 right-4 z-50 md:hidden bg-gray-800 text-white p-3 rounded-lg hover:bg-gray-700 transition-colors shadow-lg"
+        className={`fixed top-4 right-4 z-50 md:hidden p-3 rounded-xl transition-all duration-300 shadow-lg border ${
+          isMobileMenuOpen 
+            ? 'bg-red-600 text-white border-red-400' 
+            : 'bg-black/60 backdrop-blur-md text-red-500 border-red-900/50 hover:bg-red-900/20'
+        }`}
       >
         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -221,40 +230,37 @@ const Navbar = () => {
       {/* Mobile Menu - Full Screen */}
       <div
         ref={mobileMenuRef}
-        className="fixed inset-0 bg-black/90 backdrop-blur-md text-white z-40 md:hidden flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.9)] shadow-red-950/40"
+        className="fixed inset-0 bg-black/95 backdrop-blur-xl text-white z-40 md:hidden flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.9)]"
         style={{ transform: 'translateX(100%)' }}
       >
         {/* Header */}
-        <div className="p-6 flex items-center justify-between border-b border-red-900/30">
-          <h1 className="text-2xl font-bold tracking-wider text-white">INOVEX</h1>
-          <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="p-2 hover:bg-red-900/30 rounded-lg transition-colors"
-          >
-            <X size={24} />
-          </button>
+        <div className="p-6 flex items-center justify-between border-b border-red-900/20">
+          <h1 className="text-2xl font-black tracking-[0.2em] text-red-600">INOVEX</h1>
+          <div className="w-10 h-10" /> {/* Spacer for button */}
         </div>
 
         {/* Main Navigation */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-4 pt-10">
+          <div className="p-4 space-y-3 pt-10">
             {mainNavItems.map((item, index) => (
               <a
                 key={index}
                 href={`#${item.path}`}
                 onClick={(e) => handleNavClick(e, item)}
-                className={`flex items-center justify-between px-6 py-4 rounded-xl transition-all ${activeSection === item.path
-                  ? 'bg-red-900/60 text-white border-l-4 border-red-500'
-                  : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                className={`flex items-center justify-between px-6 py-5 rounded-2xl transition-all duration-300 border ${activeSection === item.path
+                  ? 'bg-red-950/40 text-red-500 border-red-500/50 shadow-[0_0_20px_rgba(220,38,38,0.1)]'
+                  : 'bg-zinc-900/30 text-gray-400 border-white/5'
                   }`}
               >
-                <div className="flex items-center gap-4">
-                  <item.icon size={24} />
-                  <span className="text-lg font-semibold">{item.label}</span>
+                <div className="flex items-center gap-5">
+                  <div className={`p-2 rounded-lg ${activeSection === item.path ? 'bg-red-600/20' : 'bg-white/5'}`}>
+                    <item.icon size={22} className={activeSection === item.path ? 'text-red-500' : 'text-gray-500'} />
+                  </div>
+                  <span className={`text-lg tracking-wider ${activeSection === item.path ? 'font-bold' : 'font-medium'}`}>
+                    {item.label.toUpperCase()}
+                  </span>
                 </div>
-                <svg className="w-6 h-6 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                <div className={`w-2 h-2 rounded-full ${activeSection === item.path ? 'bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.8)]' : 'bg-zinc-800'}`} />
               </a>
             ))}
           </div>

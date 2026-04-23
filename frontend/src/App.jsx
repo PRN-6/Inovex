@@ -7,6 +7,7 @@ import Media from './pages/Media'
 import Team from './pages/Team'
 import Footer from './components/Footer'
 import About from './pages/About'
+import Register from './pages/Register'
 import './styles/globals.css'
 
 /**
@@ -30,6 +31,7 @@ const App = () => {
           } />
           <Route path="/team" element={<Team />} />
           <Route path="/about" element={<About />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </Router>
