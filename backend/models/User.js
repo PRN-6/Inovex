@@ -37,9 +37,20 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Department is required'],
         trim: true
     },
-    event: {
+    registrations: [{
+        eventName: String,
+        teammates: [{
+            name: String,
+            usn: String,
+            email: String
+        }]
+    }],
+    amount: Number,
+    transactionId: String,
+    paymentStatus: {
         type: String,
-        required: [true, 'Event selection is required']
+        default: 'pending',
+        enum: ['pending', 'verified', 'failed']
     },
     registrationDate: {
         type: Date,
