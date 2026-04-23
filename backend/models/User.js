@@ -1,0 +1,52 @@
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Name is required'],
+        trim: true
+    },
+    email: {
+        type: String,
+        required: [true, 'Email is required'],
+        lowercase: true,
+        trim: true
+    },
+    phone: {
+        type: String,
+        required: [true, 'Phone number is required'],
+        trim: true
+    },
+    college: {
+        type: String,
+        required: [true, 'College name is required'],
+        trim: true
+    },
+    usn: {
+        type: String,
+        required: [true, 'USN is required'],
+        trim: true,
+        uppercase: true
+    },
+    year: {
+        type: String,
+        required: [true, 'Year of study is required']
+    },
+    department: {
+        type: String,
+        required: [true, 'Department is required'],
+        trim: true
+    },
+    event: {
+        type: String,
+        required: [true, 'Event selection is required']
+    },
+    registrationDate: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
