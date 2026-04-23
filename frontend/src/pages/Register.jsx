@@ -62,7 +62,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/register', {
+      const response = await fetch('https://inovex2026.vercel.app/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

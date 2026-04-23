@@ -91,6 +91,24 @@ EMAIL_PASS=your_16_char_gmail_app_password
 
 ---
 
+## 🛡 Performance Testing
+
+To ensure the registration system can handle high traffic during the fest, we use **k6** for load testing.
+
+### 1. Install k6
+Follow the [official k6 installation guide](https://k6.io/docs/getting-started/installation/) for your OS.
+
+### 2. Run Stress Test
+Ensure the backend server is running (`node server.js` in the backend folder), then execute:
+
+```bash
+k6 run performance-tests/register_stress_test.js
+```
+
+The script simulates 20 concurrent users over 1 minute and 50 seconds, generating randomized participant data for each request.
+
+---
+
 ## 🛡 License
 This project is for the **INOVEX 2026** College Festival. 
 
