@@ -2,11 +2,19 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
 const User = require('./models/User');
 const { sendConfirmationEmail } = require('./utils/emailService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Initialize Razorpay
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
+    key_secret: process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret'
+});
 
 // Middleware
 app.use(cors());
@@ -22,37 +30,57 @@ mongoose.connect(process.env.MONGO_URI)
 
 // API Routes
 
+// @route   POST /api/create-order
+// @desc    Create a Razorpay order
+app.post('/api/create-order', async (req, res) => {
+    try {
+        const { amount } = req.body;
+        
+        const options = {
+            amount: amount * 100, // Amount in paise
+            currency: "INR",
+            receipt: `receipt_${Date.now()}`
+        };
+
+        const order = await razorpay.orders.create(options);
+        res.status(201).json({ success: true, order });
+    } catch (error) {
+        console.error('Order Creation Error:', error);
+        res.status(500).json({ success: false, message: "Could not initiate payment" });
+    }
+});
+
 // @route   POST /api/register
-// @desc    Register a new participant
+// @desc    Verify payment and register participant
 app.post('/api/register', async (req, res) => {
     try {
-        const { name, email, phone, college, usn, year, department, event } = req.body;
+        const { 
+            name, email, phone, college, usn, year, department, registrations, amount,
+            razorpay_order_id, razorpay_payment_id, razorpay_signature 
+        } = req.body;
 
-        // Basic validation check
-        if (!name || !email || !phone || !usn || !event) {
-            return res.status(400).json({
-                success: false,
-                message: "Please provide all required fields"
-            });
+        // Verify Razorpay Signature
+        const sign = razorpay_order_id + "|" + razorpay_payment_id;
+        const expectedSign = crypto
+            .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret')
+            .update(sign.toString())
+            .digest("hex");
+
+        if (razorpay_signature !== expectedSign) {
+            return res.status(400).json({ success: false, message: "Invalid payment signature" });
         }
 
         const newUser = new User({
-            name,
-            email,
-            phone,
-            college,
-            usn,
-            year,
-            department,
-            event
+            name, email, phone, college, usn, year, department, registrations,
+            amount,
+            transactionId: razorpay_payment_id,
+            paymentStatus: 'verified'
         });
 
         await newUser.save();
-
-        // Trigger Email Dispatch
         await sendConfirmationEmail(newUser);
 
-        console.log(`New Registration: ${name} for ${event}`);
+        console.log(`✅ New Registration: ${name} (Amount: ${amount})`);
 
         res.status(201).json({
             success: true,
@@ -61,15 +89,11 @@ app.post('/api/register', async (req, res) => {
 
     } catch (error) {
         console.error('Registration Error:', error);
-        res.status(500).json({
-            success: false,
-            message: "Server Error. Please try again later."
-        });
+        res.status(500).json({ success: false, message: "Server Error. Please try again later." });
     }
 });
 
 // @route   GET /api/registrations
-// @desc    Get all registrations (Admin use)
 app.get('/api/registrations', async (req, res) => {
     try {
         const registrations = await User.find().sort({ registrationDate: -1 });
@@ -79,7 +103,6 @@ app.get('/api/registrations', async (req, res) => {
     }
 });
 
-// Basic Health Check
 app.get('/', (req, res) => {
     res.send('INOVEX Backend is Running...');
 });

@@ -17,7 +17,7 @@ const sendConfirmationEmail = async (userData) => {
     const mailOptions = {
         from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
         to: userData.email,
-        subject: `QUEST CONFIRMED: ${userData.event.toUpperCase()}`,
+        subject: `QUESTS CONFIRMED: ${userData.registrations.map(r => r.eventName).join(', ').toUpperCase()}`,
         html: `
             <div style="background-color: #000; color: #fff; padding: 40px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; border: 2px solid #b45309; border-radius: 15px; max-width: 600px; margin: auto;">
                 <div style="text-align: center; margin-bottom: 30px;">
@@ -27,14 +27,22 @@ const sendConfirmationEmail = async (userData) => {
                 
                 <p style="font-size: 18px; color: #e5e7eb; line-height: 1.6;">Greetings, <strong style="color: #f59e0b;">${userData.name}</strong>!</p>
                 
-                <p style="color: #9ca3af; line-height: 1.6;">Your identity has been verified in the system. Your quest is now forged, and your participation is officially recorded for the following expedition:</p>
+                <p style="color: #9ca3af; line-height: 1.6;">Your identity has been verified. Your path is forged for the following expeditions:</p>
                 
-                <div style="background-color: #1c1917; padding: 25px; border-radius: 12px; margin: 30px 0; border-left: 4px solid #f59e0b; text-align: center;">
-                    <h2 style="margin: 0; color: #f59e0b; font-size: 24px; text-transform: uppercase; letter-spacing: 2px;">${userData.event}</h2>
-                </div>
+                ${userData.registrations.map(reg => `
+                    <div style="background-color: #1c1917; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+                        <h2 style="margin: 0; color: #f59e0b; font-size: 18px; text-transform: uppercase; letter-spacing: 2px;">${reg.eventName}</h2>
+                        ${reg.teammates.length > 0 ? `
+                            <p style="margin: 10px 0 5px; color: #78716c; font-size: 10px; text-transform: uppercase;">Squad Members:</p>
+                            <ul style="margin: 0; padding-left: 15px; color: #d1d5db; font-size: 13px;">
+                                ${reg.teammates.map(t => `<li>${t.name} (${t.usn})</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                    </div>
+                `).join('')}
                 
-                <div style="background-color: #0c0a09; padding: 20px; border-radius: 8px; border: 1px solid #292524;">
-                    <p style="margin: 5px 0; color: #78716c; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Participant Details:</p>
+                <div style="background-color: #0c0a09; padding: 20px; border-radius: 8px; border: 1px solid #292524; margin-top: 30px;">
+                    <p style="margin: 5px 0; color: #78716c; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Primary Participant Details:</p>
                     <p style="margin: 5px 0; color: #d1d5db; font-size: 14px;"><strong>ID CODE (USN):</strong> ${userData.usn}</p>
                     <p style="margin: 5px 0; color: #d1d5db; font-size: 14px;"><strong>GUILD (COLLEGE):</strong> ${userData.college}</p>
                 </div>
