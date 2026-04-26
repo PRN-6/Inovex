@@ -354,8 +354,8 @@ const Register = () => {
                     <label
                       key={eventName}
                       className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer group ${selectedEvents.includes(eventName)
-                          ? 'bg-amber-500/10 border-amber-500/40 text-amber-400'
-                          : 'bg-black/40 border-amber-900/10 text-white/40 hover:border-amber-500/20'
+                        ? 'bg-amber-500/10 border-amber-500/40 text-amber-400'
+                        : 'bg-black/40 border-amber-900/10 text-white/40 hover:border-amber-500/20'
                         }`}
                     >
                       <input

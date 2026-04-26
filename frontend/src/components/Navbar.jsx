@@ -22,9 +22,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [logoClicks, setLogoClicks] = useState(0);
+  const clickTimeoutRef = useRef(null);
 
-  // Hide navbar on event details page
-  if (location.pathname.startsWith('/event/')) {
+  // Hide navbar on specific pages
+  if (location.pathname.startsWith('/event/') || location.pathname === '/inovex-terminal-2026') {
     return null;
   }
 
@@ -36,28 +38,39 @@ const Navbar = () => {
 
   // GSAP animations
   useEffect(() => {
-    // Set initial mobile menu position to hidden
-    if (mobileMenuRef.current) {
-      gsap.set(mobileMenuRef.current, { x: "100%" });
-    }
+    const ctx = gsap.context(() => {
+      // Set initial mobile menu position to hidden
+      if (mobileMenuRef.current) {
+        gsap.set(mobileMenuRef.current, { x: "100%" });
+      }
 
-    // Animate desktop sidebar on load
-    gsap.fromTo(desktopSidebarRef.current,
-      { x: -100, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
-    );
+      // Animate desktop sidebar on load
+      if (desktopSidebarRef.current) {
+        gsap.fromTo(desktopSidebarRef.current,
+          { x: -100, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+        );
+      }
 
-    // Animate mobile menu button on load
-    gsap.fromTo(mobileMenuButtonRef.current,
-      { scale: 0, rotation: -180 },
-      { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.7)", delay: 0.3 }
-    );
+      // Animate mobile menu button on load
+      if (mobileMenuButtonRef.current) {
+        gsap.fromTo(mobileMenuButtonRef.current,
+          { scale: 0, rotation: -180 },
+          { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.7)", delay: 0.3 }
+        );
+      }
 
-    // Animate nav items staggered
-    gsap.fromTo(navItemsRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out", delay: 0.5 }
-    );
+      // Animate nav items staggered
+      const navItems = navItemsRef.current.filter(item => item !== null);
+      if (navItems.length > 0) {
+        gsap.fromTo(navItems,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out", delay: 0.5 }
+        );
+      }
+    });
+
+    return () => ctx.revert();
   }, []);
 
   // Mobile menu animation
@@ -104,6 +117,13 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
+  }, []);
 
   // Update active section based on current route
   useEffect(() => {
@@ -181,7 +201,18 @@ const Navbar = () => {
         className="group fixed left-0 top-0 h-full bg-black/80 backdrop-blur-md text-white z-40 hidden md:flex flex-col transition-all duration-300 ease-in-out w-16 hover:w-40 border-r border-red-900/30 shadow-[10px_0_30px_rgba(0,0,0,0.8)] shadow-red-950/20"
       >
         {/* Logo */}
-        <div className="p-4 border-b border-red-900/30 flex items-center h-16">
+        <div 
+          className="p-4 border-b border-red-900/30 flex items-center h-16 cursor-pointer"
+          onClick={() => {
+            setLogoClicks(prev => prev + 1);
+            if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+            clickTimeoutRef.current = setTimeout(() => setLogoClicks(0), 3000);
+            if (logoClicks + 1 >= 5) {
+              navigate('/inovex-terminal-2026');
+              setLogoClicks(0);
+            }
+          }}
+        >
           <h1 className="text-xl font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-0 group-hover:w-auto overflow-hidden text-white whitespace-nowrap">
             INOVEX
           </h1>
@@ -234,7 +265,19 @@ const Navbar = () => {
         style={{ transform: 'translateX(100%)' }}
       >
         {/* Header */}
-        <div className="p-6 flex items-center justify-between border-b border-red-900/20">
+        <div 
+          className="p-6 flex items-center justify-between border-b border-red-900/20"
+          onClick={() => {
+            setLogoClicks(prev => prev + 1);
+            if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+            clickTimeoutRef.current = setTimeout(() => setLogoClicks(0), 3000);
+            if (logoClicks + 1 >= 5) {
+              navigate('/inovex-terminal-2026');
+              setLogoClicks(0);
+              setIsMobileMenuOpen(false);
+            }
+          }}
+        >
           <h1 className="text-2xl font-black tracking-[0.2em] text-red-600">INOVEX</h1>
           <div className="w-10 h-10" /> {/* Spacer for button */}
         </div>

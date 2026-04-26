@@ -9,7 +9,9 @@ const Footer = () => {
 
   const handleNavClick = (e, path) => {
     e.preventDefault();
-    if (location.pathname === '/' && path !== 'team' && path !== 'about') {
+    const externalPages = ['team', 'about', 'privacy', 'terms'];
+    
+    if (location.pathname === '/' && !externalPages.includes(path)) {
       const element = document.getElementById(path);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -17,7 +19,7 @@ const Footer = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } else {
-      if (path === 'team' || path === 'about') {
+      if (['team', 'about', 'privacy', 'terms'].includes(path)) {
         navigate(`/${path}`);
       } else {
         navigate('/');
@@ -56,13 +58,13 @@ const Footer = () => {
       {/* Decorative Hazard Stripe Top */}
       <div className="absolute top-0 left-0 w-full h-[6px] bg-[repeating-linear-gradient(45deg,#df1f26,#df1f26_10px,#000_10px,#000_20px)] opacity-40"></div>
 
-      <div className="container mx-10 px-6 relative z-10 md:pl-[9%]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-20">
+      <div className="container mx-auto px-6 relative z-10 md:px-12 lg:pl-[9%]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
 
           {/* Section 1: InGen Corporate Overlay */}
           <div className="lg:col-span-4 space-y-8">
             <div className="space-y-2">
-              <h2 className="text-5xl font-black italic tracking-tighter leading-none">INOVEX</h2>
+              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter leading-none">INOVEX</h2>
               <div className="flex items-center gap-2 text-[10px] font-black tracking-[0.4em] text-red-600">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
                 Code the Future // Create the Change
@@ -76,20 +78,20 @@ const Footer = () => {
             {/* Diagnostic Terminal Panel */}
             <div className="border border-white/5 bg-white/[0.02] p-5 rounded-sm space-y-4 max-w-xs">
               <div className="flex justify-between items-end border-b border-white/5 pb-2">
-                <span className="text-[9px] font-black text-white/30 tracking-widest">System Integrity</span>
+                <span className="text-[9px] font-black text-white/30 tracking-widest uppercase">System Integrity</span>
                 <span className="text-[10px] font-black text-green-500 tracking-widest">98.4% STABLE</span>
               </div>
               <div className="flex justify-between items-end border-b border-white/5 pb-2">
-                <span className="text-[9px] font-black text-white/30 tracking-widest">Asset Sync</span>
+                <span className="text-[9px] font-black text-white/30 tracking-widest uppercase">Asset Sync</span>
                 <span className="text-[10px] font-black text-red-600 tracking-widest animate-pulse">ACTIVE SCAN</span>
               </div>
             </div>
           </div>
 
           {/* Section 2: Protocols, Resources & Legal */}
-          <div className="lg:col-span-5 grid grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8">
 
-            <div className="space-y-8">
+            <div className="space-y-6 lg:space-y-8">
               <h3 className="text-[10px] font-black tracking-[0.5em] text-white/40 flex items-center gap-3">
                 <span className="w-6 h-[1px] bg-white/20"></span>
                 Protocol
@@ -110,7 +112,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-6 lg:space-y-8">
               <h3 className="text-[10px] font-black tracking-[0.5em] text-white/40 flex items-center gap-3">
                 <span className="w-6 h-[1px] bg-white/20"></span>
                 Resources
@@ -130,7 +132,8 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
-            <div className="space-y-8">
+
+            <div className="space-y-6 lg:space-y-8">
               <h3 className="text-[10px] font-black tracking-[0.5em] text-white/40 flex items-center gap-3">
                 <span className="w-6 h-[1px] bg-white/20"></span>
                 Legal
@@ -177,7 +180,7 @@ const Footer = () => {
                 </a>
                 <div className="text-xs font-black tracking-widest text-white flex items-center gap-2 lg:justify-end">
                   <Phone className="w-3 h-3 opacity-40" />
-                  [PHONE NUMBER]
+                  +91 93635 08381
                 </div>
               </div>
 
@@ -202,13 +205,13 @@ const Footer = () => {
 
         {/* Global Footer Meta */}
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black tracking-[0.4em] text-white/20 md:pl-[1%]">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 text-center md:text-left">
             <span>© 2026 INOVEX</span>
             <span className="hidden md:block w-4 h-[1px] bg-white/10"></span>
             <span>ALL ASSETS SECURED</span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col md:flex-row items-center gap-3 text-center">
             <span className="text-red-900/40">Diagnostic 07.B //</span>
             <span className="text-white/40">Containment Stable</span>
           </div>
@@ -216,7 +219,7 @@ const Footer = () => {
       </div>
 
       {/* Extreme Background Aesthetic */}
-      <div className="absolute -bottom-10 -right-10 text-[25vw] font-black italic opacity-[0.02] pointer-events-none translate-y-20">
+      <div className="absolute -bottom-10 -right-10 text-[25vw] font-black italic opacity-[0.02] pointer-events-none translate-y-20 select-none">
         INOVEX
       </div>
 

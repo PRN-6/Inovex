@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const User = require('./models/User');
@@ -17,8 +20,11 @@ const razorpay = new Razorpay({
 });
 
 // Middleware
+app.use(helmet()); // Security headers
+app.use(compression()); // Compress responses
+app.use(morgan('dev')); // Request logging
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10kb' })); // Body limit for security
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -35,7 +41,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.post('/api/create-order', async (req, res) => {
     try {
         const { amount } = req.body;
-        
+
         const options = {
             amount: amount * 100, // Amount in paise
             currency: "INR",
@@ -51,34 +57,35 @@ app.post('/api/create-order', async (req, res) => {
 });
 
 // @route   POST /api/register
-// @desc    Verify payment and register participant
+// @desc    Register participant directly
 app.post('/api/register', async (req, res) => {
+    // Maintenance Mode Check
+    if (process.env.MAINTENANCE_MODE === 'true') {
+        return res.status(503).json({ 
+            success: false, 
+            message: "EXPEDITION HALTED: The registration system is currently undergoing maintenance. Please try again later." 
+        });
+    }
+
     try {
         const { 
             name, email, phone, college, usn, year, department, registrations, amount,
-            razorpay_order_id, razorpay_payment_id, razorpay_signature 
+            transactionId 
         } = req.body;
-
-        // Verify Razorpay Signature
-        const sign = razorpay_order_id + "|" + razorpay_payment_id;
-        const expectedSign = crypto
-            .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret')
-            .update(sign.toString())
-            .digest("hex");
-
-        if (razorpay_signature !== expectedSign) {
-            return res.status(400).json({ success: false, message: "Invalid payment signature" });
-        }
 
         const newUser = new User({
             name, email, phone, college, usn, year, department, registrations,
             amount,
-            transactionId: razorpay_payment_id,
-            paymentStatus: 'verified'
+            transactionId: transactionId || `DIR_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+            paymentStatus: 'verified',
+            registrationDate: new Date()
         });
 
         await newUser.save();
-        await sendConfirmationEmail(newUser);
+
+        // Send email in background (non-blocking)
+        sendConfirmationEmail(newUser)
+            .catch(err => console.error("Background Email Error:", err));
 
         console.log(`✅ New Registration: ${name} (Amount: ${amount})`);
 
@@ -93,13 +100,51 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+// @route   GET /api/status
+// @desc    Check system status
+app.get('/api/status', (req, res) => {
+    res.json({ 
+        maintenance: process.env.MAINTENANCE_MODE === 'true',
+        maintenanceUntil: process.env.MAINTENANCE_UNTIL || null
+    });
+});
+
 // @route   GET /api/registrations
+// @desc    Get all registrations (Protected)
 app.get('/api/registrations', async (req, res) => {
     try {
+        const adminKey = req.headers['x-admin-key'];
+        const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        // Check if the key matches either level
+        if (adminKey !== secretKey && adminKey !== superSecretKey) {
+            return res.status(401).json({ success: false, message: "Unauthorized access" });
+        }
+
         const registrations = await User.find().sort({ registrationDate: -1 });
         res.json({ success: true, count: registrations.length, data: registrations });
     } catch (error) {
+        console.error('Fetch Error:', error);
         res.status(500).json({ success: false, message: "Error fetching data" });
+    }
+});
+
+// @route   DELETE /api/registrations/:id
+// @desc    Delete a registration (Super Admin Only)
+app.delete('/api/registrations/:id', async (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'];
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        if (adminKey !== superSecretKey) {
+            return res.status(403).json({ success: false, message: "SUPER ADMIN clearance required for deletion" });
+        }
+
+        await User.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: "Asset purged from system" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Purge failed" });
     }
 });
 

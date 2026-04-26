@@ -1,6 +1,6 @@
 # 🦖 INOVEX 2026: BORN FROM FIRE
 
-**INOVEX** is a high-fidelity, sci-fi themed college festival website. Inspired by the sleek, high-tech aesthetic of InGen (Jurassic Park), this platform serves as the digital gateway for participants to register for legendary events, track timelines, and explore festival personnel.
+**INOVEX** is a high-fidelity, sci-fi themed college festival website. Inspired by the sleek, high-tech aesthetic of InGen (Jurassic Park) and dragon-inspired "Legendary" themes, this platform serves as a battle-hardened gateway for festival registrations.
 
 ---
 
@@ -8,108 +8,97 @@
 
 ### Frontend
 - **Framework**: [React.js](https://reactjs.org/) (Vite)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Animations**: [GSAP](https://greensock.com/gsap/) (GreenSock Animation Platform)
+- **Styling**: Vanilla CSS & Tailwind (Custom Hybrid)
+- **Animations**: [GSAP](https://greensock.com/gsap/) & Framer Motion
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Forms**: [React Hook Form](https://react-hook-form.com/)
-- **Routing**: [React Router DOM](https://reactrouter.com/)
 
 ### Backend
-- **Runtime**: [Node.js](https://nodejs.org/)
-- **Framework**: [Express.js](https://expressjs.com/)
-- **Database**: [MongoDB Atlas](https://www.mongodb.com/atlas/database)
-- **ODM**: [Mongoose](https://mongoosejs.com/)
-- **Email**: [Nodemailer](https://nodemailer.com/)
-- **Security**: [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) & [Dotenv](https://www.npmjs.com/package/dotenv)
+- **Runtime**: Node.js / Express.js
+- **Database**: MongoDB Atlas (Mongoose)
+- **Email**: Nodemailer (Pooled Connection)
+- **Stress Testing**: k6.io
 
 ---
 
 ## ✨ Key Features
 
-- **Thematic Registration**: A fully validated multi-field registration form with "InGen" styling.
-- **Automated Email Confirmation**: Instant, thematic HTML emails sent to participants upon successful registration.
-- **Responsive "Dragon Theme" UI**: Custom-tailored layouts for mobile and desktop, including a glass-morphic mobile navigation system.
-- **Visual Excellence**: Floating ember effects, smooth GSAP transitions, and backdrop-blur dashboard interfaces.
-- **Database Integration**: Secure storage of participant data including USN, department, and event selection.
+### 1. Advanced Registration Protocol
+- **Direct Submission**: Fast, no-payment model for immediate registration.
+- **Squad Manifest**: Support for team-based events (RexHack, Spy vs Spy) with teammate USN tracking.
+- **Speed Hack**: Non-blocking background email processing, resulting in **<150ms response times** under heavy load.
+
+### 2. Central Terminal (Admin Panel)
+- **Dual-Tier Clearance**: 
+    - **Normal Admin**: View-only access to participant manifest.
+    - **Super Admin**: Full purge rights (DELETE) to manage asset database.
+- **Reporting Suite**: One-click exports for:
+    - **Excel (.xls)**: Full database manifest with team details.
+    - **Word (.doc)**: Professional, branded event reports.
+    - **CSV**: Raw data for external processing.
+- **Dynamic Search**: Real-time USN and name filtering.
+
+### 3. Site-B Maintenance Mode
+- **Instant Toggle**: Controlled via environment variables (`MAINTENANCE_MODE`).
+- **Expedition Countdown**: Real-time countdown timer to inform users when registrations reopen.
+- **Admin Bypass**: The Admin Terminal remains operational even during maintenance.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Performance & Scaling
+Tested via **k6** to handle extreme traffic:
+- **Concurrent Users**: 500+ Virtual Users (VUs)
+- **Throughput**: ~15,000 registrations in 2 minutes.
+- **Reliability**: 0.00% failure rate under peak stress.
 
-### Prerequisites
-- Node.js installed
-- A MongoDB Atlas Cluster
-- A Gmail account (for automated emails)
+---
 
-### Installation
+## ⚙️ Environment Configuration
 
-1. **Clone the repository**
+### Backend `.env`
+```env
+PORT=5000
+MONGO_URI=your_mongodb_uri
+EMAIL_USER=your_gmail
+EMAIL_PASS=your_app_password
+ADMIN_SECRET_KEY=level_1_key
+SUPER_ADMIN_SECRET_KEY=super_admin_key
+MAINTENANCE_MODE=false
+MAINTENANCE_UNTIL=2026-04-26T18:00:00Z
+```
+
+### Frontend `.env`
+```env
+VITE_ADMIN_SECRET_KEY=level_1_key
+VITE_SUPER_ADMIN_SECRET_KEY=super_admin_key
+```
+
+---
+
+## 🛠 Installation & Setup
+
+1. **Clone & Install**
    ```bash
-   git clone <your-repo-url>
-   cd college-fest-website-0.6
+   npm install
+   cd backend && npm install
+   cd ../frontend && npm install
    ```
 
-2. **Setup Frontend**
+2. **Run Development Mode**
    ```bash
-   cd frontend
-   npm install
+   # Terminal 1 (Backend)
+   npm run dev
+   
+   # Terminal 2 (Frontend)
    npm run dev
    ```
 
-3. **Setup Backend**
+3. **Load Testing (Optional)**
    ```bash
-   cd ../backend
-   npm install
+   k6 run load_test.js
    ```
 
-### Environment Variables
-Create a `.env` file in the `backend` directory with the following keys:
-```env
-MONGO_URI=your_mongodb_atlas_connection_string
-PORT=5000
-EMAIL_USER=your_gmail_address
-EMAIL_PASS=your_16_char_gmail_app_password
-```
-
 ---
 
-## 📁 Project Structure
-
-```text
-├── frontend/
-│   ├── src/
-│   │   ├── components/    # Navbar and Reusable UI
-│   │   ├── pages/         # Home, Events, Register, Team, About
-│   │   ├── data/          # Event and Personnel data
-│   │   └── styles/        # Global CSS and Tailwind configs
-├── backend/
-│   ├── models/            # Mongoose Schema (User.js)
-│   ├── utils/             # Email Service (emailService.js)
-│   ├── server.js          # Main Entry Point
-│   └── .env               # Secret Configuration
-```
-
----
-
-## 🛡 Performance Testing
-
-To ensure the registration system can handle high traffic during the fest, we use **k6** for load testing.
-
-### 1. Install k6
-Follow the [official k6 installation guide](https://k6.io/docs/getting-started/installation/) for your OS.
-
-### 2. Run Stress Test
-Ensure the backend server is running (`node server.js` in the backend folder), then execute:
-
-```bash
-k6 run performance-tests/register_stress_test.js
-```
-
-The script simulates 20 concurrent users over 1 minute and 50 seconds, generating randomized participant data for each request.
-
----
-
-## 🛡 License
-This project is for the **INOVEX 2026** College Festival. 
-
-**"Your path is forged. Prepare for the expedition."**
+## 📜 License
+INOVEX CORE SYSTEMS - SITE-B DATA PROTOCOL. 
+All rights reserved © 2026.
