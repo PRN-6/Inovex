@@ -126,7 +126,7 @@ const About = () => {
                   </div>
                   <div>
                     <span className="block text-xs font-bold text-white/40 uppercase mb-1">Sector Origin</span>
-                    <span className="text-sm font-medium">Main Auditorium Hub & Engineering Complex</span>
+                    <span className="text-sm font-medium">AJ Institute of Engineering & Technology</span>
                   </div>
                 </li>
                 <li className="flex gap-4">
