@@ -11,9 +11,7 @@ const Register = () => {
   const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0 });
 
   // Dynamic API URL for Local/Production
-  const API_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000' 
-    : 'https://inovex-backend01.onrender.com';
+  const API_URL = "https://inovex-backend01-b4y6.onrender.com";
 
   // Event Pricing & Squad Sizes
   const eventPrices = {
@@ -78,14 +76,14 @@ const Register = () => {
     embersRef.current.forEach((ember) => {
       if (ember) {
         gsap.set(ember, { x: Math.random() * window.innerWidth, y: window.innerHeight + 50, opacity: 0 });
-        const anim = gsap.to(ember, { 
-          y: -100, 
-          x: `+=${Math.random() * 200 - 100}`, 
-          opacity: [0, 0.8, 0], 
-          duration: Math.random() * 5 + 5, 
-          repeat: -1, 
-          delay: Math.random() * 10, 
-          ease: "none" 
+        const anim = gsap.to(ember, {
+          y: -100,
+          x: `+=${Math.random() * 200 - 100}`,
+          opacity: [0, 0.8, 0],
+          duration: Math.random() * 5 + 5,
+          repeat: -1,
+          delay: Math.random() * 10,
+          ease: "none"
         });
         activeAnimations.push(anim);
       }
@@ -103,7 +101,7 @@ const Register = () => {
       return;
     }
     setIsLoading(true);
-    
+
     try {
       // Package registration data with teammates
       const registrations = selectedEvents.map(eventName => {
@@ -163,7 +161,7 @@ const Register = () => {
                 <Shield size={64} className="text-red-500 mb-6 animate-pulse" />
                 <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] mb-4">Expedition Halted</h2>
                 <p className="text-[10px] font-bold text-red-500/60 tracking-widest uppercase leading-relaxed mb-10">
-                  The registration protocol is currently offline for maintenance.<br/>Please check back shortly.
+                  The registration protocol is currently offline for maintenance.<br />Please check back shortly.
                 </p>
 
                 {(timeLeft.h > 0 || timeLeft.m > 0 || timeLeft.s > 0) && (
@@ -203,71 +201,71 @@ const Register = () => {
                 </div>
 
                 <form onSubmit={handleSubmit(handleRegistration)} className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Full Name</label>
-                <div className="relative group">
-                  <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-500 transition-colors" />
-                  <input {...register("name", { required: true })} placeholder="E.G. ALEX DRIVER" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-                </div>
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Full Name</label>
+                    <div className="relative group">
+                      <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-500 transition-colors" />
+                      <input {...register("name", { required: true })} placeholder="E.G. ALEX DRIVER" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Email</label>
-                  <input {...register("email", { required: true })} type="email" placeholder="EMAIL" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Phone</label>
-                  <input {...register("phone", { required: true })} placeholder="PHONE" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-                </div>
-              </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Email</label>
+                      <input {...register("email", { required: true })} type="email" placeholder="EMAIL" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Phone</label>
+                      <input {...register("phone", { required: true })} placeholder="PHONE" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                    </div>
+                  </div>
 
-              <div className="space-y-1">
-                <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">College / Institution</label>
-                <input {...register("college", { required: true })} placeholder="COLLEGE NAME" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">College / Institution</label>
+                    <input {...register("college", { required: true })} placeholder="COLLEGE NAME" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                  </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">USN / ID</label>
-                  <input {...register("usn", { required: true })} placeholder="USN" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Year</label>
-                  <select {...register("year", { required: true })} className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white">
-                    <option value="1">1ST YEAR</option><option value="2">2ND YEAR</option><option value="3">3RD YEAR</option><option value="4">4TH YEAR</option>
-                  </select>
-                </div>
-              </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">USN / ID</label>
+                      <input {...register("usn", { required: true })} placeholder="USN" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Year</label>
+                      <select {...register("year", { required: true })} className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white">
+                        <option value="1">1ST YEAR</option><option value="2">2ND YEAR</option><option value="3">3RD YEAR</option><option value="4">4TH YEAR</option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div className="space-y-1">
-                <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Department</label>
-                <input {...register("department", { required: true })} placeholder="E.G. COMPUTER SCIENCE" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Department</label>
+                    <input {...register("department", { required: true })} placeholder="E.G. COMPUTER SCIENCE" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                  </div>
 
-              <div className="pt-6 border-t border-white/5">
-                <label className="text-[9px] font-black text-red-500 uppercase tracking-[0.3em] mb-4 block">Select Quests</label>
-                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
-                  {Object.keys(eventPrices).map((eventName) => (
-                    <label key={eventName} className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(eventName) ? 'bg-red-600/10 border-red-600/40 text-red-500' : 'bg-black/40 border-white/5 text-white/20 hover:border-white/20'}`}>
-                      <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
-                      <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${selectedEvents.includes(eventName) ? 'bg-red-600 border-red-600' : 'border-white/20'}`}>
-                        {selectedEvents.includes(eventName) && <Database size={10} className="text-white" />}
-                      </div>
-                      <span className="text-[8px] font-black uppercase truncate tracking-tight">{eventName}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+                  <div className="pt-6 border-t border-white/5">
+                    <label className="text-[9px] font-black text-red-500 uppercase tracking-[0.3em] mb-4 block">Select Quests</label>
+                    <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                      {Object.keys(eventPrices).map((eventName) => (
+                        <label key={eventName} className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(eventName) ? 'bg-red-600/10 border-red-600/40 text-red-500' : 'bg-black/40 border-white/5 text-white/20 hover:border-white/20'}`}>
+                          <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
+                          <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${selectedEvents.includes(eventName) ? 'bg-red-600 border-red-600' : 'border-white/20'}`}>
+                            {selectedEvents.includes(eventName) && <Database size={10} className="text-white" />}
+                          </div>
+                          <span className="text-[8px] font-black uppercase truncate tracking-tight">{eventName}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
 
-              <button type="submit" disabled={isLoading} className={`w-full mt-6 py-4 rounded-2xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 group relative overflow-hidden ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/20'}`}>
-                <div className="absolute inset-0 bg-white/10 skew-x-[-45deg] -translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                {isLoading ? <Database size={18} className="animate-spin" /> : <Flame size={18} />}
-                <span>{isLoading ? 'PROCESSING...' : 'COMPLETE REGISTRATION'}</span>
-              </button>
-            </form>
-          </>
-        )}
+                  <button type="submit" disabled={isLoading} className={`w-full mt-6 py-4 rounded-2xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 group relative overflow-hidden ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/20'}`}>
+                    <div className="absolute inset-0 bg-white/10 skew-x-[-45deg] -translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                    {isLoading ? <Database size={18} className="animate-spin" /> : <Flame size={18} />}
+                    <span>{isLoading ? 'PROCESSING...' : 'COMPLETE REGISTRATION'}</span>
+                  </button>
+                </form>
+              </>
+            )}
 
             {isSubmitted && (
               <div className="success-overlay absolute inset-0 bg-black/98 flex flex-col items-center justify-center p-8 text-center z-50 rounded-3xl">
