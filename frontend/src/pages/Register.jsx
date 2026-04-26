@@ -98,6 +98,10 @@ const Register = () => {
   }, []);
 
   const handleRegistration = async (formData) => {
+    if (selectedEvents.length === 0) {
+      alert("MISSION CRITICAL: You must select at least one event to join the expedition.");
+      return;
+    }
     setIsLoading(true);
     
     try {
