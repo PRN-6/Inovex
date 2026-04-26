@@ -11,7 +11,7 @@ const Register = () => {
   const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0 });
 
   // Dynamic API URL for Local/Production
-  const API_URL = "https://inovex-backend01-b4y6.onrender.com";
+  const API_URL = "https://inovex-backend01.onrender.com";
 
   // Event Pricing & Squad Sizes
   const eventPrices = {
