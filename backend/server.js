@@ -96,6 +96,16 @@ app.post('/api/register', async (req, res) => {
 
     } catch (error) {
         console.error('Registration Error:', error);
+        
+        // Handle MongoDB Duplicate Key Error (Code 11000)
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            return res.status(400).json({ 
+                success: false, 
+                message: `DUPLICATE ASSET: A participant with this ${field.toUpperCase()} is already in the database.` 
+            });
+        }
+
         res.status(500).json({ success: false, message: "Server Error. Please try again later." });
     }
 });
