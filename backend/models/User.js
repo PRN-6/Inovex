@@ -58,6 +58,11 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+// Optimization: Add indexes for faster lookups
+userSchema.index({ email: 1 });
+userSchema.index({ usn: 1 });
+userSchema.index({ registrationDate: -1 });
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

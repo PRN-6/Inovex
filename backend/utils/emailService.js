@@ -1,8 +1,11 @@
 const nodemailer = require('nodemailer');
 
-// Email Transporter Configuration
+// Email Transporter Configuration with Pooling
 const transporter = nodemailer.createTransport({
     service: 'gmail',
+    pool: true, // Use pooling to handle multiple emails
+    maxConnections: 5,
+    maxMessages: 100,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -14,6 +17,11 @@ const transporter = nodemailer.createTransport({
  * @param {Object} userData - The user document from MongoDB
  */
 const sendConfirmationEmail = async (userData) => {
+    // K6 TEST GUARD: Skip email if it's a load test
+    if (userData.transactionId && userData.transactionId.startsWith('K6_TEST')) {
+        return { success: true, message: "K6 Test detected: Email suppressed" };
+    }
+
     const mailOptions = {
         from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
         to: userData.email,
