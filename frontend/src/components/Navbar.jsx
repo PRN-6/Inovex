@@ -186,11 +186,10 @@ const Navbar = () => {
       <button
         ref={mobileMenuButtonRef}
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className={`fixed top-4 right-4 z-50 md:hidden p-3 rounded-xl transition-all duration-300 shadow-lg border ${
-          isMobileMenuOpen 
-            ? 'bg-red-600 text-white border-red-400' 
+        className={`fixed top-4 right-4 z-50 md:hidden p-3 rounded-xl transition-all duration-300 shadow-lg border ${isMobileMenuOpen
+            ? 'bg-red-600 text-white border-red-400'
             : 'bg-black/60 backdrop-blur-md text-red-500 border-red-900/50 hover:bg-red-900/20'
-        }`}
+          }`}
       >
         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -201,7 +200,7 @@ const Navbar = () => {
         className="group fixed left-0 top-0 h-full bg-black/80 backdrop-blur-md text-white z-40 hidden md:flex flex-col transition-all duration-300 ease-in-out w-16 hover:w-40 border-r border-red-900/30 shadow-[10px_0_30px_rgba(0,0,0,0.8)] shadow-red-950/20"
       >
         {/* Logo */}
-        <div 
+        <div
           className="p-4 border-b border-red-900/30 flex items-center h-16 cursor-pointer"
           onClick={() => {
             setLogoClicks(prev => prev + 1);
@@ -265,7 +264,7 @@ const Navbar = () => {
         style={{ transform: 'translateX(100%)' }}
       >
         {/* Header */}
-        <div 
+        <div
           className="p-6 flex items-center justify-between border-b border-red-900/20"
           onClick={() => {
             setLogoClicks(prev => prev + 1);

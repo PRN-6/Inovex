@@ -1,11 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import { eventsData } from '../data/eventsData';
 
 const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
   const mobileCardRef = useRef(null);
   const cardRef = useRef(null);
   const [hasAnimated, setHasAnimated] = React.useState(false);
   const [currentImageIndex, setCurrentImageIndex] = React.useState(selectedIndex !== null ? selectedIndex : 0);
+
+  const event = eventsData[currentImageIndex + 1];
 
   // Update currentImageIndex when selectedIndex changes
   useEffect(() => {
@@ -17,17 +20,17 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
   // Handle tilt animation on hover
   const handleMouseMove = (e, cardElement) => {
     if (!cardElement) return;
-    
+
     const rect = cardElement.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
+
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    
+
     const rotateX = (y - centerY) / 10;
     const rotateY = (centerX - x) / 10;
-    
+
     gsap.to(cardElement, {
       rotationX: rotateX,
       rotationY: rotateY,
@@ -39,7 +42,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
 
   const handleMouseLeave = (cardElement) => {
     if (!cardElement) return;
-    
+
     gsap.to(cardElement, {
       rotationX: 0,
       rotationY: 0,
@@ -55,11 +58,11 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       const handleScroll = () => {
         const scrollPosition = window.scrollY;
         const windowHeight = window.innerHeight;
-        
+
         if (scrollPosition >= windowHeight * 0.5 && !hasAnimated) {
           setHasAnimated(true);
-          
-          gsap.fromTo(cardRef.current, 
+
+          gsap.fromTo(cardRef.current,
             { x: 200, opacity: 0, rotationY: 45, scale: 0.8 },
             { x: 0, opacity: 1, rotationY: 0, scale: 1, duration: 1.0, ease: "power3.out" }
           );
@@ -74,7 +77,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
   // Animate card when visibility changes
   useEffect(() => {
     if (cardRef.current && isVisible && !(selectedIndex === 0 && hasAnimated)) {
-      gsap.fromTo(cardRef.current, 
+      gsap.fromTo(cardRef.current,
         { x: 200, opacity: 0, rotationY: 45, scale: 0.8 },
         { x: 0, opacity: 1, rotationY: 0, scale: 1, duration: 1.0, ease: "power3.out" }
       );
@@ -86,24 +89,24 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
     if (shouldSpin && (mobileCardRef.current || cardRef.current)) {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline();
-        
+
         if (mobileCardRef.current) {
           tl.to(mobileCardRef.current, {
             rotationY: 180,
             duration: 0.6,
             ease: "power1.inOut",
-            onUpdate: function() {
+            onUpdate: function () {
               if (this.progress() > 0.45) setCurrentImageIndex(selectedIndex);
             }
           })
-          .to(mobileCardRef.current, {
-            rotationY: 360,
-            duration: 0.6,
-            ease: "power1.inOut",
-            onComplete: () => gsap.set(mobileCardRef.current, { rotationY: 0 })
-          });
+            .to(mobileCardRef.current, {
+              rotationY: 360,
+              duration: 0.6,
+              ease: "power1.inOut",
+              onComplete: () => gsap.set(mobileCardRef.current, { rotationY: 0 })
+            });
         }
-        
+
         if (cardRef.current) {
           tl.to(cardRef.current, {
             rotationY: 360,
@@ -133,13 +136,24 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
         onMouseLeave={() => handleMouseLeave(mobileCardRef.current)}
       >
         <div className="bg-white rounded-2xl shadow-2xl h-96 relative overflow-hidden">
-          <img 
-            src={`/images/cards/card${currentImageIndex + 1}.webp`} 
-            alt="Event card" 
+          <img
+            src={`/images/cards/card${currentImageIndex + 1}.webp`}
+            alt="Event card"
             className="w-full h-full object-cover"
             loading="lazy"
             decoding="async"
           />
+          {/* Eligibility Ribbon */}
+          {event?.participants?.includes('UG Students') && (
+            <div className="absolute top-4 right-[-35px] bg-red-600 text-white text-[10px] font-black px-10 py-1 rotate-45 shadow-lg">
+              UG ONLY
+            </div>
+          )}
+          {event?.participants?.includes('PG Students') && (
+            <div className="absolute top-4 right-[-35px] bg-blue-600 text-white text-[10px] font-black px-10 py-1 rotate-45 shadow-lg">
+              PG ONLY
+            </div>
+          )}
         </div>
       </div>
 
@@ -152,14 +166,26 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
         onMouseLeave={() => handleMouseLeave(cardRef.current)}
       >
         <div className="bg-white rounded-2xl shadow-2xl h-144 relative overflow-hidden">
-          <img 
-            src={`/images/cards/card${currentImageIndex + 1}.webp`} 
-            alt="Event card" 
+          <img
+            src={`/images/cards/card${currentImageIndex + 1}.webp`}
+            alt="Event card"
             className="w-full h-full object-cover"
             loading="lazy"
             decoding="async"
           />
           <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+
+          {/* Eligibility Ribbon */}
+          {event?.participants?.includes('UG Students') && (
+            <div className="absolute top-6 right-[-45px] bg-red-600 text-white text-[12px] font-black px-12 py-2 rotate-45 shadow-lg z-10">
+              UG ONLY
+            </div>
+          )}
+          {event?.participants?.includes('PG Students') && (
+            <div className="absolute top-6 right-[-45px] bg-blue-600 text-white text-[12px] font-black px-12 py-2 rotate-45 shadow-lg z-10">
+              PG ONLY
+            </div>
+          )}
         </div>
       </div>
     </>

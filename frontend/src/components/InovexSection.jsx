@@ -120,15 +120,15 @@ const InovexSection = () => {
   const format = (num) => String(num).padStart(2, '0').split('')
 
   return (
-    <section 
-      id="timeline" 
-      ref={containerRef} 
+    <section
+      id="timeline"
+      ref={containerRef}
       className="relative py-16 md:py-32 overflow-hidden min-h-screen flex items-center justify-center font-sans tracking-tight bg-cover bg-center"
       style={{ backgroundImage: `url('/images/heros/hero5.webp')` }}
     >
       {/* Dark Overlay for Readability */}
       <div className="absolute inset-0 bg-black/60 z-0"></div>
-      
+
       {/* Vignette Effect (Dark Corners) */}
       <div className="absolute inset-0 bg-[radial-gradient(circle,transparent_20%,black_100%)] opacity-70 z-0 pointer-events-none"></div>
 

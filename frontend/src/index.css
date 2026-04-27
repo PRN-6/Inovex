@@ -13,8 +13,13 @@
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%) skewX(-45deg); }
-  100% { transform: translateX(400%) skewX(-45deg); }
+  0% {
+    transform: translateX(-100%) skewX(-45deg);
+  }
+
+  100% {
+    transform: translateX(400%) skewX(-45deg);
+  }
 }
 
 @layer utilities {

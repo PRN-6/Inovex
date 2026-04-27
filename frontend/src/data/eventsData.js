@@ -28,12 +28,12 @@ export const eventsData = {
       },
       {
         name: "Round 2: Group Task",
-        time: "2:00 PM – 4:00 PM (Duration: 2 Hours)",
+        time: "1:00 PM – 2:30 PM (Duration: 1.30 Hours)",
         desc: "Participants will be divided into teams and assigned a group task to assess teamwork, communication, and leadership abilities."
       },
       {
         name: "Round 3: Presentation",
-        time: "11:00 AM – 12:00 PM",
+        time: "3:00 PM – 4:30 PM (Duration: 1.30 Hours)",
         desc: "Each participant presents their ideas on a given topic to evaluate confidence, clarity, and technical understanding."
       },
       {
@@ -50,10 +50,11 @@ export const eventsData = {
     date: "March 16, 2026",
     time: "10:00 AM - 4:00 PM",
     location: "College Campus",
-    participants: "Team of 3-4",
+    participants: "Team of 3-4 (Only for UG Students)",
     prize: "₹8,000",
     description: "A spy-themed treasure hunt where teams act as secret agents. Solve clues, complete activities, and move across checkpoints to uncover the final secret mission using a volunteer-guided QR system.",
     rules: [
+      "Only for UG students",
       "No personal phones used for clue scanning; only volunteer phone allowed",
       "One volunteer assigned per team to verify tasks",
       "Staggered start times and unique routes to avoid crowding",
@@ -85,10 +86,11 @@ export const eventsData = {
     date: "TBD",
     time: "10:30 AM - 3:45 PM",
     location: "Classroom",
-    participants: "Team of 2",
+    participants: "Team of 2 (Only for PG Students)",
     prize: "₹7,000 Pool",
     description: "Unleash the Chaos! A unique tech surprise event featuring Tech Bingo, Tech Snake & Ladders, and a fast-paced Tech Relay round. Test your luck, logic, and teamwork.",
     rules: [
+      "Only for PG students",
       "Teams of exactly 2 members (Max 20 teams)",
       "Use of mobile phones is strictly prohibited",
       "Any malpractice leads to disqualification",

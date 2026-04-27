@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText } from 'lucide-react';
+import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X } from 'lucide-react';
 import { gsap } from 'gsap';
 
 const Admin = () => {
@@ -9,15 +9,195 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterEvent, setFilterEvent] = useState('all');
-  const [clearanceLevel, setClearanceLevel] = useState(0); // 0: None, 1: Admin, 2: Super Admin
+  const [filterDate, setFilterDate] = useState('');
+  const [clearanceLevel, setClearanceLevel] = useState(0); // 0: None, 0.5: Event Head, 1: Admin, 2: Super Admin
+  const [restrictedEvent, setRestrictedEvent] = useState(null);
+  const [selectedReg, setSelectedReg] = useState(null);
 
-  const ADMIN_CODE = import.meta.env.VITE_ADMIN_SECRET_KEY || "INOVEX2026_ADMIN";
-  const SUPER_ADMIN_CODE = import.meta.env.VITE_SUPER_ADMIN_SECRET_KEY || "INOVEX2026_SUPER";
-
-  // Dynamic API URL for Local/Production
-  const API_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000' 
+  const API_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5000'
     : 'https://inovex-backend01.onrender.com';
+
+  const CalendarPicker = ({ value, onChange, onClear }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const calendarRef = React.useRef(null);
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+
+    const handleDateClick = (day) => {
+      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      // Adjust for timezone to ensure YYYY-MM-DD format
+      const offset = date.getTimezoneOffset();
+      const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+      onChange(adjustedDate.toISOString().split('T')[0]);
+      setIsOpen(false);
+    };
+
+    const nextMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+    const prevMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+
+    const days = [];
+    const totalDays = daysInMonth(currentMonth.getFullYear(), currentMonth.getMonth());
+    const startOffset = firstDayOfMonth(currentMonth.getFullYear(), currentMonth.getMonth());
+
+    for (let i = 0; i < startOffset; i++) days.push(null);
+    for (let i = 1; i <= totalDays; i++) days.push(i);
+
+    const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+
+    return (
+      <div className="relative calendar-picker" ref={calendarRef}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`flex items-center gap-2 bg-white/5 text-[10px] font-black border rounded-full px-4 py-2 transition-all 
+            ${isOpen ? 'border-red-600 text-white' : 'border-white/10 text-white/50 hover:border-white/20'}`}
+        >
+          <Calendar size={14} className={value ? 'text-red-600' : ''} />
+          <span>{value ? new Date(value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'FILTER BY DATE'}</span>
+          <ChevronRight size={12} className={`transition-transform ml-1 ${isOpen ? 'rotate-90' : ''}`} />
+        </button>
+
+        {isOpen && (
+          <div className="absolute top-full right-0 mt-4 w-72 bg-black/95 border border-white/10 p-6 z-[100] shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex justify-between items-center mb-6">
+              <button onClick={prevMonth} className="p-2 hover:bg-white/5 rounded-full transition-colors"><ChevronRight className="rotate-180" size={16} /></button>
+              <div className="text-center">
+                <p className="text-[10px] font-black tracking-[0.3em] text-white">{monthNames[currentMonth.getMonth()]}</p>
+                <p className="text-[8px] font-black text-white/20 tracking-widest mt-1">{currentMonth.getFullYear()}</p>
+              </div>
+              <button onClick={nextMonth} className="p-2 hover:bg-white/5 rounded-full transition-colors"><ChevronRight size={16} /></button>
+            </div>
+
+            <div className="grid grid-cols-7 gap-2 text-center mb-4">
+              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
+                <span key={d} className="text-[8px] font-black text-white/10">{d}</span>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-7 gap-2">
+              {days.map((day, i) => {
+                const isSelected = value && day && new Date(value).getDate() === day &&
+                  new Date(value).getMonth() === currentMonth.getMonth() &&
+                  new Date(value).getFullYear() === currentMonth.getFullYear();
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => day && handleDateClick(day)}
+                    disabled={!day}
+                    className={`aspect-square text-[9px] font-black flex items-center justify-center rounded-sm transition-all
+                      ${!day ? 'opacity-0 cursor-default' : 'hover:bg-red-600 hover:text-white'}
+                      ${isSelected ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(223,31,38,0.3)]' : 'text-white/40'}
+                    `}
+                  >
+                    {day}
+                  </button>
+                );
+              })}
+            </div>
+
+            {value && (
+              <button
+                onClick={() => { onClear(); setIsOpen(false); }}
+                className="w-full mt-6 py-3 border-t border-white/5 text-[8px] font-black text-red-600 hover:text-red-500 transition-colors tracking-[0.4em] uppercase"
+              >
+                RESET TEMPORAL FILTER
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const RegistrationDetailModal = ({ reg, onClose }) => {
+    if (!reg) return null;
+
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose}></div>
+        <div className="relative w-full max-w-2xl bg-zinc-900 border border-white/10 p-8 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200">
+          <button onClick={onClose} className="absolute top-4 right-4 text-white/40 hover:text-white"><X size={20} /></button>
+
+          <div className="flex items-center gap-4 mb-8 border-b border-white/5 pb-6">
+            <div className="p-3 bg-red-600/10 border border-red-600/20 rounded-xl">
+              <Users size={24} className="text-red-600" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-black italic text-white tracking-tight">{reg.name}</h3>
+              <p className="text-[10px] font-black text-red-600 tracking-[0.4em] uppercase">Asset Full Profile</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div>
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Identification</p>
+                <p className="text-sm font-bold text-white tracking-widest">{reg.usn}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Contact Intel</p>
+                <p className="text-sm font-bold text-white mb-1">{reg.email}</p>
+                <p className="text-sm font-bold text-amber-500">{reg.phone}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Guild / College</p>
+                <p className="text-sm font-bold text-white">{reg.college}</p>
+                <p className="text-xs text-white/50">{reg.department} // Year {reg.year}</p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Tribute Details</p>
+                <p className="text-lg font-black text-green-500 italic">₹{reg.amount}</p>
+                <p className="text-[10px] font-bold text-white/40 tracking-tighter mt-1">ID: {reg.transactionId}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-2 text-red-600">Active Quests</p>
+                <div className="space-y-3">
+                  {reg.registrations?.map((ev, i) => (
+                    <div key={i} className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                      <p className="text-xs font-black text-white mb-1">{ev.eventName}</p>
+                      {ev.teammates?.length > 0 && (
+                        <div className="space-y-2 mt-2 pt-2 border-t border-white/5">
+                          {ev.teammates.map((t, ti) => (
+                            <div key={ti} className="flex flex-col">
+                              <p className="text-[9px] text-white/70 font-bold">
+                                <span className="text-red-500 mr-1">SQUAD {ti + 2}:</span> {t.name}
+                              </p>
+                              <p className="text-[8px] text-white/30 tracking-widest">{t.usn} // {t.email}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center text-[9px] font-black text-white/20 tracking-widest">
+            <span>REGISTERED ON: {new Date(reg.registrationDate).toLocaleString()}</span>
+            <span>ID: {reg._id}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,43 +205,56 @@ const Admin = () => {
     }
   }, [isAuthenticated]);
 
-  const fetchRegistrations = async () => {
-    if (!accessCode) return;
+  const fetchRegistrations = async (forcedKey = null) => {
+    const keyToUse = forcedKey || accessCode;
+    if (!keyToUse) return;
     setIsLoading(true);
     try {
       const response = await fetch(`${API_URL}/api/registrations`, {
         headers: {
-          'x-admin-key': accessCode
+          'x-admin-key': keyToUse
         }
       });
       const data = await response.json();
       if (data && data.success && Array.isArray(data.data)) {
         setRegistrations(data.data);
+
+        // Update role info based on backend response
+        if (data.role) {
+          setClearanceLevel(data.role.clearance);
+          setRestrictedEvent(data.role.restrictedEvent);
+          if (data.role.restrictedEvent) {
+            setFilterEvent(data.role.restrictedEvent);
+          }
+        }
+
+        return true; // Success
       } else {
         setRegistrations([]);
         if (response.status === 401) {
           setIsAuthenticated(false);
-          alert("SESSION EXPIRED OR INVALID KEY");
+          alert("ACCESS DENIED: INVALID OR EXPIRED CLEARANCE KEY");
         }
+        return false;
       }
     } catch (error) {
       console.error("Fetch Error:", error);
       setRegistrations([]);
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (accessCode === SUPER_ADMIN_CODE) {
-      setClearanceLevel(2);
+    if (!accessCode) return;
+
+    // Attempt to fetch data with the provided code
+    // If successful, the server will tell us our role
+    const success = await fetchRegistrations(accessCode);
+    if (success) {
       setIsAuthenticated(true);
-    } else if (accessCode === ADMIN_CODE) {
-      setClearanceLevel(1);
-      setIsAuthenticated(true);
-    } else {
-      alert("ACCESS DENIED: INVALID CLEARANCE CODE");
     }
   };
 
@@ -96,9 +289,14 @@ const Admin = () => {
       const matchesFilter = filterEvent === 'all' ||
         (reg.registrations && Array.isArray(reg.registrations) && reg.registrations.some(r => r && String(r.eventName) === filterEvent));
 
-      return matchesSearch && matchesFilter;
+      const matchesRestricted = !restrictedEvent ||
+        (reg.registrations && Array.isArray(reg.registrations) && reg.registrations.some(r => r && String(r.eventName) === restrictedEvent));
+
+      const matchesDate = !filterDate || (reg.registrationDate && new Date(reg.registrationDate).toDateString() === new Date(filterDate).toDateString());
+
+      return matchesSearch && matchesFilter && matchesRestricted && matchesDate;
     });
-  }, [registrations, searchQuery, filterEvent]);
+  }, [registrations, searchQuery, filterEvent, filterDate, restrictedEvent]);
 
   const stats = useMemo(() => {
     const safeRegs = Array.isArray(registrations) ? registrations : [];
@@ -141,8 +339,8 @@ const Admin = () => {
     const rows = filteredData.map(r => [
       r.name, r.email, r.phone, r.usn, r.college, r.year, r.department, r.amount, r.transactionId,
       r.registrations?.map(ev => {
-        const teamInfo = ev.teammates?.length > 0 
-          ? ` (Squad: ${ev.teammates.map(t => `${t.name} [${t.usn}]`).join(", ")})` 
+        const teamInfo = ev.teammates?.length > 0
+          ? ` (Squad: ${ev.teammates.map(t => `${t.name} [USN: ${t.usn}, Email: ${t.email}]`).join(" | ")})`
           : "";
         return `${ev.eventName}${teamInfo}`;
       }).join(" | ")
@@ -326,9 +524,11 @@ const Admin = () => {
               <h2 className="text-xl font-black italic tracking-tighter">INOVEX ADMIN</h2>
               <div className="flex items-center gap-2">
                 <p className="text-[8px] font-black tracking-widest text-red-600/60">SYSTEM STATUS: 100% OPERATIONAL</p>
-                <span className={`text-[7px] px-1.5 py-0.5 rounded-full font-black border ${clearanceLevel >= 2 ? 'bg-red-600 text-white border-red-400' : 'bg-white/5 text-white/40 border-white/10'
+                <span className={`text-[7px] px-1.5 py-0.5 rounded-full font-black border ${clearanceLevel >= 2 ? 'bg-red-600 text-white border-red-400' :
+                    clearanceLevel >= 1 ? 'bg-white/10 text-white/80 border-white/20' :
+                      'bg-blue-600/20 text-blue-400 border-blue-500/30'
                   }`}>
-                  {clearanceLevel >= 2 ? 'SUPER ADMIN' : 'LEVEL 1 ACCESS'}
+                  {clearanceLevel >= 2 ? 'SUPER ADMIN' : clearanceLevel >= 1 ? 'LEVEL 1 ACCESS' : `EVENT LEAD: ${restrictedEvent?.toUpperCase()}`}
                 </span>
               </div>
             </div>
@@ -362,12 +562,24 @@ const Admin = () => {
       <main className="container mx-auto px-6 py-8 space-y-10">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
+          <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3 relative overflow-hidden group">
             <div className="flex justify-between items-start">
               <span className="text-[10px] font-black text-white/40 tracking-widest">TOTAL TRIBUTE</span>
               <TrendingUp size={16} className="text-green-500" />
             </div>
-            <p className="text-3xl font-black italic">₹{stats.totalRevenue.toLocaleString()}</p>
+            {clearanceLevel >= 1 ? (
+              <p className="text-3xl font-black italic">₹{stats.totalRevenue.toLocaleString()}</p>
+            ) : (
+              <div className="flex flex-col gap-1">
+                <p className="text-xl font-black italic text-white/20">ACCESS RESTRICTED</p>
+                <p className="text-[8px] font-black text-red-600/40">ADMIN CLEARANCE REQUIRED</p>
+              </div>
+            )}
+            {clearanceLevel < 1 && (
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <Lock size={16} className="text-white/20" />
+              </div>
+            )}
           </div>
           <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
             <div className="flex justify-between items-start">
@@ -393,24 +605,35 @@ const Admin = () => {
         </div>
 
         {/* Data Table */}
-        <div className="border border-white/5 bg-white/[0.01] overflow-hidden">
+        <div className="border border-white/5 bg-white/[0.01]">
           <div className="p-4 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
             <h3 className="text-xs font-black tracking-[0.3em] flex items-center gap-3">
               <Database size={14} className="text-red-600" />
               ASSET DATABASE
             </h3>
-            <div className="flex items-center gap-2">
-              <Filter size={12} className="text-white/30" />
-              <select
-                className="bg-black text-[10px] font-black border border-white/10 px-2 py-1 outline-none"
-                value={filterEvent}
-                onChange={(e) => setFilterEvent(e.target.value)}
-              >
-                <option value="all">ALL QUESTS</option>
-                {Object.keys(stats.eventBreakdown).map(ev => (
-                  <option key={ev} value={ev}>{ev.toUpperCase()}</option>
-                ))}
-              </select>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Filter size={12} className="text-white/30" />
+                <select
+                  className={`bg-black text-[10px] font-black border border-white/10 px-2 py-1 outline-none transition-opacity ${restrictedEvent ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  value={filterEvent}
+                  onChange={(e) => !restrictedEvent && setFilterEvent(e.target.value)}
+                  disabled={!!restrictedEvent}
+                >
+                  <option value="all">ALL QUESTS</option>
+                  {Object.keys(stats.eventBreakdown).map(ev => (
+                    <option key={ev} value={ev}>{ev.toUpperCase()}</option>
+                  ))}
+                </select>
+                {restrictedEvent && (
+                  <span className="text-[8px] font-black text-blue-400/50 ml-1 tracking-widest">LOCKED</span>
+                )}
+              </div>
+              <CalendarPicker
+                value={filterDate}
+                onChange={setFilterDate}
+                onClear={() => setFilterDate('')}
+              />
             </div>
           </div>
 
@@ -419,7 +642,7 @@ const Admin = () => {
               <thead>
                 <tr className="border-b border-white/5 bg-white/[0.02]">
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">PARTICIPANT</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">IDENTIFICATION (USN)</th>
+                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">CONTACT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">GUILD / DEPT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">QUESTS</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">TRIBUTE</th>
@@ -446,16 +669,19 @@ const Admin = () => {
                       <td className="p-4">
                         <div className="space-y-1">
                           <p className="text-xs font-black text-white">{reg.name || 'UNKNOWN'}</p>
-                          <p className="text-[9px] font-bold text-white/30">{reg.email || 'N/A'}</p>
+                          <p className="text-[10px] font-black tracking-widest bg-white/5 px-2 py-0.5 rounded-sm border border-white/5 inline-block">{reg.usn || 'N/A'}</p>
                         </div>
                       </td>
                       <td className="p-4">
-                        <span className="text-[10px] font-black tracking-widest bg-white/5 px-2 py-1 rounded-sm border border-white/5">{reg.usn || 'N/A'}</span>
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black text-white/80 tracking-widest">{reg.phone || 'NO PHONE'}</p>
+                          <p className="text-[9px] font-bold text-white/30 normal-case">{reg.email || 'N/A'}</p>
+                        </div>
                       </td>
                       <td className="p-4">
                         <div className="space-y-1">
-                          <p className="text-[10px] font-black text-white/60">{reg.college || 'EXTERNAL'}</p>
-                          <p className="text-[9px] font-bold text-red-900/40">{reg.department || 'N/A'} // YEAR {reg.year || '?'}</p>
+                          <p className="text-[10px] font-black text-white/60 truncate max-w-[150px]" title={reg.college}>{reg.college || 'EXTERNAL'}</p>
+                          <p className="text-[8px] font-bold text-red-900/40 uppercase tracking-tighter">Year {reg.year || '?'} // {reg.department || 'N/A'}</p>
                         </div>
                       </td>
                       <td className="p-4">
@@ -486,9 +712,23 @@ const Admin = () => {
                           </p>
                         </div>
                       </td>
+                      <td className="p-4">
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black text-white/60">
+                            {reg.registrationDate ? new Date(reg.registrationDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : 'N/A'}
+                          </p>
+                          <p className="text-[8px] font-bold text-white/20 tracking-tighter">
+                            {reg.registrationDate ? new Date(reg.registrationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                          </p>
+                        </div>
+                      </td>
                       <td className="p-4 text-right">
                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button className="p-2 text-white/40 hover:text-white transition-colors" title="VIEW DETAILS">
+                          <button
+                            onClick={() => setSelectedReg(reg)}
+                            className="p-2 text-white/40 hover:text-red-500 transition-colors"
+                            title="VIEW ASSET INTEL"
+                          >
                             <ExternalLink size={14} />
                           </button>
                           {clearanceLevel >= 2 && (
@@ -510,6 +750,11 @@ const Admin = () => {
           </div>
         </div>
       </main>
+
+      <RegistrationDetailModal
+        reg={selectedReg}
+        onClose={() => setSelectedReg(null)}
+      />
 
       {/* Footer Meta */}
       <footer className="p-8 border-t border-white/5 text-center">

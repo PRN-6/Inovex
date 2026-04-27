@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { gsap } from 'gsap';
-import { User, Mail, School, Phone, ChevronRight, ShieldCheck, Database, Flame, Hash, GraduationCap, BookOpen, Shield, CheckCircle, UserPlus } from 'lucide-react';
+import { User, Mail, School, Phone, ChevronRight, ShieldCheck, Database, Flame, Hash, GraduationCap, BookOpen, Shield, CheckCircle, UserPlus, X } from 'lucide-react';
 
 const Register = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -122,7 +122,8 @@ const Register = () => {
         ...formData,
         registrations,
         amount: selectedEvents.reduce((total, e) => total + (eventPrices[e] || 0), 0),
-        transactionId: `REG_${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+        transactionId: `DIR_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        hp_field: formData.hp_field
       };
 
       const response = await fetch(`${API_URL}/api/register`, {
@@ -147,20 +148,21 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden font-sans">
-      {/* Immersive Background */}
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.05)_0%,rgba(0,0,0,1)_70%)]" />
+    <div className="min-h-screen bg-[#050505] text-white relative overflow-hidden font-sans">
+      {/* Immersive Background - Now with more vibrant depth */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08)_0%,rgba(0,0,0,1)_70%)]" />
+      <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
       <div className="relative z-10 w-full min-h-screen px-6 md:px-20 lg:px-40 lg:pl-56 pt-28 pb-20 overflow-y-auto">
         <div className="w-full flex flex-col lg:flex-row gap-12 items-center lg:items-start transition-all duration-700">
 
           {/* REGISTRATION FORM */}
-          <div ref={containerRef} className="w-full max-w-md lg:sticky lg:top-28 lg:z-30 border border-red-900/20 rounded-3xl p-8 bg-zinc-900/30 backdrop-blur-xl shadow-2xl shadow-red-950/10">
+          <div ref={containerRef} className="w-full max-w-md lg:sticky lg:top-28 lg:z-30 border border-amber-500/20 rounded-3xl p-8 bg-zinc-900/40 backdrop-blur-2xl shadow-2xl shadow-amber-900/5">
             {isMaintenance ? (
               <div className="flex flex-col items-center py-12 text-center animate-in fade-in zoom-in duration-500">
-                <Shield size={64} className="text-red-500 mb-6 animate-pulse" />
+                <Shield size={64} className="text-amber-500 mb-6 animate-pulse" />
                 <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] mb-4">Expedition Halted</h2>
-                <p className="text-[10px] font-bold text-red-500/60 tracking-widest uppercase leading-relaxed mb-10">
+                <p className="text-xs font-bold text-amber-500/80 tracking-widest uppercase leading-relaxed mb-10">
                   The registration protocol is currently offline for maintenance.<br />Please check back shortly.
                 </p>
 
@@ -168,99 +170,151 @@ const Register = () => {
                   <div className="grid grid-cols-3 gap-4 mb-10 w-full px-6">
                     <div className="flex flex-col items-center">
                       <span className="text-3xl font-black italic text-white leading-none">{String(timeLeft.h).padStart(2, '0')}</span>
-                      <span className="text-[7px] font-black text-red-500 tracking-[0.3em] mt-1 uppercase">Hours</span>
+                      <span className="text-[10px] font-black text-amber-500 tracking-[0.3em] mt-1 uppercase">Hours</span>
                     </div>
                     <div className="flex flex-col items-center">
                       <span className="text-3xl font-black italic text-white leading-none">{String(timeLeft.m).padStart(2, '0')}</span>
-                      <span className="text-[7px] font-black text-red-500 tracking-[0.3em] mt-1 uppercase">Mins</span>
+                      <span className="text-[10px] font-black text-amber-500 tracking-[0.3em] mt-1 uppercase">Mins</span>
                     </div>
                     <div className="flex flex-col items-center">
                       <span className="text-3xl font-black italic text-white leading-none animate-pulse">{String(timeLeft.s).padStart(2, '0')}</span>
-                      <span className="text-[7px] font-black text-red-500 tracking-[0.3em] mt-1 uppercase">Secs</span>
+                      <span className="text-[10px] font-black text-amber-500 tracking-[0.3em] mt-1 uppercase">Secs</span>
                     </div>
                   </div>
                 )}
 
                 <div className="flex items-center gap-2 mb-10">
-                  <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
-                  <span className="text-[8px] font-black text-white/20 tracking-[0.4em] uppercase italic">Syst-Sync Active</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></div>
+                  <span className="text-[10px] font-black text-white/30 tracking-[0.4em] uppercase italic">Syst-Sync Active</span>
                 </div>
 
-                <button onClick={() => window.location.href = '/'} className="px-8 py-3 border border-red-500/20 text-red-500 text-[9px] font-black tracking-widest hover:bg-red-500 hover:text-white transition-all uppercase">
+                <button onClick={() => window.location.href = '/'} className="px-8 py-3 border border-amber-500/40 text-amber-500 text-[10px] font-black tracking-widest hover:bg-amber-500 hover:text-white transition-all uppercase rounded-lg">
                   Return to Base
                 </button>
               </div>
             ) : (
               <>
                 <div className="flex flex-col items-center mb-8">
-                  <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center mb-4 border border-red-600/20">
-                    <UserPlus size={24} className="text-red-500" />
+                  <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-4 border border-amber-500/20 rotate-3 hover:rotate-0 transition-transform duration-500">
+                    <UserPlus size={28} className="text-amber-500" />
                   </div>
-                  <h2 className="text-2xl font-black text-white uppercase tracking-[0.3em]">Registration</h2>
-                  <p className="text-[9px] font-bold text-red-500/60 tracking-widest mt-2">SECURE YOUR SPOT IN THE EXPEDITION</p>
+                  <h2 className="text-3xl font-black text-white uppercase tracking-[0.2em]">Register</h2>
+                  <div className="h-1 w-12 bg-amber-500 mt-2 rounded-full"></div>
+                  <p className="text-[10px] font-bold text-amber-500/80 tracking-widest mt-3 uppercase">Secure your spot in the expedition</p>
                 </div>
 
-                <form onSubmit={handleSubmit(handleRegistration)} className="space-y-4">
-                  <div className="space-y-1">
-                    <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Full Name</label>
+                <form onSubmit={handleSubmit(handleRegistration)} className="space-y-5">
+                  {/* Honeypot field to catch bots - MUST REMAIN HIDDEN */}
+                  <input 
+                    {...register("hp_field")} 
+                    type="text" 
+                    className="hidden" 
+                    tabIndex="-1" 
+                    autoComplete="off" 
+                  />
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Full Name</label>
                     <div className="relative group">
-                      <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-500 transition-colors" />
-                      <input {...register("name", { required: true })} placeholder="E.G. ALEX DRIVER" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                      <User size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.name ? 'text-red-500' : 'text-white/30 group-focus-within:text-amber-500'}`} />
+                      <input 
+                        {...register("name", { required: "Full name is required" })} 
+                        placeholder="E.G. ALEX DRIVER" 
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                      />
                     </div>
+                    {errors.name && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.name.message}</p>}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Email</label>
-                      <input {...register("email", { required: true })} type="email" placeholder="EMAIL" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Email</label>
+                      <input 
+                        {...register("email", { 
+                          required: "Email is required",
+                          pattern: { value: /^\S+@\S+$/i, message: "Invalid email format" }
+                        })} 
+                        type="email" 
+                        placeholder="EMAIL ADDRESS" 
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                      />
+                      {errors.email && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.email.message}</p>}
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Phone</label>
-                      <input {...register("phone", { required: true })} placeholder="PHONE" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Phone</label>
+                      <input 
+                        {...register("phone", { 
+                          required: "Phone is required",
+                          pattern: { value: /^[0-9]{10}$/, message: "Must be 10 digits" }
+                        })} 
+                        placeholder="10-DIGIT NUMBER" 
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.phone ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                      />
+                      {errors.phone && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.phone.message}</p>}
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">College / Institution</label>
-                    <input {...register("college", { required: true })} placeholder="COLLEGE NAME" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">College / Institution</label>
+                    <input 
+                      {...register("college", { required: "College name is required" })} 
+                      placeholder="COLLEGE NAME" 
+                      className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.college ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                    />
+                    {errors.college && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.college.message}</p>}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">USN / ID</label>
-                      <input {...register("usn", { required: true })} placeholder="USN" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">USN / ID</label>
+                      <input 
+                        {...register("usn", { required: "USN is required" })} 
+                        placeholder="USN" 
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.usn ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                      />
+                      {errors.usn && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.usn.message}</p>}
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Year</label>
-                      <select {...register("year", { required: true })} className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white">
-                        <option value="1">1ST YEAR</option><option value="2">2ND YEAR</option><option value="3">3RD YEAR</option><option value="4">4TH YEAR</option>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Year</label>
+                      <select 
+                        {...register("year", { required: "Required" })} 
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white ${errors.year ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
+                      >
+                        <option value="1" className="bg-zinc-900">1ST YEAR</option>
+                        <option value="2" className="bg-zinc-900">2ND YEAR</option>
+                        <option value="3" className="bg-zinc-900">3RD YEAR</option>
+                        <option value="4" className="bg-zinc-900">4TH YEAR</option>
                       </select>
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-[8px] font-black text-white/40 uppercase tracking-widest ml-1">Department</label>
-                    <input {...register("department", { required: true })} placeholder="E.G. COMPUTER SCIENCE" className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:outline-none focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Department</label>
+                    <input 
+                      {...register("department", { required: "Department is required" })} 
+                      placeholder="E.G. COMPUTER SCIENCE" 
+                      className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.department ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                    />
+                    {errors.department && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.department.message}</p>}
                   </div>
 
                   <div className="pt-6 border-t border-white/5">
-                    <label className="text-[9px] font-black text-red-500 uppercase tracking-[0.3em] mb-4 block">Select Quests</label>
-                    <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                    <label className="text-xs font-black text-amber-500 uppercase tracking-[0.2em] mb-4 block">Select Quests</label>
+                    <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                       {Object.keys(eventPrices).map((eventName) => (
-                        <label key={eventName} className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(eventName) ? 'bg-red-600/10 border-red-600/40 text-red-500' : 'bg-black/40 border-white/5 text-white/20 hover:border-white/20'}`}>
+                        <label key={eventName} className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
                           <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
-                          <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${selectedEvents.includes(eventName) ? 'bg-red-600 border-red-600' : 'border-white/20'}`}>
-                            {selectedEvents.includes(eventName) && <Database size={10} className="text-white" />}
+                          <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
+                            {selectedEvents.includes(eventName) && <Database size={12} className="text-black" />}
                           </div>
-                          <span className="text-[8px] font-black uppercase truncate tracking-tight">{eventName}</span>
+                          <span className="text-[10px] font-black uppercase truncate tracking-tight">{eventName}</span>
                         </label>
                       ))}
                     </div>
                   </div>
 
-                  <button type="submit" disabled={isLoading} className={`w-full mt-6 py-4 rounded-2xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 group relative overflow-hidden ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/20'}`}>
-                    <div className="absolute inset-0 bg-white/10 skew-x-[-45deg] -translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                    {isLoading ? <Database size={18} className="animate-spin" /> : <Flame size={18} />}
+                  <button type="submit" disabled={isLoading} className={`w-full mt-6 py-4.5 rounded-2xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 group relative overflow-hidden ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-900/20'}`}>
+                    <div className="absolute inset-0 bg-white/20 skew-x-[-45deg] -translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                    {isLoading ? <Database size={20} className="animate-spin" /> : <Flame size={20} />}
                     <span>{isLoading ? 'PROCESSING...' : 'COMPLETE REGISTRATION'}</span>
                   </button>
                 </form>
@@ -268,15 +322,15 @@ const Register = () => {
             )}
 
             {isSubmitted && (
-              <div className="success-overlay absolute inset-0 bg-black/98 flex flex-col items-center justify-center p-8 text-center z-50 rounded-3xl">
-                <div className="w-20 h-20 bg-red-600/20 rounded-full flex items-center justify-center mb-6 border border-red-600/40 animate-pulse">
-                  <CheckCircle size={40} className="text-red-500" />
+              <div className="success-overlay absolute inset-0 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center p-8 text-center z-50 rounded-3xl">
+                <div className="w-24 h-24 bg-amber-500/20 rounded-full flex items-center justify-center mb-6 border border-amber-500/40 animate-bounce">
+                  <CheckCircle size={48} className="text-amber-500" />
                 </div>
                 <h3 className="text-3xl font-black italic tracking-tight uppercase mb-4 text-white">QUEST FORGED</h3>
-                <p className="text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase leading-relaxed">
+                <p className="text-xs font-bold tracking-[0.1em] text-white/60 uppercase leading-relaxed">
                   Your identity has been verified and your spot is secured.<br />Welcome to INOVEX 2026.
                 </p>
-                <button onClick={() => window.location.href = '/'} className="mt-8 text-[10px] font-black text-red-500 underline underline-offset-8 tracking-[0.3em] hover:text-white transition-colors">RETURN TO BASE</button>
+                <button onClick={() => window.location.href = '/'} className="mt-10 px-8 py-3 bg-amber-500 text-black text-[10px] font-black tracking-[0.3em] rounded-full hover:bg-amber-400 transition-colors uppercase">RETURN TO BASE</button>
               </div>
             )}
           </div>
@@ -284,10 +338,12 @@ const Register = () => {
           {/* SQUAD SELECTION SIDEBAR */}
           <div className="flex-1 w-full max-w-3xl">
             {selectedEvents.filter(e => getTeamSize(e) > 1).length === 0 ? (
-              <div className="hidden lg:flex flex-col items-center justify-center h-[70vh] border-2 border-dashed border-white/5 rounded-3xl p-12 text-center opacity-20">
-                <Shield size={64} className="text-white mb-6" />
-                <h3 className="text-xl font-black uppercase tracking-[0.4em]">Squad Formation</h3>
-                <p className="text-[10px] font-bold tracking-widest uppercase mt-4 max-w-xs leading-loose">Select team-based quests to unlock squad synchronization protocols.</p>
+              <div className="hidden lg:flex flex-col items-center justify-center h-[70vh] border-2 border-dashed border-amber-500/10 rounded-3xl p-12 text-center group">
+                <div className="p-8 rounded-full bg-amber-500/5 border border-amber-500/10 mb-8 group-hover:scale-110 transition-transform duration-700">
+                  <Shield size={64} className="text-amber-500/20" />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-[0.3em] text-white/40">Squad Formation</h3>
+                <p className="text-[11px] font-bold tracking-widest uppercase mt-4 max-w-xs leading-loose text-white/20">Select team-based quests to unlock squad synchronization protocols.</p>
               </div>
             ) : (
               <div className="space-y-10">
@@ -297,21 +353,24 @@ const Register = () => {
                   return (
                     <div key={eventName} className="animate-in fade-in slide-in-from-right-12 duration-700 ease-out">
                       <div className="flex items-center gap-6 mb-6">
-                        <div className="h-px w-12 bg-red-600/30"></div>
-                        <h3 className="text-sm font-black text-red-500 tracking-[0.5em] uppercase">{eventName} <span className="text-[10px] text-white/20 ml-2 italic">SQUAD CONFIG</span></h3>
-                        <div className="h-px flex-1 bg-red-600/30"></div>
+                        <div className="h-px w-12 bg-amber-500/30"></div>
+                        <h3 className="text-sm font-black text-amber-500 tracking-[0.5em] uppercase">{eventName} <span className="text-[10px] text-white/20 ml-2 italic">SQUAD CONFIG</span></h3>
+                        <div className="h-px flex-1 bg-amber-500/30"></div>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {[...Array(teamSize - 1)].map((_, i) => (
-                          <div key={i} className="p-6 rounded-3xl bg-zinc-900/30 backdrop-blur-xl border border-white/5 hover:border-red-600/30 transition-all group">
-                            <div className="flex items-center justify-between mb-4">
-                              <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Partner {i + 2}</span>
-                              <User size={12} className="text-white/10" />
+                          <div key={i} className="p-8 rounded-3xl bg-zinc-900/40 backdrop-blur-2xl border border-white/5 hover:border-amber-500/30 transition-all group relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 blur-3xl -mr-12 -mt-12 group-hover:bg-amber-500/10 transition-colors"></div>
+                            <div className="flex items-center justify-between mb-6">
+                              <span className="text-[11px] font-black text-white/60 uppercase tracking-widest">Partner {i + 2}</span>
+                              <div className="p-2 bg-white/5 rounded-lg">
+                                <User size={14} className="text-amber-500/40" />
+                              </div>
                             </div>
-                            <div className="space-y-3">
-                              <input {...register(`teammates.${eventName}.${i}.name`, { required: true })} placeholder="NAME" className="w-full bg-black/40 border border-white/5 rounded-xl py-2.5 px-4 text-[10px] font-bold tracking-widest focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-                              <input {...register(`teammates.${eventName}.${i}.usn`, { required: true })} placeholder="USN" className="w-full bg-black/40 border border-white/5 rounded-xl py-2.5 px-4 text-[10px] font-bold tracking-widest focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
-                              <input {...register(`teammates.${eventName}.${i}.email`, { required: true })} placeholder="EMAIL" className="w-full bg-black/40 border border-white/5 rounded-xl py-2.5 px-4 text-[10px] font-bold tracking-widest focus:border-red-600/50 transition-all text-white placeholder:text-white/10" />
+                            <div className="space-y-4">
+                              <input {...register(`teammates.${eventName}.${i}.name`, { required: true })} placeholder="PARTNER NAME" className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/20" />
+                              <input {...register(`teammates.${eventName}.${i}.usn`, { required: true })} placeholder="PARTNER USN" className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/20" />
+                              <input {...register(`teammates.${eventName}.${i}.email`, { required: true })} placeholder="PARTNER EMAIL" className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/20" />
                             </div>
                           </div>
                         ))}
@@ -325,10 +384,10 @@ const Register = () => {
         </div>
       </div>
 
-      {/* Decorative Embers Layer */}
+      {/* Decorative Embers Layer - Now Amber */}
       <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <div key={i} ref={el => embersRef.current[i] = el} className="absolute w-1 h-1 bg-red-500 rounded-full blur-[1px]" />
+        {[...Array(25)].map((_, i) => (
+          <div key={i} ref={el => embersRef.current[i] = el} className="absolute w-1.5 h-1.5 bg-amber-500/60 rounded-full blur-[1px]" />
         ))}
       </div>
     </div>

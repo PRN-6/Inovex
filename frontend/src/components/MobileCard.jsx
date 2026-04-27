@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { eventsData } from '../data/eventsData';
 
 const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(selectedIndex || 0);
   const mobileCardRef = useRef(null);
+
+  // Safely get event data
+  const event = eventsData && eventsData[currentImageIndex + 1];
 
   useEffect(() => {
     if (!shouldSpin) {
@@ -89,6 +93,17 @@ const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => 
           decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60" />
+        {/* Eligibility Ribbon */}
+        {event?.participants?.includes('UG Students') && (
+          <div className="absolute top-3 right-[-30px] bg-red-600 text-white text-[8px] font-black px-8 py-1 rotate-45 shadow-lg z-10">
+            UG ONLY
+          </div>
+        )}
+        {event?.participants?.includes('PG Students') && (
+          <div className="absolute top-3 right-[-30px] bg-blue-600 text-white text-[8px] font-black px-8 py-1 rotate-45 shadow-lg z-10">
+            PG ONLY
+          </div>
+        )}
       </div>
     </div>
   );

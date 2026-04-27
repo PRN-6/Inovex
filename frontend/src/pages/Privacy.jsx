@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { ShieldCheck, Lock, Eye, Database, Globe, Server, FileText } from 'lucide-react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 const Privacy = () => {
   useEffect(() => {
@@ -13,8 +11,6 @@ const Privacy = () => {
       {/* Background Aesthetic */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(223,31,38,0.05)_0%,rgba(0,0,0,1)_70%)]" />
       <div className="absolute top-0 left-0 w-full h-[6px] bg-[repeating-linear-gradient(45deg,#df1f26,#df1f26_10px,#000_10px,#000_20px)] opacity-20"></div>
-
-      <Navbar />
 
       <main className="relative z-10 container mx-auto px-6 pt-32 pb-20 max-w-4xl">
         <div className="space-y-12">
@@ -97,8 +93,6 @@ const Privacy = () => {
           </section>
         </div>
       </main>
-
-      <Footer />
 
       {/* Decorative Watermark */}
       <div className="fixed bottom-0 right-0 text-[20vw] font-black italic opacity-[0.02] pointer-events-none translate-y-20 select-none">

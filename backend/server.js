@@ -7,6 +7,7 @@ const compression = require('compression');
 const morgan = require('morgan');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const rateLimit = require('express-rate-limit');
 const User = require('./models/User');
 const { sendConfirmationEmail } = require('./utils/emailService');
 
@@ -25,6 +26,18 @@ app.use(compression()); // Compress responses
 app.use(morgan('dev')); // Request logging
 app.use(cors());
 app.use(express.json({ limit: '10kb' })); // Body limit for security
+
+// Rate Limiter for Registrations (Spam Protection)
+const registerLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit each IP to 5 registration attempts per window
+    message: { 
+        success: false, 
+        message: "TOO MANY ATTEMPTS: Your access has been temporarily throttled to prevent spam. Please try again in 15 minutes." 
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -58,7 +71,7 @@ app.post('/api/create-order', async (req, res) => {
 
 // @route   POST /api/register
 // @desc    Register participant directly
-app.post('/api/register', async (req, res) => {
+app.post('/api/register', registerLimiter, async (req, res) => {
     // Maintenance Mode Check
     if (process.env.MAINTENANCE_MODE === 'true') {
         return res.status(503).json({ 
@@ -70,28 +83,63 @@ app.post('/api/register', async (req, res) => {
     try {
         const { 
             name, email, phone, college, usn, year, department, registrations, amount,
-            transactionId 
+            transactionId, 
+            hp_field // Honeypot field
         } = req.body;
 
-        const newUser = new User({
-            name, email, phone, college, usn, year, department, registrations,
-            amount,
-            transactionId: transactionId || `DIR_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-            paymentStatus: 'verified',
-            registrationDate: new Date()
-        });
+        // BOT CHECK: If honeypot field is filled, reject immediately
+        if (hp_field) {
+            console.warn(`🚨 BOT DETECTED: Automated submission attempt blocked.`);
+            return res.status(400).json({ success: false, message: "UNAUTHORIZED: Automated access detected." });
+        }
 
-        await newUser.save();
+        // 1. Check if user already exists in the system
+        let user = await User.findOne({ usn: usn.toUpperCase() });
+
+        if (user) {
+            // 2. Check if they are trying to register for an event they are already in
+            const existingEvents = user.registrations.map(r => r.eventName);
+            const duplicateEvents = registrations.filter(r => existingEvents.includes(r.eventName));
+
+            if (duplicateEvents.length > 0) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: `ALREADY REGISTERED: You are already part of: ${duplicateEvents.map(e => e.eventName).join(', ')}.` 
+                });
+            }
+
+            // 3. Append new registrations to existing user
+            user.registrations.push(...registrations);
+            user.amount = (user.amount || 0) + amount;
+            
+            // Optionally update contact info if it changed
+            user.phone = phone;
+            user.email = email;
+
+            await user.save();
+            console.log(`✅ Registration Updated: ${name} added ${registrations.length} new event(s)`);
+
+        } else {
+            // 4. Create new user record
+            user = new User({
+                name, email, phone, college, usn, year, department, registrations,
+                amount,
+                transactionId: transactionId || `DIR_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+                paymentStatus: 'verified',
+                registrationDate: new Date()
+            });
+
+            await user.save();
+            console.log(`✅ New Registration: ${name} (Amount: ${amount})`);
+        }
 
         // Send email in background (non-blocking)
-        sendConfirmationEmail(newUser)
+        sendConfirmationEmail(user)
             .catch(err => console.error("Background Email Error:", err));
-
-        console.log(`✅ New Registration: ${name} (Amount: ${amount})`);
 
         res.status(201).json({
             success: true,
-            message: "Registration successful! Good luck, Legend."
+            message: "Registration successful! Your quest logs have been updated."
         });
 
     } catch (error) {
@@ -127,16 +175,59 @@ app.get('/api/registrations', async (req, res) => {
         const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
         const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
 
-        // Check if the key matches either level
-        if (adminKey !== secretKey && adminKey !== superSecretKey) {
-            return res.status(401).json({ success: false, message: "Unauthorized access" });
+        const EVENT_HEAD_CODES = {
+            [process.env.KEY_TECH]: "Techsaurus",
+            [process.env.KEY_SPY]: "Spy vs Spy – QR Treasure Hunt",
+            [process.env.KEY_REXR]: "Rex Rampage",
+            [process.env.KEY_CINE]: "Cinesaur: Reel Making",
+            [process.env.KEY_DINOX]: "Dinox: From Design to Reality",
+            [process.env.KEY_HACK]: "RexHack: Survival of the Smartest",
+            [process.env.KEY_BATTLE]: "INOVEX: BATTLE NEXUS",
+            [process.env.KEY_GENESIS]: "Genesis Reborn: Product Launch",
+            [process.env.KEY_MUSIC]: "Music Battle",
+            [process.env.KEY_QUIZ]: "Quiz Master",
+            [process.env.KEY_DANCE]: "Dance Showdown",
+            [process.env.KEY_ART]: "Art Exhibition"
+        };
+
+        let query = {};
+
+        // Check if the key matches Super Admin or Admin
+        if (adminKey === secretKey || adminKey === superSecretKey) {
+            // Full database access
+            query = {};
+        } else if (EVENT_HEAD_CODES[adminKey]) {
+            // Restricted access: Only find users who registered for their specific event
+            const eventName = EVENT_HEAD_CODES[adminKey];
+            query = { "registrations.eventName": eventName };
+        } else {
+            return res.status(401).json({ success: false, message: "Unauthorized access: Invalid Clearance Key" });
         }
 
-        const registrations = await User.find().sort({ registrationDate: -1 });
-        res.json({ success: true, count: registrations.length, data: registrations });
+        const registrations = await User.find(query).sort({ registrationDate: -1 });
+        
+        // Determine role info for the frontend
+        let roleInfo = {
+            clearance: 1,
+            restrictedEvent: null
+        };
+
+        if (adminKey === superSecretKey) {
+            roleInfo.clearance = 2;
+        } else if (EVENT_HEAD_CODES[adminKey]) {
+            roleInfo.clearance = 0.5;
+            roleInfo.restrictedEvent = EVENT_HEAD_CODES[adminKey];
+        }
+
+        res.json({ 
+            success: true, 
+            count: registrations.length, 
+            data: registrations,
+            role: roleInfo 
+        });
     } catch (error) {
         console.error('Fetch Error:', error);
-        res.status(500).json({ success: false, message: "Error fetching data" });
+        res.status(500).json({ success: false, message: "Error fetching synchronization data" });
     }
 });
 

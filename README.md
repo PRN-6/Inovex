@@ -8,47 +8,39 @@
 
 ### Frontend
 - **Framework**: [React.js](https://reactjs.org/) (Vite)
-- **Styling**: Vanilla CSS & Tailwind (Custom Hybrid)
-- **Animations**: [GSAP](https://greensock.com/gsap/) & Framer Motion
+- **Styling**: Tailwind CSS (Custom Design System)
+- **Animations**: [GSAP](https://greensock.com/gsap/) (ScrollTrigger & Contextual)
+- **State Management**: React Hooks (useForm, useMemo)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
 ### Backend
 - **Runtime**: Node.js / Express.js
 - **Database**: MongoDB Atlas (Mongoose)
-- **Email**: Nodemailer (Pooled Connection)
-- **Stress Testing**: k6.io
+- **Email**: Nodemailer (Pooled Connection / Background Processing)
+- **Security**: Express-Rate-Limit, Helmet, & Honeypot Protection
 
 ---
 
 ## ✨ Key Features
 
-### 1. Advanced Registration Protocol
-- **Direct Submission**: Fast, no-payment model for immediate registration.
-- **Squad Manifest**: Support for team-based events (RexHack, Spy vs Spy) with teammate USN tracking.
-- **Speed Hack**: Non-blocking background email processing, resulting in **<150ms response times** under heavy load.
+### 1. Smart Registration Protocol
+- **Identity Sync**: Students can register for multiple events at different times using the same USN. The system automatically merges their registrations into a single profile.
+- **Squad Manifest**: Support for team-based events with real-time teammate tracking.
+- **Conflict Resolution**: Prevents users from registering for the same event twice while allowing them to sign up for new ones.
+- **Spam Defense**: 3-layer protection including IP-based Rate Limiting, Unique Database Constraints, and invisible Honeypot fields.
 
-### 2. Central Terminal (Admin Panel)
-- **Dual-Tier Clearance**: 
-    - **Normal Admin**: View-only access to participant manifest.
-    - **Super Admin**: Full purge rights (DELETE) to manage asset database.
-- **Reporting Suite**: One-click exports for:
-    - **Excel (.xls)**: Full database manifest with team details.
-    - **Word (.doc)**: Professional, branded event reports.
-    - **CSV**: Raw data for external processing.
-- **Dynamic Search**: Real-time USN and name filtering.
+### 2. Central Command Terminal (Admin)
+- **Triple-Tier Clearance**: 
+    - **Event Heads**: Restricted access to view only registrations for their specific event.
+    - **Admin**: General view-only access to the entire manifest.
+    - **Super Admin**: Full database purge rights (DELETE) and global configuration.
+- **Temporal Filtering**: Advanced high-fidelity Calendar Picker for date-based data isolation.
+- **Reporting Suite**: Branded exports for Excel (.xls), Word (.doc), and CSV.
 
-### 3. Site-B Maintenance Mode
-- **Instant Toggle**: Controlled via environment variables (`MAINTENANCE_MODE`).
-- **Expedition Countdown**: Real-time countdown timer to inform users when registrations reopen.
-- **Admin Bypass**: The Admin Terminal remains operational even during maintenance.
-
----
-
-## 🚀 Performance & Scaling
-Tested via **k6** to handle extreme traffic:
-- **Concurrent Users**: 500+ Virtual Users (VUs)
-- **Throughput**: ~15,000 registrations in 2 minutes.
-- **Reliability**: 0.00% failure rate under peak stress.
+### 3. Immersive UX Design
+- **Kinetic Cards**: Event cards with 3D tilt effects, eligibility ribbons, and interactive "Begin Expedition" buttons.
+- **Thematic Overlays**: Dragon-themed registration success screens and ember animations.
+- **Mobile Optimized**: Fully responsive layout with custom mobile navigation and touch-friendly sliders.
 
 ---
 
@@ -56,20 +48,20 @@ Tested via **k6** to handle extreme traffic:
 
 ### Backend `.env`
 ```env
+# SERVER SETTINGS
 PORT=5000
 MONGO_URI=your_mongodb_uri
-EMAIL_USER=your_gmail
-EMAIL_PASS=your_app_password
-ADMIN_SECRET_KEY=level_1_key
-SUPER_ADMIN_SECRET_KEY=super_admin_key
-MAINTENANCE_MODE=false
-MAINTENANCE_UNTIL=2026-04-26T18:00:00Z
-```
 
-### Frontend `.env`
-```env
-VITE_ADMIN_SECRET_KEY=level_1_key
-VITE_SUPER_ADMIN_SECRET_KEY=super_admin_key
+# SECURITY KEYS
+ADMIN_SECRET_KEY=admin_access_key
+SUPER_ADMIN_SECRET_KEY=super_admin_key
+
+# EVENT HEAD MAPPING (JSON)
+# Define access codes for each event lead
+EVENT_HEAD_CODES='{"EH_TECH_2026":"Techsaurus", ...}'
+
+# SYSTEM STATUS
+MAINTENANCE_MODE=false
 ```
 
 ---
@@ -78,7 +70,8 @@ VITE_SUPER_ADMIN_SECRET_KEY=super_admin_key
 
 1. **Clone & Install**
    ```bash
-   npm install
+   git clone https://github.com/your-repo/inovex-2026.git
+   cd inovex-2026
    cd backend && npm install
    cd ../frontend && npm install
    ```
@@ -86,19 +79,19 @@ VITE_SUPER_ADMIN_SECRET_KEY=super_admin_key
 2. **Run Development Mode**
    ```bash
    # Terminal 1 (Backend)
-   npm run dev
+   cd backend && npm run dev
    
    # Terminal 2 (Frontend)
-   npm run dev
+   cd frontend && npm run dev
    ```
 
-3. **Load Testing (Optional)**
+3. **Production Build**
    ```bash
-   k6 run load_test.js
+   cd frontend && npm run build
    ```
 
 ---
 
 ## 📜 License
-INOVEX CORE SYSTEMS - SITE-B DATA PROTOCOL. 
-All rights reserved © 2026.
+**INOVEX CORE SYSTEMS - SITE-B DATA PROTOCOL.** 
+All rights reserved © 2026. Built with precision for the next generation of innovators.
