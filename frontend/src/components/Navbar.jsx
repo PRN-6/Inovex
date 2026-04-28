@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity, Info, UserPlus } from 'lucide-react';
 import { gsap } from 'gsap';
+import FeedbackModal from './FeedbackModal';
 
 const mainNavItems = [
   { icon: Home, label: 'Home', path: 'home' },
@@ -14,7 +15,7 @@ const mainNavItems = [
 ];
 
 const socialIcons = [
-  { icon: MessageSquare, label: 'Discord' },
+  { icon: MessageSquare, label: 'Feedback' },
 ];
 
 const Navbar = () => {
@@ -22,6 +23,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [logoClicks, setLogoClicks] = useState(0);
   const clickTimeoutRef = useRef(null);
 
@@ -244,18 +246,33 @@ const Navbar = () => {
         <div className="p-4 border-t border-red-900/30">
           <div className="flex justify-around">
             {socialIcons.map((social, index) => (
-              <a
+              <button
                 key={index}
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-red-900/30 rounded-lg"
+                onClick={() => social.label === 'Feedback' ? setIsFeedbackOpen(true) : null}
+                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-red-900/30 rounded-lg w-full flex justify-center cursor-pointer"
                 title={social.label}
               >
                 <social.icon size={18} />
-              </a>
+              </button>
             ))}
           </div>
         </div>
       </div>
+
+      <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
+
+      {/* Desktop Top-Right Register Button (Home Page Only) */}
+      {location.pathname === '/' && (
+        <button
+          onClick={(e) => handleNavClick(e, mainNavItems.find(i => i.path === 'register'))}
+          className="fixed top-8 right-8 z-50 hidden md:flex items-center gap-3 px-8 py-3 bg-red-600 text-white font-black italic tracking-[0.2em] skew-x-[-12deg] shadow-[8px_8px_0_rgba(0,0,0,1)] hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:bg-white hover:text-red-600 transition-all duration-300 group cursor-pointer border-2 border-transparent hover:border-red-600"
+        >
+          <div className="skew-x-[12deg] flex items-center gap-3">
+            <UserPlus size={18} className="group-hover:scale-110 transition-transform" />
+            <span>REGISTER NOW</span>
+          </div>
+        </button>
+      )}
 
       {/* Mobile Menu - Full Screen */}
       <div
@@ -283,8 +300,8 @@ const Navbar = () => {
 
         {/* Main Navigation */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-3 pt-10">
-            {mainNavItems.map((item, index) => (
+          <div className="p-4 space-y-3 pt-10 pb-20">
+            {mainNavItems.filter(item => item.path !== 'register').map((item, index) => (
               <a
                 key={index}
                 href={`#${item.path}`}
@@ -305,6 +322,34 @@ const Navbar = () => {
                 <div className={`w-2 h-2 rounded-full ${activeSection === item.path ? 'bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.8)]' : 'bg-zinc-800'}`} />
               </a>
             ))}
+
+            {/* Mobile Feedback Link */}
+            <button
+              onClick={() => {
+                setIsFeedbackOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center justify-between px-6 py-5 rounded-2xl transition-all duration-300 border bg-zinc-900/30 text-gray-400 border-white/5 hover:bg-red-950/20 hover:text-red-500 hover:border-red-500/30"
+            >
+              <div className="flex items-center gap-5">
+                <div className="p-2 rounded-lg bg-white/5">
+                  <MessageSquare size={22} className="text-gray-500" />
+                </div>
+                <span className="text-lg tracking-wider font-medium">
+                  FEEDBACK
+                </span>
+              </div>
+              <div className="w-2 h-2 rounded-full bg-zinc-800" />
+            </button>
+
+            {/* Prominent Register Button */}
+            <button
+              onClick={(e) => handleNavClick(e, mainNavItems.find(i => i.path === 'register'))}
+              className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl transition-all duration-300 bg-red-600 text-white font-black italic tracking-[0.2em] shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:bg-red-500 active:scale-95"
+            >
+              <UserPlus size={22} />
+              REGISTER NOW
+            </button>
           </div>
         </div>
       </div>

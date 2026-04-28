@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
 import Events from './pages/Events'
@@ -42,6 +43,7 @@ const AppContent = () => {
         </Routes>
       </Suspense>
       {!hideFooter && <Footer />}
+      <Analytics />
     </div>
   );
 }

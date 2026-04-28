@@ -4,7 +4,7 @@ export const teamData = [
     name: "Dr.Vijesh Krishnan",
     role: "Faculty Coordinator",
     category: "faculty",
-    image: "/images/team/member1.jpg",
+    image: "/images/team/member1.webp",
     socials: {
       instagram: "https://www.instagram.com/viju._caz?igsh=MXNpamV2bmQ4NXY2Ng==",
     }
@@ -14,7 +14,7 @@ export const teamData = [
     name: "Mr.Ragesh Raju",
     role: "Faculty Coordinator",
     category: "faculty",
-    image: "/images/team/member2.jpg",
+    image: "/images/team/member2.webp",
     socials: {
       instagram: "https://www.instagram.com/rageshraju?igsh=dHhneWZjd2w5M21z",
     }
@@ -24,7 +24,7 @@ export const teamData = [
     name: "Mrs.Jayashree J",
     role: "Faculty Coordinator",
     category: "faculty",
-    image: "/images/team/member3.jpg",
+    image: "/images/team/member3.webp",
     socials: {
       instagram: "https://www.instagram.com/____shree.gowda____?igsh=MXYxY3NhdTIwcDBx",
     }
@@ -34,7 +34,7 @@ export const teamData = [
     name: "Rohit Durgappa Kattimani",
     role: "President",
     category: "student",
-    image: "/images/team/member4.jpg",
+    image: "/images/team/member4.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/rohitdk29?igsh=Y3p5anM3YW1vMDQ0",
@@ -45,7 +45,7 @@ export const teamData = [
     name: "Venisha Rizal D'souza",
     role: "Vice President",
     category: "student",
-    image: "/images/team/member5.jpg",
+    image: "/images/team/member5.webp",
     socials: {
       linkedin: "https://www.linkedin.com/in/venisha-rizal-dsouza-633161364?trk=contact-info",
       instagram: "https://www.instagram.com/_venisha_rizal_?igsh=MW9xenFmNjBmNHhubw==",
@@ -56,7 +56,7 @@ export const teamData = [
     name: "Deeksha s Shetty",
     role: "Secretary",
     category: "student",
-    image: "/images/team/member6.jpg",
+    image: "/images/team/member6.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/deeksha_shetty21?igsh=OHp0MnQ5cmR0aWVo",
@@ -67,7 +67,7 @@ export const teamData = [
     name: "Deeksha Shetty",
     role: "Joint Secretary",
     category: "student",
-    image: "/images/team/member7.jpg",
+    image: "/images/team/member7.webp",
     socials: {
       linkedin: "https://www.linkedin.com/in/deeksha-shetty-24b30a39a/",
       instagram: "https://www.instagram.com/deeksha_shetty21?igsh=OHp0MnQ5cmR0aWVo",
@@ -78,7 +78,7 @@ export const teamData = [
     name: "Ruchita R Jadhav",
     role: "Treasurer",
     category: "student",
-    image: "/images/team/member8.jpg",
+    image: "/images/team/member8.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/ruchita.jadhav._?igsh=MTFybG80YXAwemx1YQ==",
@@ -89,7 +89,7 @@ export const teamData = [
     name: "Sanjana S R",
     role: "Treasurer",
     category: "student",
-    image: "/images/team/member9.jpg",
+    image: "/images/team/member9.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/san_jana_salian?igsh=MXhzeWxvYjdycmZiMg==",
@@ -100,7 +100,7 @@ export const teamData = [
     name: "Abhiram",
     role: "Technical Coordinator",
     category: "student",
-    image: "/images/team/member10.jpg",
+    image: "/images/team/member10.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/abhiram_abhi_018?igsh=MTZ3Z2l0cjd4ODUzMA==",
@@ -111,7 +111,7 @@ export const teamData = [
     name: "Harshith",
     role: "Technical Coordinator",
     category: "student",
-    image: "/images/team/member11.jpg",
+    image: "/images/team/member11.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/hxrsh__06_?igsh=MWM5MWYzaTFwbDA4eA==",
@@ -122,7 +122,7 @@ export const teamData = [
     name: "Kushi P",
     role: "Cultural Coordinator",
     category: "student",
-    image: "/images/team/member12.jpg",
+    image: "/images/team/member12.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/_iamkushii_?igsh=MXI1YmYwN3FvYTF4cg==",
@@ -133,7 +133,7 @@ export const teamData = [
     name: "Harshita A",
     role: "Cultural Coordinator",
     category: "student",
-    image: "/images/team/member13.jpg",
+    image: "/images/team/member13.webp",
     socials: {
       linkedin: "https://www.linkedin.com/in/harshita-acharya-375a24326",
       instagram: "https://www.instagram.com/haarsshiiitaa?igsh=MTVrdDUyb3J5bTUwbQ==",
@@ -144,7 +144,7 @@ export const teamData = [
     name: "Durgashree S",
     role: "Sports Coordinator",
     category: "student",
-    image: "/images/team/member14.jpg",
+    image: "/images/team/member14.webp",
     socials: {
       linkedin: "https://www.linkedin.com/in/deeksha-shetty-24b30a39a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
       instagram: "https://www.instagram.com/shettyy_shree?igsh=bmYzZGMzZDRuZXpp",
@@ -155,7 +155,7 @@ export const teamData = [
     name: "Niyam Shetty",
     role: "Sports Coordinator",
     category: "student",
-    image: "/images/team/member15.jpg",
+    image: "/images/team/member15.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/niyam_shetty_?igsh=cWFobG1tb3Z2YWZn",
@@ -166,7 +166,7 @@ export const teamData = [
     name: "Darshan Prabhakar",
     role: "Social Media Coordinator",
     category: "student",
-    image: "/images/team/member16.jpg",
+    image: "/images/team/member16.webp",
     socials: {
       linkedin: "#",
       instagram: "https://www.instagram.com/darshan.acharya_?igsh=MWtrNTVoMTVscDhvNA==",
@@ -177,7 +177,7 @@ export const teamData = [
     name: "Joycil Britto",
     role: "Social Media Coordinator",
     category: "student",
-    image: "/images/team/member17.jpg",
+    image: "/images/team/member17.webp",
     socials: {
       linkedin: "https://www.linkedin.com/in/joycil-britto/",
       instagram: "https://www.instagram.com/_.itzz.__.joyy._?utm_source=qr&igsh=b2EzYmtmcnY1NXJt",

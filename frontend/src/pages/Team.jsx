@@ -61,32 +61,39 @@ const Team = () => {
               <div
                 key={member.id}
                 ref={el => cardsRef.current[index] = el}
-                className={`group relative bg-[#0a0a0a] border border-white/10 overflow-hidden hover:border-red-600/50 transition-all duration-300 ${customClass}`}
+                className={`group relative bg-[#0a0a0a] border border-white/10 overflow-hidden 
+                           hover:border-red-600/50 hover:shadow-[0_0_40px_rgba(220,38,38,0.15)] 
+                           transition-all duration-500 ease-out perspective-1000
+                           hover:[transform:rotateX(5deg)_rotateY(-5deg)_translateY(-5px)] ${customClass}`}
               >
 
-                {/* Image Container */}
-                <div className="relative aspect-[3/4] overflow-hidden bg-black/50">
+                {/* Holographic Shimmer Effect */}
+                <div className="absolute inset-0 z-30 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-700">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent w-[200%] animate-holo"></div>
+                </div>
 
-                  {/* Placeholder / Actual Image */}
+                {/* Image Container */}
+                <div className="relative aspect-[3/4] overflow-hidden bg-black">
+
+                  {/* actual Image */}
                   <div className="w-full h-full relative">
                     <img
                       src={member.image}
                       alt={member.name}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                      className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-105"
+                      className="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-110 group-hover:brightness-110"
                     />
-                    {/* Fallback pattern if image is missing */}
-                    <div className="absolute inset-0 bg-[#111] hidden flex-col items-center justify-center p-6 text-center border-b border-white/5">
-                      <Fingerprint size={48} className="text-white/10 mb-4 group-hover:text-red-500/30 transition-colors" />
-                      <span className="text-[10px] font-black tracking-widest text-white/20 uppercase">No Bio-Data</span>
+
+                    {/* Cyber Mesh Overlay */}
+                    <div className="absolute inset-0 z-10 opacity-0 group-hover:opacity-20 pointer-events-none bg-[radial-gradient(circle,rgba(220,38,38,0.2)_1px,transparent_1px)] bg-[size:10px_10px]"></div>
+
+                    {/* Moving Scan line */}
+                    <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 pointer-events-none overflow-hidden">
+                      <div className="w-full h-[50%] bg-gradient-to-b from-transparent via-red-600/5 to-transparent animate-scan-line"></div>
                     </div>
                   </div>
 
-                  {/* Internal Gradient for Text Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                  {/* Contrast Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-20"></div>
                 </div>
 
                 {/* Data Context */}
@@ -167,3 +174,24 @@ const Team = () => {
 };
 
 export default Team;
+
+
+// Faculty Coordinators
+// member1.jpg — Dr. Vijesh Krishnan
+// member2.jpg — Mr. Ragesh Raju
+// member3.jpg — Mrs. Jayashree J
+// Core Committee
+// member4.jpg — Rohit Durgappa Kattimani
+// member5.jpg — Venisha Rizal D'souza
+// member6.jpg — Deeksha S Shetty
+// member7.jpg — Deeksha Shetty
+// member8.jpg — Ruchita R Jadhav
+// member9.jpg — Sanjana S R
+// member10.jpg — Abhiram
+// member11.jpg — Harshith
+// member12.jpg — Kushi P
+// member13.jpg — Harshita A
+// member14.jpg — Durgashree S
+// member15.jpg — Niyam Shetty
+// member16.jpg — Darshan Prabhakar
+// member17.jpg — Joycil Britto

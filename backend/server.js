@@ -9,7 +9,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
 const User = require('./models/User');
-const { sendConfirmationEmail } = require('./utils/emailService');
+const { sendConfirmationEmail, sendFeedbackEmail } = require('./utils/emailService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -155,6 +155,29 @@ app.post('/api/register', registerLimiter, async (req, res) => {
         }
 
         res.status(500).json({ success: false, message: "Server Error. Please try again later." });
+    }
+});
+
+// @route   POST /api/feedback
+// @desc    Send feedback email to administrator
+app.post('/api/feedback', async (req, res) => {
+    try {
+        const { name, email, type, message } = req.body;
+
+        if (!name || !email || !message) {
+            return res.status(400).json({ success: false, message: "Required fields missing" });
+        }
+
+        const result = await sendFeedbackEmail({ name, email, type, message });
+        
+        if (result.success) {
+            res.status(200).json({ success: true, message: "Feedback transmitted successfully" });
+        } else {
+            res.status(500).json({ success: false, message: "Transmission failed" });
+        }
+    } catch (error) {
+        console.error('Feedback API Error:', error);
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 });
 

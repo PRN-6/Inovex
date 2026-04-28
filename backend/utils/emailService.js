@@ -74,4 +74,37 @@ const sendConfirmationEmail = async (userData) => {
     }
 };
 
-module.exports = { sendConfirmationEmail };
+/**
+ * Sends feedback data to the administrator
+ * @param {Object} feedbackData - The feedback data from the frontend
+ */
+const sendFeedbackEmail = async (feedbackData) => {
+    const mailOptions = {
+        from: `"INOVEX FEEDBACK" <${process.env.EMAIL_USER}>`,
+        to: "prinsonroyal11@gmail.com",
+        subject: `NEW FEEDBACK: ${feedbackData.type.toUpperCase()} from ${feedbackData.name}`,
+        html: `
+            <div style="background-color: #000; color: #fff; padding: 30px; font-family: sans-serif; border: 1px solid #dc2626; border-radius: 8px;">
+                <h2 style="color: #dc2626; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px;">New Feedback Received</h2>
+                <p><strong>Name:</strong> ${feedbackData.name}</p>
+                <p><strong>Email:</strong> ${feedbackData.email}</p>
+                <p><strong>Type:</strong> ${feedbackData.type}</p>
+                <div style="background-color: #111; padding: 15px; border-radius: 4px; border-left: 4px solid #dc2626; margin-top: 20px;">
+                    <p style="margin: 0; color: #ccc;">${feedbackData.message}</p>
+                </div>
+                <p style="font-size: 10px; color: #555; margin-top: 30px;">Sent via INOVEX Terminal Feedback Channel</p>
+            </div>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`📧 Feedback email sent to admin`);
+        return { success: true };
+    } catch (error) {
+        console.error('❌ Feedback email failed:', error.message);
+        return { success: false, error: error.message };
+    }
+};
+
+module.exports = { sendConfirmationEmail, sendFeedbackEmail };
