@@ -1,0 +1,60 @@
+================================================================================
+INOVEX 2026: SYSTEM SECURITY & LOGIC MANIFEST
+================================================================================
+Documenting all solved technical challenges and "possibilities" implemented.
+
+1.  MANUAL PAYMENT GATEWAY (QR PROTOCOL)
+    - Challenge: College restriction on automated payment gateways (Razorpay).
+    - Solution: Implemented a manual QR-based payment protocol with UTR/Transaction ID 
+      capture and a dedicated Admin Verification Workflow.
+
+2.  DUPLICATE REGISTRATION DEFENSE (PRIMARY)
+    - Challenge: Preventing the same student from registering for the same event twice.
+    - Solution: Real-time database check on USN + EventName before allowing submission.
+
+3.  SMART PROFILE SYNCing
+    - Challenge: Students registering for different events at different times.
+    - Solution: Automatic USN detection. If a student is already in the database, 
+      the system appends new events to their existing profile instead of creating 
+      confusing duplicate rows.
+
+4.  GLOBAL TEAMMATE VALIDATION (THE "DOUBLE-BOOKING" FIX)
+    - Challenge: A student joining multiple different teams for the same event.
+    - Solution: Deep-scan validation that checks every USN in a team list against 
+      the entire database to ensure they aren't already part of another squad.
+
+5.  TRANSACTION ID (UTR) UNIQUENESS
+    - Challenge: One student "borrowing" another student's payment proof.
+    - Solution: Enforced uniqueness on Transaction IDs across different USNs. 
+      The system rejects any UTR that has already been claimed by someone else.
+
+6.  SPAM & BOT PROTECTION (TRIPLE-LAYER)
+    - Rate Limiting: Blocks IP addresses that attempt more than 20 registrations 
+      within 15 minutes.
+    - Honeypot: An invisible "hp_field" that instantly blocks any automated bot 
+      that tries to fill it.
+    - Schema Validation: Strict Mongoose validation to prevent garbage data.
+
+7.  TIERED CLEARANCE (RBAC)
+    - Event Heads: Can only see data for their specific event (Restricted Access).
+    - Admin: Can view all data but cannot delete.
+    - Super Admin: Full "Purge" rights and global status management.
+
+8.  UPTIME & PERFORMANCE OPTIMIZATION
+    - Health Protocol: /health endpoint for UptimeRobot to prevent Render "sleep".
+    - Background Emailing: Uses asynchronous processing so the UI doesn't hang 
+      while the server talks to the email provider.
+    - Modular Architecture: Refactored server into specialized routes/controllers 
+      to prevent code corruption and improve speed.
+
+9.  EMAIL VERIFICATION CHAIN
+    - Solved "Spam Email" issue by only sending the official Quest Confirmation 
+      AFTER the Admin has manually clicked "VERIFIED".
+
+10. USN NORMALIZATION
+    - Automated Uppercasing: Ensures "4jk22cs001" and "4JK22CS001" are treated 
+      as the same student to prevent duplicate records.
+
+================================================================================
+STATUS: SYSTEM SECURED // ALL GATEWAYS OPERATIONAL
+================================================================================

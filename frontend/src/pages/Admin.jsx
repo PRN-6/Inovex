@@ -190,9 +190,28 @@ const Admin = () => {
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center text-[9px] font-black text-white/20 tracking-widest">
-            <span>REGISTERED ON: {new Date(reg.registrationDate).toLocaleString()}</span>
-            <span>ID: {reg._id}</span>
+          <div className="mt-8 pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-3">
+              <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">STATUS CONTROL:</p>
+              <div className="flex gap-2">
+                {['pending', 'verified', 'failed'].map(status => (
+                  <button
+                    key={status}
+                    onClick={() => handleStatusUpdate(reg._id, status)}
+                    className={`px-3 py-1 text-[8px] font-black tracking-widest uppercase border rounded-full transition-all ${reg.paymentStatus === status
+                        ? (status === 'verified' ? 'bg-green-600 border-green-400 text-white' : status === 'failed' ? 'bg-red-600 border-red-400 text-white' : 'bg-amber-600 border-amber-400 text-white')
+                        : 'border-white/10 text-white/40 hover:border-white/20'
+                      }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col items-end text-[9px] font-black text-white/20 tracking-widest">
+              <span>REGISTERED ON: {new Date(reg.registrationDate).toLocaleString()}</span>
+              <span>ID: {reg._id}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -445,6 +464,31 @@ const Admin = () => {
     link.click();
   };
 
+  const handleStatusUpdate = async (id, newStatus) => {
+    try {
+      const response = await fetch(`${API_URL}/api/registrations/${id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': accessCode
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setRegistrations(prev => prev.map(r => r._id === id ? { ...r, paymentStatus: newStatus } : r));
+        if (selectedReg && selectedReg._id === id) {
+          setSelectedReg({ ...selectedReg, paymentStatus: newStatus });
+        }
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Status Update Error:", error);
+      alert("CRITICAL ERROR: STATUS UPDATE FAILED");
+    }
+  };
+
   const handleDelete = async (id, name) => {
     if (!window.confirm(`PROTOCOL OVERRIDE: Are you sure you want to purge asset ${name} from the database?`)) return;
 
@@ -646,6 +690,8 @@ const Admin = () => {
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">GUILD / DEPT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">QUESTS</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">TRIBUTE</th>
+                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">STATUS</th>
+                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">DATE</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30 text-right">ACTION</th>
                 </tr>
               </thead>
@@ -707,26 +753,34 @@ const Admin = () => {
                       <td className="p-4">
                         <div className="space-y-1">
                           <p className="text-xs font-black text-white">₹{reg.amount || 0}</p>
-                          <p className="text-[8px] font-bold text-green-500/50 tracking-tighter truncate max-w-[100px]" title={reg.transactionId}>
-                            ID: {reg.transactionId || 'CASH/OFFLINE'}
+                          <p className="text-[9px] font-black text-amber-500 mt-1 tracking-wider font-mono bg-amber-500/5 px-1.5 py-0.5 rounded border border-amber-500/10 inline-block" title={reg.transactionId}>
+                            UTR: {reg.transactionId || 'NOT PROVIDED'}
                           </p>
                         </div>
+                      </td>
+                      <td className="p-4 text-[10px] font-black tracking-widest">
+                        <span className={`px-2 py-0.5 rounded-full border ${reg.paymentStatus === 'verified' ? 'bg-green-600/10 text-green-500 border-green-500/20' :
+                            reg.paymentStatus === 'failed' ? 'bg-red-600/10 text-red-500 border-red-500/20' :
+                              'bg-amber-600/10 text-amber-500 border-amber-500/20'
+                          }`}>
+                          {reg.paymentStatus?.toUpperCase() || 'PENDING'}
+                        </span>
                       </td>
                       <td className="p-4">
                         <div className="space-y-1">
                           <p className="text-[10px] font-black text-white/60">
                             {reg.registrationDate ? new Date(reg.registrationDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : 'N/A'}
                           </p>
-                          <p className="text-[8px] font-bold text-white/20 tracking-tighter">
+                          <p className="text-[8px] font-bold text-white/20 tracking-tighter text-right">
                             {reg.registrationDate ? new Date(reg.registrationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                           </p>
                         </div>
                       </td>
                       <td className="p-4 text-right">
-                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-end gap-3">
                           <button
                             onClick={() => setSelectedReg(reg)}
-                            className="p-2 text-white/40 hover:text-red-500 transition-colors"
+                            className="p-2.5 bg-white/5 border border-white/10 text-white/60 hover:text-red-500 hover:border-red-500/50 hover:bg-red-500/5 transition-all rounded-lg"
                             title="VIEW ASSET INTEL"
                           >
                             <ExternalLink size={14} />
@@ -734,7 +788,7 @@ const Admin = () => {
                           {clearanceLevel >= 2 && (
                             <button
                               onClick={() => handleDelete(reg._id, reg.name)}
-                              className="p-2 text-white/40 hover:text-red-500 transition-colors"
+                              className="p-2.5 bg-white/5 border border-white/10 text-white/60 hover:text-red-600 hover:border-red-600/50 hover:bg-red-600/5 transition-all rounded-lg"
                               title="PURGE ASSET (SUPER ADMIN ONLY)"
                             >
                               <Trash2 size={14} />

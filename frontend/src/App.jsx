@@ -7,6 +7,7 @@ import Events from './pages/Events'
 import InovexSection from './components/InovexSection'
 import Media from './pages/Media'
 import Footer from './components/Footer'
+import { NotificationProvider } from './context/NotificationContext'
 import './styles/globals.css'
 
 // Lazy load non-critical pages
@@ -53,9 +54,11 @@ const AppContent = () => {
  */
 const App = () => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <NotificationProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </NotificationProvider>
   )
 }
 

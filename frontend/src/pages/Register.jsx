@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNotification } from '../context/NotificationContext';
 import { gsap } from 'gsap';
 import { User, Mail, School, Phone, ChevronRight, ShieldCheck, Database, Flame, Hash, GraduationCap, BookOpen, Shield, CheckCircle, UserPlus, X } from 'lucide-react';
 
@@ -9,9 +10,14 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isMaintenance, setIsMaintenance] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0 });
+  const [showPayment, setShowPayment] = useState(false);
+  const [tempFormData, setTempFormData] = useState(null);
+  const { showNotify } = useNotification();
 
   // Dynamic API URL for Local/Production
-  const API_URL = "https://inovex-backend01.onrender.com";
+  const API_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5000'
+    : 'https://inovex-backend01.onrender.com';
 
   // Event Pricing & Squad Sizes
   const eventPrices = {
@@ -97,21 +103,55 @@ const Register = () => {
 
   const handleRegistration = async (formData) => {
     if (selectedEvents.length === 0) {
-      alert("MISSION CRITICAL: You must select at least one event to join the expedition.");
+      showNotify("MISSION CRITICAL: You must select at least one event.", "error");
       return;
     }
-    setIsLoading(true);
 
+    setIsLoading(true);
     try {
-      // Package registration data with teammates
+      // Check if user is already registered for selected events
+      const checkRes = await fetch(`${API_URL}/api/check-registration/${formData.usn}`);
+      const checkData = await checkRes.json();
+
+      if (checkData.success && checkData.registeredEvents.length > 0) {
+        const alreadyRegistered = selectedEvents.filter(e => checkData.registeredEvents.includes(e));
+        if (alreadyRegistered.length > 0) {
+          showNotify(`MISSION ABORTED: You are already registered for: ${alreadyRegistered.join(", ")}.`, 'error');
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      setTempFormData(formData);
+      setShowPayment(true);
+      gsap.fromTo(".payment-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+    } catch (err) {
+      console.error("Check Failed:", err);
+      // If the check fails (e.g. network issue), we still allow them to proceed to payment
+      setTempFormData(formData);
+      setShowPayment(true);
+      gsap.fromTo(".payment-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const confirmPayment = async (transactionId) => {
+    if (!transactionId || transactionId.length < 6) {
+      showNotify("ERROR: Please enter a valid Transaction ID / UTR number.", "error");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
       const registrations = selectedEvents.map(eventName => {
         const teamSize = getTeamSize(eventName);
         const teammates = [];
         if (teamSize > 1) {
           for (let i = 0; i < teamSize - 1; i++) {
-            const tName = formData.teammates?.[eventName]?.[i]?.name;
-            const tUsn = formData.teammates?.[eventName]?.[i]?.usn;
-            const tEmail = formData.teammates?.[eventName]?.[i]?.email;
+            const tName = tempFormData.teammates?.[eventName]?.[i]?.name;
+            const tUsn = tempFormData.teammates?.[eventName]?.[i]?.usn;
+            const tEmail = tempFormData.teammates?.[eventName]?.[i]?.email;
             if (tName) teammates.push({ name: tName, usn: tUsn, email: tEmail });
           }
         }
@@ -119,11 +159,11 @@ const Register = () => {
       });
 
       const finalPayload = {
-        ...formData,
+        ...tempFormData,
         registrations,
         amount: selectedEvents.reduce((total, e) => total + (eventPrices[e] || 0), 0),
-        transactionId: `DIR_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-        hp_field: formData.hp_field
+        transactionId: transactionId,
+        hp_field: tempFormData.hp_field
       };
 
       const response = await fetch(`${API_URL}/api/register`, {
@@ -134,14 +174,15 @@ const Register = () => {
 
       if (response.ok) {
         setIsSubmitted(true);
+        setShowPayment(false);
         gsap.fromTo(".success-overlay", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" });
       } else {
         const error = await response.json();
-        alert(error.message || "Registration failed. Please try again.");
+        showNotify(error.message || "Registration failed. Please try again.", 'error');
       }
     } catch (error) {
       console.error("Submission Error:", error);
-      alert("System Offline: Could not connect to the registration server.");
+      showNotify("System Offline: Could not connect to the registration server.", 'error');
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +198,8 @@ const Register = () => {
         <div className="w-full flex flex-col lg:flex-row gap-12 items-center lg:items-start transition-all duration-700">
 
           {/* REGISTRATION FORM */}
-          <div ref={containerRef} className="w-full max-w-md lg:sticky lg:top-28 lg:z-30 border border-amber-500/20 rounded-3xl p-8 bg-zinc-900/40 backdrop-blur-2xl shadow-2xl shadow-amber-900/5">
+          <div ref={containerRef} className="w-full max-w-md lg:sticky lg:top-28 lg:z-30 border border-amber-500/20 rounded-3xl p-8 bg-zinc-900/40 backdrop-blur-2xl shadow-2xl shadow-amber-900/5 relative">
+            
             {isMaintenance ? (
               <div className="flex flex-col items-center py-12 text-center animate-in fade-in zoom-in duration-500">
                 <Shield size={64} className="text-amber-500 mb-6 animate-pulse" />
@@ -319,6 +361,65 @@ const Register = () => {
                   </button>
                 </form>
               </>
+            )}
+
+            {showPayment && (
+              <div className="payment-overlay absolute inset-0 bg-black/95 backdrop-blur-xl flex flex-col p-8 z-50 rounded-3xl overflow-y-auto">
+                <button onClick={() => setShowPayment(false)} className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors">
+                  <X size={24} />
+                </button>
+                
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-black italic tracking-tight uppercase text-white">Payment Protocol</h3>
+                  <div className="h-1 w-12 bg-amber-500 mx-auto mt-2 rounded-full"></div>
+                </div>
+
+                <div className="flex-1 space-y-6">
+                  <div className="p-4 bg-white/5 border border-white/10 rounded-2xl text-center">
+                    <p className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase mb-1">Total Tribute Required</p>
+                    <p className="text-3xl font-black text-amber-500 italic">₹{selectedEvents.reduce((total, e) => total + (eventPrices[e] || 0), 0)}</p>
+                  </div>
+
+                  <div className="relative aspect-square w-full max-w-[240px] mx-auto bg-white p-4 rounded-2xl shadow-xl shadow-amber-900/20">
+                    {/* QR Code Placeholder - In a real app, replace with actual QR image */}
+                    <img 
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=your-upi-id@bank&pn=Inovex&am=0" 
+                      alt="Payment QR" 
+                      className="w-full h-full object-contain"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/5 rounded-2xl pointer-events-none border-2 border-dashed border-black/10">
+                    </div>
+                  </div>
+
+                  <div className="text-center space-y-2">
+                    <p className="text-[11px] font-bold text-white/60 leading-relaxed">
+                      Scan the QR code above to complete your transaction via any UPI app (GPay, PhonePe, etc.)
+                    </p>
+                    <p className="text-[9px] font-black text-amber-500/60 tracking-widest uppercase">
+                      IMPORTANT: Verification takes 12-24 hours
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1">Transaction ID / UTR Number</label>
+                    <input 
+                      id="utr-input"
+                      type="text" 
+                      placeholder="ENTER 12-DIGIT UTR"
+                      className="w-full bg-white/5 border border-amber-500/30 rounded-xl py-4 px-4 text-sm font-black tracking-[0.2em] focus:outline-none focus:border-amber-500 transition-all text-white placeholder:text-white/10"
+                    />
+                  </div>
+
+                  <button 
+                    onClick={() => confirmPayment(document.getElementById('utr-input').value)}
+                    disabled={isLoading}
+                    className={`w-full py-4 rounded-xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-amber-500 hover:bg-amber-400 text-black'}`}
+                  >
+                    {isLoading ? <Database size={18} className="animate-spin" /> : <ShieldCheck size={18} />}
+                    <span>{isLoading ? 'VERIFYING...' : 'CONFIRM PAYMENT'}</span>
+                  </button>
+                </div>
+              </div>
             )}
 
             {isSubmitted && (

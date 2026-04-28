@@ -10,7 +10,7 @@ const Footer = () => {
   const handleNavClick = (e, path) => {
     e.preventDefault();
     const externalPages = ['team', 'about', 'privacy', 'terms'];
-    
+
     if (location.pathname === '/' && !externalPages.includes(path)) {
       const element = document.getElementById(path);
       if (element) {
@@ -46,8 +46,11 @@ const Footer = () => {
     { label: 'Techsaurus', path: 'events' },
     { label: 'Spy vs Spy', path: 'events' },
     { label: 'Rex Rampage', path: 'events' },
+    { label: 'Cinesaur', path: 'events' },
     { label: 'Dinox', path: 'events' },
+    { label: 'RexHack', path: 'events' },
     { label: 'Battle Nexus', path: 'events' },
+    { label: 'Genesis Reborn', path: 'events' },
   ];
 
   const resourceLinks = [
@@ -216,14 +219,14 @@ const Footer = () => {
               <div className="space-y-3">
                 <span className="text-[9px] font-black text-white/30 tracking-widest block uppercase">External Feed</span>
                 <div className="flex gap-4 lg:justify-end">
-                  <a href="#" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group">
+                  <a href="#" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group" title="TERMINAL CHAT">
                     <MessageSquare size={18} className="opacity-60 group-hover:opacity-100" />
                   </a>
-                  <a href="#" className="flex items-center justify-center p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all text-[10px] font-black">
-                    IG
+                  <a href="#" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group" title="INSTAGRAM FEED">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 group-hover:opacity-100"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                   </a>
-                  <a href="#" className="flex items-center justify-center p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all text-[10px] font-black">
-                    TW
+                  <a href="#" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group" title="YOUTUBE FEED">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 group-hover:opacity-100"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
                   </a>
                 </div>
               </div>

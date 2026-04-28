@@ -22,10 +22,12 @@ const sendConfirmationEmail = async (userData) => {
         return { success: true, message: "K6 Test detected: Email suppressed" };
     }
 
+    const isVerified = userData.paymentStatus === 'verified';
+    
     const mailOptions = {
         from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
         to: userData.email,
-        subject: `QUESTS CONFIRMED: ${userData.registrations.map(r => r.eventName).join(', ').toUpperCase()}`,
+        subject: isVerified ? `QUESTS CONFIRMED: ${userData.registrations.map(r => r.eventName).join(', ').toUpperCase()}` : `REGISTRATION RECEIVED: PENDING VERIFICATION`,
         html: `
             <div style="background-color: #000; color: #fff; padding: 40px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; border: 2px solid #b45309; border-radius: 15px; max-width: 600px; margin: auto;">
                 <div style="text-align: center; margin-bottom: 30px;">
@@ -35,7 +37,13 @@ const sendConfirmationEmail = async (userData) => {
                 
                 <p style="font-size: 18px; color: #e5e7eb; line-height: 1.6;">Greetings, <strong style="color: #f59e0b;">${userData.name}</strong>!</p>
                 
-                <p style="color: #9ca3af; line-height: 1.6;">Your identity has been verified. Your path is forged for the following expeditions:</p>
+                ${isVerified ? `
+                    <p style="color: #10b981; font-weight: bold; font-size: 20px; text-align: center; margin-bottom: 20px;">✓ PAYMENT VERIFIED</p>
+                    <p style="color: #9ca3af; line-height: 1.6;">Your identity has been verified. Your path is forged for the following expeditions:</p>
+                ` : `
+                    <p style="color: #f59e0b; font-weight: bold; font-size: 20px; text-align: center; margin-bottom: 20px;">⏱ PENDING VERIFICATION</p>
+                    <p style="color: #9ca3af; line-height: 1.6;">We have received your registration and transaction ID (<strong style="color: #fff;">${userData.transactionId}</strong>). Our wardens are currently verifying the tribute. This typically takes 12-24 hours.</p>
+                `}
                 
                 ${userData.registrations.map(reg => `
                     <div style="background-color: #1c1917; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #f59e0b;">
@@ -55,7 +63,11 @@ const sendConfirmationEmail = async (userData) => {
                     <p style="margin: 5px 0; color: #d1d5db; font-size: 14px;"><strong>GUILD (COLLEGE):</strong> ${userData.college}</p>
                 </div>
                 
-                <p style="color: #f59e0b; font-weight: bold; text-align: center; margin-top: 40px; font-style: italic; letter-spacing: 1px;">"Your path is forged. Prepare for the expedition."</p>
+                ${isVerified ? `
+                    <p style="color: #f59e0b; font-weight: bold; text-align: center; margin-top: 40px; font-style: italic; letter-spacing: 1px;">"Your path is forged. Prepare for the expedition."</p>
+                ` : `
+                    <p style="color: #f59e0b; font-weight: bold; text-align: center; margin-top: 40px; font-style: italic; letter-spacing: 1px;">"Your tribute is being processed. Hold fast."</p>
+                `}
                 
                 <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #292524; text-align: center;">
                     <p style="color: #444; font-size: 10px; text-transform: uppercase; letter-spacing: 2px;">© 2026 INOVEX TECH FEST • SYSTEM GENERATED NOTIFICATION</p>
