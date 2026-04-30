@@ -1,0 +1,39 @@
+CROSS-BROWSER TESTING CHECKLIST - INOVEX 2026
+===========================================
+
+1. LAYOUT & RESPONSIVENESS
+-------------------------
+[ ] Check Navbar alignment and toggle functionality on Mobile (Chrome, Safari, Firefox).
+[ ] Verify Hero section scaling and background video/image rendering.
+[ ] Ensure Event cards (Techsaurus, RexHack, etc.) maintain grid alignment on tablet/mobile.
+[ ] Validate Footer alignment (ensure shifted content looks good on all screen widths).
+[ ] Check for horizontal overflow/scrolling issues on narrow mobile screens.
+
+2. INTERACTIVE COMPONENTS
+------------------------
+[ ] Test "Register Now" button animation and redirection.
+[ ] Open Feedback Modal: verify form field focus, validation, and submission.
+[ ] Test Event Modal: check scroll behavior inside the modal and close button.
+[ ] Verify smooth scroll functionality for all anchor links (Events, Timeline, etc.).
+
+3. FUNCTIONAL TESTING
+--------------------
+[ ] REGISTRATION FLOW: Fill form, verify dynamic price calculation.
+[ ] PAYMENT GATEWAY: Test Razorpay popup trigger and loading states.
+[ ] FORM VALIDATION: Ensure error messages appear correctly in all browsers.
+[ ] ADMIN TERMINAL: Check if the terminal theme renders correctly (monospaced fonts, colors).
+
+4. AESTHETICS & PERFORMANCE
+--------------------------
+[ ] Check Glassmorphism effects (backdrop-filter) in Firefox and Safari.
+[ ] Verify Hazard stripe animations and pulse effects.
+[ ] Ensure Google Fonts (Inter/Orbitron) load correctly.
+[ ] Monitor page load performance (lazy loading of images/components).
+
+5. BROWSER LIST
+--------------
+[ ] Chrome (Desktop & Mobile)
+[ ] Safari (macOS & iOS)
+[ ] Firefox (Desktop)
+[ ] Edge (Desktop)
+[ ] Samsung Internet / Brave (Mobile)

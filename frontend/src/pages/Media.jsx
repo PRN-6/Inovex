@@ -60,7 +60,7 @@ const Media = () => {
       </div>
 
       {/* Top Left: Title */}
-      <div className="absolute top-6 md:top-10 left-8 md:left-32 lg:left-40 z-20">
+      <div className="absolute top-6 md:top-10 left-8 md:left-32 lg:left-48 z-20">
         <h1 className="text-xl md:text-3xl font-black tracking-[0.2em] uppercase leading-none text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
           Media
         </h1>
@@ -68,7 +68,7 @@ const Media = () => {
       </div>
 
       {/* Main Info Block (Middle Left) */}
-      <div ref={infoRef} className="absolute top-[40%] md:top-[30%] left-8 md:left-32 lg:left-40 z-20 max-w-2xl pr-8 md:pr-0">
+      <div ref={infoRef} className="absolute top-[40%] md:top-[30%] left-8 md:left-32 lg:left-48 z-20 max-w-2xl pr-8 md:pr-0">
         <div className="flex items-center gap-3 mb-2 md:mb-4">
           <span className="bg-white/10 backdrop-blur-md border border-white/20 px-2 py-0.5 text-[8px] md:text-[10px] font-bold uppercase tracking-widest rounded-sm text-gray-300">
             {currentItem.type}
@@ -88,12 +88,12 @@ const Media = () => {
 
       {/* Focused Carousel (Bottom Section) */}
       <div className="absolute bottom-3 md:bottom-6 right-0 left-0 md:left-auto md:right-10 lg:right-20 z-30 flex flex-col items-center md:items-end gap-6 px-4">
-        
+
         {/* Indicators and Navigation */}
         <div className="flex items-center justify-center gap-4 md:gap-1 relative">
-          
+
           {/* PREV ITEM */}
-          <div 
+          <div
             onClick={() => handleNav('prev')}
             className="hidden md:flex flex-col items-end opacity-30 scale-75 transition-all duration-500 origin-right cursor-pointer hover:opacity-50"
           >
@@ -108,7 +108,7 @@ const Media = () => {
           </div>
 
           {/* PREV BUTTON */}
-          <button 
+          <button
             onClick={() => handleNav('prev')}
             className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white text-black flex items-center justify-center z-40 -mr-4 md:-mr-5 shadow-xl hover:scale-110 active:scale-95 transition-transform"
           >
@@ -119,7 +119,7 @@ const Media = () => {
           <div className="relative group">
             <div className="w-[65vw] md:w-[320px] lg:w-[380px] h-32 md:h-44 lg:h-52 overflow-hidden rounded-md border-2 border-white/20 shadow-[0_15px_40px_rgba(0,0,0,0.6)] transition-all duration-500">
               <img src={currentItem.image} className="w-full h-full object-cover" alt="" />
-              
+
               {/* Image Overlay Title */}
               <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
                 <p className="text-[10px] md:text-sm font-black uppercase tracking-tight text-white leading-tight">
@@ -131,7 +131,7 @@ const Media = () => {
           </div>
 
           {/* NEXT BUTTON */}
-          <button 
+          <button
             onClick={() => handleNav('next')}
             className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white text-black flex items-center justify-center z-40 -ml-4 md:-ml-5 shadow-xl hover:scale-110 active:scale-95 transition-transform"
           >
@@ -139,7 +139,7 @@ const Media = () => {
           </button>
 
           {/* NEXT ITEM */}
-          <div 
+          <div
             onClick={() => handleNav('next')}
             className="hidden md:flex flex-col items-start opacity-30 scale-75 transition-all duration-500 origin-left cursor-pointer hover:opacity-50"
           >
@@ -157,7 +157,7 @@ const Media = () => {
 
         {/* Global Progress Bar */}
         <div className="w-full max-w-[200px] h-0.5 bg-white/10 relative hidden md:block">
-          <div 
+          <div
             className="absolute inset-y-0 left-0 bg-yellow-400 transition-all duration-500"
             style={{ width: `${((activeIndex + 1) / mediaData.length) * 100}%` }}
           />

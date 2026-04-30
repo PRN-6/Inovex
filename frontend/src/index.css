@@ -21,9 +21,23 @@
 
 @layer base {
   body {
-    @apply bg-black text-white antialiased overflow-x-hidden;
+    @apply bg-black text-white antialiased overflow-x-hidden selection:bg-red-600/30;
+    /* Prevent layout shift on mobile */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Global Fallback for Backdrop Blur */
+  @supports not (backdrop-filter: blur(1px)) {
+    .backdrop-blur-2xl, .backdrop-blur-xl, .backdrop-blur-lg {
+      background-color: rgba(10, 10, 10, 0.95) !important;
+    }
+    
+    .bg-zinc-900\/40 {
+      background-color: rgba(24, 24, 27, 0.9) !important;
+    }
   }
 }
+
 
 @keyframes shimmer {
   0% {

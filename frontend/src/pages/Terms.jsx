@@ -12,7 +12,7 @@ const Terms = () => {
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(223,31,38,0.05)_0%,rgba(0,0,0,1)_70%)]" />
       <div className="absolute top-0 left-0 w-full h-[6px] bg-[repeating-linear-gradient(45deg,#df1f26,#df1f26_10px,#000_10px,#000_20px)] opacity-20"></div>
 
-      <main className="relative z-10 container mx-auto px-6 pt-32 pb-20 max-w-4xl">
+      <main className="relative z-10 container mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-20 max-w-4xl">
         <div className="space-y-12">
           {/* Header */}
           <div className="space-y-4 border-b border-white/10 pb-8">

@@ -69,7 +69,7 @@ const Footer = () => {
       {/* Decorative Hazard Stripe Top */}
       <div className="absolute top-0 left-0 w-full h-[6px] bg-[repeating-linear-gradient(45deg,#df1f26,#df1f26_10px,#000_10px,#000_20px)] opacity-40"></div>
 
-      <div className="max-w-screen-2xl mx-auto px-6 relative z-10 md:px-12 lg:px-20">
+      <div className="max-w-screen-2xl mx-auto pl-10 pr-6 relative z-10 md:pl-20 md:pr-12 lg:pl-48 lg:pr-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
 
           {/* Section 1: InGen Corporate Overlay */}

@@ -189,13 +189,14 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#050505] text-white relative overflow-hidden font-sans selection:bg-amber-500/30">
       {/* Immersive Background - Now with more vibrant depth */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08)_0%,rgba(0,0,0,1)_70%)]" />
-      <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+      <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] pointer-events-none" />
 
-      <div className="relative z-10 w-full min-h-screen px-6 md:px-20 lg:px-40 lg:pl-56 pt-28 pb-20 overflow-y-auto">
-        <div className="w-full flex flex-col lg:flex-row gap-12 items-center lg:items-start transition-all duration-700">
+      <div className="relative z-10 w-full min-h-screen px-4 md:px-20 lg:px-40 lg:pl-56 pt-24 pb-20 overflow-y-auto">
+        <div className="w-full flex flex-col lg:flex-row gap-8 items-center lg:items-start transition-all duration-700">
+
 
           {/* REGISTRATION FORM */}
           <div ref={containerRef} className="w-full max-w-md lg:sticky lg:top-28 lg:z-30 border border-amber-500/20 rounded-3xl p-8 bg-zinc-900/40 backdrop-blur-2xl shadow-2xl shadow-amber-900/5 relative">
@@ -261,11 +262,12 @@ const Register = () => {
                       <input 
                         {...register("name", { required: "Full name is required" })} 
                         placeholder="E.G. ALEX DRIVER" 
-                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                        className={`w-full bg-white/5 border rounded-xl py-4 pl-12 pr-4 text-[13px] font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
                       />
                     </div>
-                    {errors.name && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.name.message}</p>}
+                    {errors.name && <p className="text-[10px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.name.message}</p>}
                   </div>
+
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
@@ -341,18 +343,19 @@ const Register = () => {
 
                   <div className="pt-6 border-t border-white/5">
                     <label className="text-xs font-black text-amber-500 uppercase tracking-[0.2em] mb-4 block">Select Quests</label>
-                    <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                       {Object.keys(eventPrices).map((eventName) => (
-                        <label key={eventName} className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
+                        <label key={eventName} className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer touch-manipulation ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
                           <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
-                          <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
-                            {selectedEvents.includes(eventName) && <Database size={12} className="text-black" />}
+                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
+                            {selectedEvents.includes(eventName) && <Database size={14} className="text-black" />}
                           </div>
-                          <span className="text-[10px] font-black uppercase truncate tracking-tight">{eventName}</span>
+                          <span className="text-[11px] font-black uppercase truncate tracking-tight">{eventName}</span>
                         </label>
                       ))}
                     </div>
                   </div>
+
 
                   <button type="submit" disabled={isLoading} className={`w-full mt-6 py-4.5 rounded-2xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 group relative overflow-hidden ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-900/20'}`}>
                     <div className="absolute inset-0 bg-white/20 skew-x-[-45deg] -translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000"></div>
