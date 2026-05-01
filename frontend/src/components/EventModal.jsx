@@ -101,13 +101,13 @@ const EventModal = ({ event, isOpen, onClose }) => {
           </button>
 
           {/* Eligibility Badge */}
-          {event.participants.includes('UG Students') && (
+          {event.participants?.includes('UG Students') && (
             <div className="px-4 py-1.5 bg-red-600/20 border border-red-500/50 rounded-full flex items-center gap-2 animate-pulse">
               <ShieldCheck className="w-4 h-4 text-red-500" />
               <span className="text-[10px] font-black tracking-[0.2em] text-red-500">ONLY FOR UG STUDENTS</span>
             </div>
           )}
-          {event.participants.includes('PG Students') && (
+          {event.participants?.includes('PG Students') && (
             <div className="px-4 py-1.5 bg-green-600/20 border border-green-500/50 rounded-full flex items-center gap-2 animate-pulse">
               <ShieldCheck className="w-4 h-4 text-green-500" />
               <span className="text-[10px] font-black tracking-[0.2em] text-green-500">ONLY FOR PG STUDENTS</span>
@@ -190,7 +190,7 @@ const EventModal = ({ event, isOpen, onClose }) => {
                         <div className="absolute top-0 left-0 w-1 h-full bg-jurassic-yellow/50 group-hover:bg-jurassic-yellow transition-colors"></div>
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2 pl-2">
                           <h3 className="font-bold text-white text-md">{round.name}</h3>
-                          {round.time && round.time !== "TBA" && (
+                          {round.time && (
                             <span className="text-xs px-2 py-1 bg-jurassic-yellow/10 text-jurassic-yellow border border-jurassic-yellow/20 rounded-md whitespace-nowrap flex items-center gap-1 shrink-0">
                               <Clock className="w-3 h-3" />
                               {round.time}
@@ -208,7 +208,7 @@ const EventModal = ({ event, isOpen, onClose }) => {
               <div className="mb-6">
                 <h2 className="text-xl font-bold mb-3 text-jurassic-yellow">Rules & Regulations</h2>
                 <ul className="space-y-2">
-                  {event.rules.map((rule, index) => (
+                  {event.rules?.map((rule, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <span className="w-6 h-6 bg-jurassic-red/20 border border-jurassic-red/50 rounded-full flex items-center justify-center text-xs font-bold text-jurassic-red shrink-0 mt-0.5">
                         {index + 1}
