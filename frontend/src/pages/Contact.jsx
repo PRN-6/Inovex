@@ -47,7 +47,7 @@ const socialLinks = [
 ];
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', type: 'feedback', message: '' });
   const [status, setStatus] = useState('idle'); // idle | sending | success | error
 
   const headerRef = useRef(null);
@@ -72,17 +72,18 @@ const Contact = () => {
       const res = await fetch(`${API_URL}/api/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type: 'other' }),
+        body: JSON.stringify(formData),
       });
       if (res.ok) {
         setStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setFormData({ name: '', email: '', type: 'feedback', message: '' });
         setTimeout(() => setStatus('idle'), 5000);
       } else {
         setStatus('error');
         setTimeout(() => setStatus('idle'), 4000);
       }
-    } catch {
+    } catch (error) {
+      console.error("Transmission error:", error);
       setStatus('error');
       setTimeout(() => setStatus('idle'), 4000);
     }
@@ -213,16 +214,19 @@ const Contact = () => {
 
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase tracking-[0.2em] text-red-500/70">
-                        Subject *
+                        Message Type *
                       </label>
-                      <input
+                      <select 
                         required
-                        type="text"
-                        value={formData.subject}
-                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        placeholder="REASON FOR CONTACT"
-                        className="w-full bg-zinc-900/50 border border-white/5 p-3 text-sm focus:outline-none focus:border-red-600/50 transition-colors placeholder:text-zinc-700 font-medium"
-                      />
+                        value={formData.type}
+                        onChange={(e) => setFormData({...formData, type: e.target.value})}
+                        className="w-full bg-zinc-900/50 border border-white/5 p-3 text-sm focus:outline-none focus:border-red-600/50 transition-colors font-medium appearance-none"
+                      >
+                        <option value="feedback">GENERAL FEEDBACK</option>
+                        <option value="bug">SYSTEM GLITCH / BUG</option>
+                        <option value="idea">INNOVATION IDEA</option>
+                        <option value="other">OTHER ENQUIRY</option>
+                      </select>
                     </div>
 
                     <div className="space-y-1.5">

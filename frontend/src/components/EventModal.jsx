@@ -257,18 +257,18 @@ const EventModal = ({ event, isOpen, onClose }) => {
                   </h2>
                   <div className="space-y-4">
                     {event.roundsData.map((round, index) => (
-                      <div key={index} className="bg-black/40 border border-white/10 rounded-xl p-4 relative overflow-hidden group hover:border-jurassic-yellow/50 transition-colors">
+                      <div key={index} className="bg-black/40 border border-white/10 rounded-xl p-3 md:p-4 relative overflow-hidden group hover:border-jurassic-yellow/50 transition-colors">
                         <div className="absolute top-0 left-0 w-1 h-full bg-jurassic-yellow/50 group-hover:bg-jurassic-yellow transition-colors"></div>
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2 pl-2">
-                          <h3 className="font-bold text-white text-md">{round.name}</h3>
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-1 sm:gap-2 pl-2">
+                          <h3 className="font-bold text-white text-sm md:text-md">{round.name}</h3>
                           {round.time && (
-                            <span className="text-xs px-2 py-1 bg-jurassic-yellow/10 text-jurassic-yellow border border-jurassic-yellow/20 rounded-md whitespace-nowrap flex items-center gap-1 shrink-0">
-                              <Clock className="w-3 h-3" />
+                            <span className="text-[10px] md:text-xs px-2 py-1 bg-jurassic-yellow/10 text-jurassic-yellow border border-jurassic-yellow/20 rounded-md flex items-center gap-1 shrink-0 w-fit">
+                              <Clock className="w-3 h-3 shrink-0" />
                               {round.time}
                             </span>
                           )}
                         </div>
-                        <p className="text-white/70 text-sm pl-2 leading-relaxed">{round.desc}</p>
+                        <p className="text-white/70 text-xs md:text-sm pl-2 leading-relaxed">{round.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -341,7 +341,7 @@ const EventModal = ({ event, isOpen, onClose }) => {
               {/* Action Button */}
               {!isBackendDisabled && (
                 <div className="pt-2">
-                  <Link 
+                  <Link
                     to="/register"
                     className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-black text-sm font-black italic tracking-[0.3em] uppercase rounded-2xl flex items-center justify-center gap-3 shadow-2xl shadow-amber-900/40 transform hover:-translate-y-1 transition-all group relative overflow-hidden"
                   >

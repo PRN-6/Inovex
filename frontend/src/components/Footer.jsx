@@ -44,7 +44,7 @@ const Footer = () => {
 
   const eventsLinks = [
     { label: 'Techsaurus', path: 'events' },
-    { label: 'Spy vs Spy', path: 'events' },
+    { label: 'Hidden Horizon', path: 'events' },
     { label: 'Rex Rampage', path: 'events' },
     { label: 'Cinesaur', path: 'events' },
     { label: 'Dinox', path: 'events' },
