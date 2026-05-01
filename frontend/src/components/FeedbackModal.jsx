@@ -3,9 +3,7 @@ import { X, Send, MessageSquare, Activity, Shield, Terminal } from 'lucide-react
 import { gsap } from 'gsap';
 
 const FeedbackModal = ({ isOpen, onClose }) => {
-  const API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    ? "http://localhost:5000"
-    : "https://inovex-backend01.onrender.com";
+  const API_URL = import.meta.env.VITE_API_URL || "https://inovex-backend01.onrender.com";
   
   const [formData, setFormData] = useState({
     name: '',

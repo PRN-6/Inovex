@@ -15,9 +15,7 @@ const Register = () => {
   const { showNotify } = useNotification();
 
   // Dynamic API URL for Local/Production
-  const API_URL = window.location.hostname === 'localhost'
-    ? 'http://localhost:5000'
-    : 'https://inovex-backend01.onrender.com';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://inovex-backend01.onrender.com';
 
   // Event Pricing & Squad Sizes
   const eventPrices = {

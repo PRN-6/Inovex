@@ -14,9 +14,7 @@ const Admin = () => {
   const [restrictedEvent, setRestrictedEvent] = useState(null);
   const [selectedReg, setSelectedReg] = useState(null);
 
-  const API_URL = window.location.hostname === 'localhost'
-    ? 'http://localhost:5000'
-    : 'https://inovex-backend01.onrender.com';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://inovex-backend01.onrender.com';
 
   const CalendarPicker = ({ value, onChange, onClear }) => {
     const [isOpen, setIsOpen] = useState(false);
