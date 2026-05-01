@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
@@ -21,6 +21,7 @@ const Admin = lazy(() => import('./pages/Admin'));
 const AppContent = () => {
   const location = useLocation();
   const hideFooter = location.pathname === '/inovex-terminal-2026' || location.pathname.startsWith('/event/');
+  const isBackendDisabled = import.meta.env.VITE_DISABLE_BACKEND === 'true';
 
   return (
     <div className="main-app-container">
@@ -37,7 +38,11 @@ const AppContent = () => {
           } />
           <Route path="/team" element={<Team />} />
           <Route path="/about" element={<About />} />
-          <Route path="/register" element={<Register />} />
+          {!isBackendDisabled ? (
+            <Route path="/register" element={<Register />} />
+          ) : (
+            <Route path="/register" element={<Navigate to="/" replace />} />
+          )}
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/inovex-terminal-2026" element={<Admin />} />

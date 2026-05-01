@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ArrowLeft, Calendar, MapPin, Users, Trophy, Clock, Tag, X, ShieldCheck, Flame } from 'lucide-react';
 
 const EventModal = ({ event, isOpen, onClose }) => {
+  const isBackendDisabled = import.meta.env.VITE_DISABLE_BACKEND === 'true';
   const modalRef = useRef(null);
   const contentRef = useRef(null);
   const backdropRef = useRef(null);
@@ -242,16 +243,18 @@ const EventModal = ({ event, isOpen, onClose }) => {
               </div>
 
               {/* Action Button */}
-              <div className="pt-2">
-                <Link 
-                  to="/register"
-                  className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-black text-sm font-black italic tracking-[0.3em] uppercase rounded-2xl flex items-center justify-center gap-3 shadow-2xl shadow-amber-900/40 transform hover:-translate-y-1 transition-all group relative overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-white/20 skew-x-[-45deg] -translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                  <Flame size={20} className="group-hover:animate-pulse" />
-                  Register For {event.title.toUpperCase()}
-                </Link>
-              </div>
+              {!isBackendDisabled && (
+                <div className="pt-2">
+                  <Link 
+                    to="/register"
+                    className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-black text-sm font-black italic tracking-[0.3em] uppercase rounded-2xl flex items-center justify-center gap-3 shadow-2xl shadow-amber-900/40 transform hover:-translate-y-1 transition-all group relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-white/20 skew-x-[-45deg] -translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                    <Flame size={20} className="group-hover:animate-pulse" />
+                    Register For {event.title.toUpperCase()}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

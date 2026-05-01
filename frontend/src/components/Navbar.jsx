@@ -4,6 +4,8 @@ import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, Us
 import { gsap } from 'gsap';
 import FeedbackModal from './FeedbackModal';
 
+const isBackendDisabled = import.meta.env.VITE_DISABLE_BACKEND === 'true';
+
 const mainNavItems = [
   { icon: Home, label: 'Home', path: 'home' },
   { icon: Calendar, label: 'Events', path: 'events' },
@@ -11,8 +13,9 @@ const mainNavItems = [
   { icon: Film, label: 'Media', path: 'media' },
   { icon: Users, label: 'Team', path: 'team' },
   { icon: Info, label: 'About', path: 'about' },
-  { icon: UserPlus, label: 'Register', path: 'register' },
+  ...(isBackendDisabled ? [] : [{ icon: UserPlus, label: 'Register', path: 'register' }]),
 ];
+
 
 const socialIcons = [
   { icon: MessageSquare, label: 'Feedback' },
@@ -262,7 +265,7 @@ const Navbar = () => {
       <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
 
       {/* Desktop Top-Right Register Button (Home Page Only) */}
-      {location.pathname === '/' && (
+      {location.pathname === '/' && !isBackendDisabled && (
         <button
           onClick={(e) => handleNavClick(e, mainNavItems.find(i => i.path === 'register'))}
           className="fixed top-8 right-8 z-50 hidden md:flex items-center gap-3 px-8 py-3 bg-red-600 text-white font-black italic tracking-[0.2em] skew-x-[-12deg] shadow-[8px_8px_0_rgba(0,0,0,1)] hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:bg-white hover:text-red-600 transition-all duration-300 group cursor-pointer border-2 border-transparent hover:border-red-600"
@@ -343,13 +346,15 @@ const Navbar = () => {
             </button>
 
             {/* Prominent Register Button */}
-            <button
+            {!isBackendDisabled && (
+              <button
               onClick={(e) => handleNavClick(e, mainNavItems.find(i => i.path === 'register'))}
               className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl transition-all duration-300 bg-red-600 text-white font-black italic tracking-[0.2em] shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:bg-red-500 active:scale-95"
             >
               <UserPlus size={22} />
               REGISTER NOW
             </button>
+            )}
           </div>
         </div>
       </div>

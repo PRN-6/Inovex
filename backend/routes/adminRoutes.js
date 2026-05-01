@@ -64,7 +64,10 @@ router.patch('/registrations/:id/status', async (req, res) => {
         if (!user) return res.status(404).json({ success: false, message: "Not found" });
 
         if (status === 'verified') {
-            sendConfirmationEmail(user).catch(err => console.error("Email Error:", err));
+            const emailResult = await sendConfirmationEmail(user);
+            if (!emailResult.success) {
+                console.error("Email Error:", emailResult.error);
+            }
         }
 
         res.json({ success: true, message: `Status updated to ${status}`, data: user });

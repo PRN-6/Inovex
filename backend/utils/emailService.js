@@ -45,17 +45,17 @@ const sendConfirmationEmail = async (userData) => {
                     <p style="color: #9ca3af; line-height: 1.6;">We have received your registration and transaction ID (<strong style="color: #fff;">${userData.transactionId}</strong>). Our wardens are currently verifying the tribute. This typically takes 12-24 hours.</p>
                 `}
                 
-                ${userData.registrations.map(reg => `
+                ${userData.registrations ? userData.registrations.map(reg => `
                     <div style="background-color: #1c1917; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #f59e0b;">
                         <h2 style="margin: 0; color: #f59e0b; font-size: 18px; text-transform: uppercase; letter-spacing: 2px;">${reg.eventName}</h2>
-                        ${reg.teammates.length > 0 ? `
+                        ${reg.teammates && reg.teammates.length > 0 ? `
                             <p style="margin: 10px 0 5px; color: #78716c; font-size: 10px; text-transform: uppercase;">Squad Members:</p>
                             <ul style="margin: 0; padding-left: 15px; color: #d1d5db; font-size: 13px;">
                                 ${reg.teammates.map(t => `<li>${t.name} (${t.usn})</li>`).join('')}
                             </ul>
                         ` : ''}
                     </div>
-                `).join('')}
+                `).join('') : ''}
                 
                 <div style="background-color: #0c0a09; padding: 20px; border-radius: 8px; border: 1px solid #292524; margin-top: 30px;">
                     <p style="margin: 5px 0; color: #78716c; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Primary Participant Details:</p>
