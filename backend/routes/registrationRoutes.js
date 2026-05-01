@@ -93,6 +93,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 
             await user.save();
             console.log(`✅ Registration Updated: ${name}`);
+            sendConfirmationEmail(user).catch(err => console.error("Email Error:", err));
         } else {
             user = new User({
                 name, email, phone, college, usn, year, department, registrations,
@@ -104,6 +105,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 
             await user.save();
             console.log(`✅ New Registration: ${name}`);
+            sendConfirmationEmail(user).catch(err => console.error("Email Error:", err));
         }
 
         res.status(201).json({

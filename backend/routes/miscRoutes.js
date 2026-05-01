@@ -13,8 +13,8 @@ router.get('/status', (req, res) => {
 // @route   POST /api/feedback
 router.post('/feedback', async (req, res) => {
     try {
-        const { name, email, message } = req.body;
-        await sendFeedbackEmail({ name, email, message });
+        const { name, email, type, message } = req.body;
+        await sendFeedbackEmail({ name, email, type, message });
         res.status(200).json({ success: true, message: "Feedback transmitted." });
     } catch (error) {
         res.status(500).json({ success: false, message: "Transmission failed." });
