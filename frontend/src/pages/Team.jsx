@@ -1,12 +1,97 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { Shield, Fingerprint, Activity } from 'lucide-react';
+import { Shield, Fingerprint, Activity, X } from 'lucide-react';
 import { FaLinkedin, FaGithub, FaInstagram, FaTwitter } from 'react-icons/fa';
 import { teamData } from '../data/teamData';
+
+/* ── Member Profile Popup ── */
+const MemberPopup = ({ member, onClose }) => {
+  const popupRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    gsap.set(overlayRef.current, { opacity: 0 });
+    gsap.set(popupRef.current, { scale: 0.6, opacity: 0, y: 30 });
+
+    const tl = gsap.timeline();
+    tl.to(overlayRef.current, { opacity: 1, duration: 0.2, ease: 'power2.out' })
+      .to(popupRef.current, { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.6)' }, '-=0.1');
+
+    return () => tl.kill();
+  }, []);
+
+  const handleClose = () => {
+    const tl = gsap.timeline({ onComplete: onClose });
+    tl.to(popupRef.current, { scale: 0.6, opacity: 0, y: 30, duration: 0.25, ease: 'back.in(1.6)' })
+      .to(overlayRef.current, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '-=0.15');
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" onClick={handleClose}>
+      <div ref={overlayRef} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div
+        ref={popupRef}
+        className="relative z-10 w-80 bg-[#0a0a0a]/95 backdrop-blur-xl rounded-2xl border border-white/15 shadow-2xl shadow-red-900/20 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close btn */}
+        <button
+          onClick={handleClose}
+          className="absolute top-3 right-3 z-20 w-7 h-7 bg-black/60 hover:bg-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110"
+        >
+          <X className="w-3.5 h-3.5 text-white" />
+        </button>
+
+        {/* Full Photo */}
+        <div className="w-full aspect-[3/4] bg-black overflow-hidden relative">
+          <img
+            src={member.image}
+            alt={member.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+        </div>
+
+        {/* Info */}
+        <div className="p-5 -mt-10 relative z-10">
+          <h4 className="text-xl font-black italic tracking-wide text-white">{member.name}</h4>
+          <p className="text-[10px] font-black tracking-[0.3em] text-red-500 uppercase mt-1">{member.role}</p>
+
+          {/* Socials */}
+          {member.socials && Object.keys(member.socials).length > 0 && (
+            <div className="mt-4 pt-3 border-t border-white/10 flex gap-3">
+              {member.socials.linkedin && (
+                <a href={member.socials.linkedin} target="_blank" rel="noreferrer" className="text-sm text-[#0a66c2] hover:text-white bg-[#0a66c2]/10 hover:bg-[#0a66c2] p-2 rounded-md transition-all flex items-center justify-center">
+                  <FaLinkedin />
+                </a>
+              )}
+              {member.socials.github && (
+                <a href={member.socials.github} target="_blank" rel="noreferrer" className="text-sm text-white hover:text-black bg-white/10 hover:bg-white p-2 rounded-md transition-all flex items-center justify-center">
+                  <FaGithub />
+                </a>
+              )}
+              {member.socials.instagram && (
+                <a href={member.socials.instagram} target="_blank" rel="noreferrer" className="text-sm text-[#E1306C] hover:text-white bg-[#E1306C]/10 hover:bg-[#E1306C] p-2 rounded-md transition-all flex items-center justify-center">
+                  <FaInstagram />
+                </a>
+              )}
+              {member.socials.twitter && (
+                <a href={member.socials.twitter} target="_blank" rel="noreferrer" className="text-sm text-[#1DA1F2] hover:text-white bg-[#1DA1F2]/10 hover:bg-[#1DA1F2] p-2 rounded-md transition-all flex items-center justify-center">
+                  <FaTwitter />
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Team = () => {
   const containerRef = useRef(null);
   const cardsRef = useRef([]);
+  const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -63,8 +148,9 @@ const Team = () => {
                 ref={el => cardsRef.current[index] = el}
                 className={`group relative bg-[#0a0a0a] border border-white/10 overflow-hidden 
                            hover:border-red-600/50 hover:shadow-[0_0_40px_rgba(220,38,38,0.15)] 
-                           transition-all duration-500 ease-out perspective-1000
+                           transition-all duration-500 ease-out perspective-1000 cursor-pointer
                            hover:[transform:rotateX(5deg)_rotateY(-5deg)_translateY(-5px)] ${customClass}`}
+                onClick={() => setSelectedMember(member)}
               >
 
                 {/* Holographic Shimmer Effect */}
@@ -169,6 +255,14 @@ const Team = () => {
         })()}
 
       </div>
+
+      {/* Member Profile Popup */}
+      {selectedMember && (
+        <MemberPopup
+          member={selectedMember}
+          onClose={() => setSelectedMember(null)}
+        />
+      )}
     </div>
   );
 };

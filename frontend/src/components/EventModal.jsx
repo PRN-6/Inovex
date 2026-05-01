@@ -32,7 +32,7 @@ const CoordinatorPopup = ({ coordinator, onClose }) => {
       <div ref={overlayRef} className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       <div
         ref={popupRef}
-        className="relative z-10 w-72 bg-black/80 backdrop-blur-xl rounded-2xl border border-white/15 shadow-2xl overflow-hidden"
+        className="relative z-10 w-80 bg-black/80 backdrop-blur-xl rounded-2xl border border-white/15 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close btn */}
