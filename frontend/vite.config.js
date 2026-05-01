@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     target: 'es2015',
-    minify: 'esbuild',
     cssTarget: 'chrome61',
   }
 })
