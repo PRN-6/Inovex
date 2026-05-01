@@ -79,7 +79,7 @@ const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => 
   return (
     <div
       ref={mobileCardRef}
-      className="md:hidden relative w-56 cursor-pointer"
+      className="relative w-56 max-w-full cursor-pointer overflow-visible"
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}

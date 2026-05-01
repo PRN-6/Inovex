@@ -9,7 +9,7 @@ const Footer = () => {
 
   const handleNavClick = (e, path) => {
     e.preventDefault();
-    const externalPages = ['team', 'about', 'privacy', 'terms'];
+    const externalPages = ['team', 'about', 'privacy', 'terms', 'faq', 'contact'];
 
     if (location.pathname === '/' && !externalPages.includes(path)) {
       const element = document.getElementById(path);
@@ -19,7 +19,7 @@ const Footer = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } else {
-      if (['team', 'about', 'privacy', 'terms'].includes(path)) {
+      if (['team', 'about', 'privacy', 'terms', 'faq', 'contact'].includes(path)) {
         navigate(`/${path}`);
       } else {
         navigate('/');
@@ -56,6 +56,8 @@ const Footer = () => {
   const resourceLinks = [
     { label: 'Team', path: 'team', icon: BookOpen },
     { label: 'About', path: 'about', icon: Users },
+    { label: 'FAQ', path: 'faq', icon: MessageSquare },
+    { label: 'Contact', path: 'contact', icon: Phone },
   ];
 
   const legalLinks = [

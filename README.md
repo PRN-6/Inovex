@@ -64,6 +64,15 @@ EVENT_HEAD_CODES='{"EH_TECH_2026":"Techsaurus", ...}'
 MAINTENANCE_MODE=false
 ```
 
+### Frontend `.env`
+```env
+# API ENDPOINT
+VITE_API_URL=http://localhost:5000
+
+# SYSTEM TOGGLES
+VITE_DISABLE_BACKEND=true # Set to 'true' to disable registration UI and backend dependencies
+```
+
 ---
 
 ## 🛠 Installation & Setup

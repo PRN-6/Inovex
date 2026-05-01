@@ -17,6 +17,8 @@ const Register = lazy(() => import('./pages/Register'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Admin = lazy(() => import('./pages/Admin'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 const AppContent = () => {
   const location = useLocation();
@@ -43,6 +45,8 @@ const AppContent = () => {
           ) : (
             <Route path="/register" element={<Navigate to="/" replace />} />
           )}
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/inovex-terminal-2026" element={<Admin />} />

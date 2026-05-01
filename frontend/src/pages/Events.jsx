@@ -131,7 +131,7 @@ const Events = () => {
         }}
       >
         {/* Mobile Version */}
-        <div className="md:hidden relative z-20 w-full h-96">
+        <div className="md:hidden relative z-20 w-full" style={{ height: '340px', overflow: 'hidden' }}>
           {allCards.map((cardIndex) => {
             const offset = (cardIndex - currentCardIndex + allCards.length) % allCards.length;
             if (offset > 1 && offset < allCards.length - 1) return null;
@@ -140,14 +140,18 @@ const Events = () => {
             if (offset === 1) mobileX = 70;
             else if (offset === allCards.length - 1) mobileX = -70;
 
+            const isCenter = offset === 0;
+
             return (
               <div
                 key={cardIndex}
                 className="absolute top-1/2 left-1/2 transition-all duration-500 ease-out cursor-pointer"
                 style={{
-                  transform: `translate(-50%, -50%) translateX(${mobileX}px) scale(${offset === 0 ? 1 : 0.8})`,
-                  opacity: offset === 0 ? 1 : 0.7,
-                  zIndex: offset === 0 ? 20 : 15,
+                  transform: `translate(-50%, -50%) translateX(${mobileX}px) scale(${isCenter ? 1 : 0.8})`,
+                  opacity: isCenter ? 1 : 0.7,
+                  zIndex: isCenter ? 20 : 15,
+                  maxWidth: '224px',
+                  width: '224px',
                 }}
                 onClick={() => handleCardClick(cardIndex)}
               >

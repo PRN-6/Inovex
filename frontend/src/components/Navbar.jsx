@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity, Info, UserPlus } from 'lucide-react';
+import { Menu, X, Home, Users, BookOpen, Film, Calendar, Gamepad2, Newspaper, User, CreditCard, Palette, Volume2, MessageSquare, Settings, Activity, Info, UserPlus, HelpCircle } from 'lucide-react';
 import { gsap } from 'gsap';
 import FeedbackModal from './FeedbackModal';
 
@@ -13,6 +13,7 @@ const mainNavItems = [
   { icon: Film, label: 'Media', path: 'media' },
   { icon: Users, label: 'Team', path: 'team' },
   { icon: Info, label: 'About', path: 'about' },
+  { icon: HelpCircle, label: 'FAQ', path: 'faq' },
   ...(isBackendDisabled ? [] : [{ icon: UserPlus, label: 'Register', path: 'register' }]),
 ];
 
@@ -142,6 +143,8 @@ const Navbar = () => {
       setActiveSection('team');
     } else if (location.pathname === '/about') {
       setActiveSection('about');
+    } else if (location.pathname === '/faq') {
+      setActiveSection('faq');
     } else if (location.pathname === '/register') {
       setActiveSection('register');
     } else if (location.pathname === '/' && activeSection === 'media') {
@@ -151,7 +154,7 @@ const Navbar = () => {
 
   const handleNavClick = (e, item) => {
     e.preventDefault();
-    if (location.pathname === '/' && item.path !== 'team' && item.path !== 'about' && item.path !== 'register') {
+    if (location.pathname === '/' && item.path !== 'team' && item.path !== 'about' && item.path !== 'faq' && item.path !== 'register') {
       const element = document.getElementById(item.path);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -165,6 +168,8 @@ const Navbar = () => {
         navigate('/team');
       } else if (item.path === 'about') {
         navigate('/about');
+      } else if (item.path === 'faq') {
+        navigate('/faq');
       } else if (item.path === 'register') {
         navigate('/register');
       } else {

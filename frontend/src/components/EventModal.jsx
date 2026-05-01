@@ -1,13 +1,83 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { ArrowLeft, Calendar, MapPin, Users, Trophy, Clock, Tag, X, ShieldCheck, Flame } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Users, Trophy, Clock, Tag, X, ShieldCheck, Flame, Phone, User } from 'lucide-react';
+
+/* ── Coordinator Profile Popup ── */
+const CoordinatorPopup = ({ coordinator, onClose }) => {
+  const popupRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    gsap.set(overlayRef.current, { opacity: 0 });
+    gsap.set(popupRef.current, { scale: 0.6, opacity: 0, y: 30 });
+
+    const tl = gsap.timeline();
+    tl.to(overlayRef.current, { opacity: 1, duration: 0.2, ease: 'power2.out' })
+      .to(popupRef.current, { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.6)' }, '-=0.1');
+
+    return () => tl.kill();
+  }, []);
+
+  const handleClose = () => {
+    const tl = gsap.timeline({
+      onComplete: onClose,
+    });
+    tl.to(popupRef.current, { scale: 0.6, opacity: 0, y: 30, duration: 0.25, ease: 'back.in(1.6)' })
+      .to(overlayRef.current, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '-=0.15');
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" onClick={handleClose}>
+      <div ref={overlayRef} className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      <div
+        ref={popupRef}
+        className="relative z-10 w-72 bg-black/80 backdrop-blur-xl rounded-2xl border border-white/15 shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close btn */}
+        <button
+          onClick={handleClose}
+          className="absolute top-3 right-3 z-10 w-7 h-7 bg-black/50 hover:bg-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110"
+        >
+          <X className="w-3.5 h-3.5 text-white" />
+        </button>
+
+        {/* Photo */}
+        <div className="w-full aspect-square bg-black/40 overflow-hidden">
+          {coordinator.photo ? (
+            <img
+              src={coordinator.photo}
+              alt={coordinator.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-jurassic-yellow/10">
+              <User className="w-20 h-20 text-jurassic-yellow/40" />
+            </div>
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="p-4 space-y-2 text-center">
+          <h4 className="text-lg font-bold text-white">{coordinator.name}</h4>
+          <p className="text-xs text-jurassic-yellow font-semibold tracking-widest uppercase">Event Coordinator</p>
+          <div className="flex items-center justify-center gap-2 text-white/60 text-sm pt-1">
+            <Phone className="w-3.5 h-3.5 text-jurassic-yellow" />
+            <span>{coordinator.contact}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const EventModal = ({ event, isOpen, onClose }) => {
   const isBackendDisabled = import.meta.env.VITE_DISABLE_BACKEND === 'true';
   const modalRef = useRef(null);
   const contentRef = useRef(null);
   const backdropRef = useRef(null);
+  const [selectedCoord, setSelectedCoord] = useState(null);
 
   useEffect(() => {
     if (isOpen && event) {
@@ -221,22 +291,48 @@ const EventModal = ({ event, isOpen, onClose }) => {
               </div>
 
               {/* Coordinator */}
-              <div className="bg-black/30 backdrop-blur-md rounded-2xl p-6 border border-white/10 mb-8">
-                <h3 className="text-lg font-bold mb-3 text-jurassic-yellow">
+              <div className="mb-8">
+                <h3 className="text-lg font-bold mb-4 text-jurassic-yellow">
                   {event.coordinators && event.coordinators.length > 1 ? "Event Coordinators" : "Event Coordinator"}
                 </h3>
-                <div className="space-y-4">
+                <div className="bg-black/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
                   {event.coordinators ? (
                     event.coordinators.map((coord, idx) => (
-                      <div key={idx} className={idx !== 0 ? "pt-4 border-t border-white/5" : ""}>
-                        <p className="font-semibold text-white">{coord.name}</p>
-                        <p className="text-white/60 text-sm">Contact: {coord.contact}</p>
+                      <div key={idx} className={`flex items-center gap-4 ${idx !== 0 ? "pt-4 border-t border-white/5" : ""}`}>
+                        {coord.photo ? (
+                          <img
+                            src={coord.photo}
+                            alt={coord.name}
+                            className="w-20 h-20 rounded-full object-cover border-2 border-jurassic-yellow/40 shrink-0 cursor-pointer hover:ring-2 hover:ring-jurassic-yellow hover:scale-105 transition-all duration-200"
+                            onClick={() => setSelectedCoord(coord)}
+                          />
+                        ) : (
+                          <div
+                            className="w-20 h-20 rounded-full bg-jurassic-yellow/10 border-2 border-jurassic-yellow/30 flex items-center justify-center shrink-0 cursor-pointer hover:ring-2 hover:ring-jurassic-yellow hover:scale-105 transition-all duration-200"
+                            onClick={() => setSelectedCoord(coord)}
+                          >
+                            <span className="text-jurassic-yellow font-black text-2xl uppercase">
+                              {coord.name?.charAt(0) || '?'}
+                            </span>
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-semibold text-white">{coord.name}</p>
+                          <p className="text-white/50 text-sm">📞 {coord.contact}</p>
+                        </div>
                       </div>
                     ))
                   ) : (
-                    <div>
-                      <p className="font-semibold text-white">{event.coordinator}</p>
-                      <p className="text-white/60 text-sm">Contact: {event.contact}</p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-20 h-20 rounded-full bg-jurassic-yellow/10 border-2 border-jurassic-yellow/30 flex items-center justify-center shrink-0">
+                        <span className="text-jurassic-yellow font-black text-2xl uppercase">
+                          {event.coordinator?.charAt(0) || '?'}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white">{event.coordinator}</p>
+                        <p className="text-white/50 text-sm">📞 {event.contact}</p>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -259,6 +355,14 @@ const EventModal = ({ event, isOpen, onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* Coordinator Profile Popup */}
+      {selectedCoord && (
+        <CoordinatorPopup
+          coordinator={selectedCoord}
+          onClose={() => setSelectedCoord(null)}
+        />
+      )}
     </div>
   );
 };

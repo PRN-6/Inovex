@@ -16,7 +16,11 @@ export const eventsData = {
       "Decision of judges will be final"
     ],
     coordinators: [
-      { name: "Swathi Naik", contact: "9876543210" }
+      {
+        name: "Swathi Naik",
+        contact: "9876543210",
+        photo: "/images/event-heads/swathi-naik.webp"
+      }
     ],
     image: "/images/cards/card1.webp",
     roundsConducted: 4,
@@ -62,7 +66,11 @@ export const eventsData = {
       "Assemble all QR fragments at the finale"
     ],
     coordinators: [
-      { name: "Jane Smith", contact: "9876543211" }
+      {
+        name: "Jane Smith",
+        contact: "9876543211",
+        photo: "/images/event-heads/jane-smith.webp"
+      }
     ],
     image: "/images/cards/card2.webp",
     roundsConducted: 2,
@@ -98,8 +106,16 @@ export const eventsData = {
       "Teams must report on time"
     ],
     coordinators: [
-      { name: "Harshita", contact: "TBD" },
-      { name: "Shraddha", contact: "TBD" }
+      {
+        name: "Harshita",
+        contact: "TBD",
+        photo: "/images/event-heads/harshita.webp"
+      },
+      {
+        name: "Shraddha",
+        contact: "TBD",
+        photo: "/images/event-heads/shraddha.webp"
+      }
     ],
     image: "/images/cards/card3.webp",
     roundsConducted: 3,
@@ -139,8 +155,16 @@ export const eventsData = {
       "Judges' decision on creativity, editing, and theme relevance is final"
     ],
     coordinators: [
-      { name: "Darshan Acharya", contact: "TBD" },
-      { name: "Joycil Britto", contact: "TBD" }
+      {
+        name: "Darshan Acharya",
+        contact: "TBD",
+        photo: "/images/event-heads/darshan-acharya.webp"
+      },
+      {
+        name: "Joycil Britto",
+        contact: "TBD",
+        photo: "/images/event-heads/joycil-britto.webp"
+      }
     ],
     image: "/images/cards/card4.webp",
     roundsConducted: 1,
@@ -170,8 +194,16 @@ export const eventsData = {
       "Evaluation is strictly based on design accuracy, creativity, code quality, and time management"
     ],
     coordinators: [
-      { name: "Shreyas", contact: "TBD" },
-      { name: "Swathi", contact: "TBD" }
+      {
+        name: "Shreyas",
+        contact: "TBD",
+        photo: "/images/event-heads/shreyas.webp"
+      },
+      {
+        name: "Swathi",
+        contact: "TBD",
+        photo: "/images/event-heads/swathi.webp"
+      }
     ],
     image: "/images/cards/card5.webp",
     roundsConducted: 2,
@@ -206,8 +238,16 @@ export const eventsData = {
       "Final evaluation is based on a live presentation and functionality demonstration"
     ],
     coordinators: [
-      { name: "Ruchita Jadhav", contact: "TBD" },
-      { name: "Prinson", contact: "TBD" }
+      {
+        name: "Ruchita Jadhav",
+        contact: "TBD",
+        photo: "/images/event-heads/ruchita-jadhav.webp"
+      },
+      {
+        name: "Prinson",
+        contact: "TBD",
+        photo: "/images/event-heads/prinson.webp"
+      }
     ],
     image: "/images/cards/card6.webp",
     roundsConducted: 2,
@@ -242,7 +282,11 @@ export const eventsData = {
       "Organizer's decision is final and maps will be decided on the spot"
     ],
     coordinators: [
-      { name: "Mike Johnson", contact: "9876543212" }
+      {
+        name: "Mike Johnson",
+        contact: "9876543212",
+        photo: "/images/event-heads/mike-johnson.webp"
+      }
     ],
     image: "/images/cards/card7.webp",
     roundsConducted: 2,
@@ -277,7 +321,11 @@ export const eventsData = {
       "Judging panel decisions are final; any misbehavior leads to disqualification"
     ],
     coordinators: [
-      { name: "Sarah Wilson", contact: "9876543213" }
+      {
+        name: "Sarah Wilson",
+        contact: "9876543213",
+        photo: "/images/event-heads/sarah-wilson.webp"
+      }
     ],
     image: "/images/cards/card8.webp",
     roundsConducted: 3,
@@ -317,7 +365,11 @@ export const eventsData = {
       "Original compositions preferred"
     ],
     coordinators: [
-      { name: "Sarah Johnson", contact: "9876543218" }
+      {
+        name: "Sarah Johnson",
+        contact: "9876543218",
+        photo: "/images/event-heads/sarah-johnson.webp"
+      }
     ],
     image: "/images/cards/card9.webp"
   },
@@ -339,7 +391,11 @@ export const eventsData = {
       "Negative marking for wrong answers"
     ],
     coordinators: [
-      { name: "Michael Davis", contact: "9876543219" }
+      {
+        name: "Michael Davis",
+        contact: "9876543219",
+        photo: "/images/event-heads/michael-davis.webp"
+      }
     ],
     image: "/images/cards/card10.webp"
   },
@@ -361,7 +417,11 @@ export const eventsData = {
       "Costume and choreography judged"
     ],
     coordinators: [
-      { name: "Lisa Anderson", contact: "9876543220" }
+      {
+        name: "Lisa Anderson",
+        contact: "9876543220",
+        photo: "/images/event-heads/lisa-anderson.webp"
+      }
     ],
     image: "/images/cards/card11.webp"
   },
@@ -383,7 +443,11 @@ export const eventsData = {
       "Setup on day 1, removal on day 2"
     ],
     coordinators: [
-      { name: "David Martinez", contact: "9876543221" }
+      {
+        name: "David Martinez",
+        contact: "9876543221",
+        photo: "/images/event-heads/david-martinez.webp"
+      }
     ],
     image: "/images/cards/card12.webp"
   }
