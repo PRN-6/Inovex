@@ -8,12 +8,13 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
+    port: 587,
+    secure: false, // Use STARTTLS
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+    family: 4 // FORCE IPv4 (This fixes the ENETUNREACH error on Render)
 });
 
 // Verify connection configuration
