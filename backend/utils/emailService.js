@@ -6,11 +6,12 @@ if (dns.setDefaultResultOrder) {
     dns.setDefaultResultOrder('ipv4first');
 }
 
-// Email Transporter Configuration (SSL/TLS Secure Transport on Port 465)
+// Email Transporter Configuration (STARTTLS on Port 587)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL/TLS
+    port: 587,
+    secure: false, // Use STARTTLS (Port 587)
+    family: 4,     // Force IPv4
     pool: true,
     maxConnections: 5,
     auth: {
@@ -33,10 +34,10 @@ transporter.verify(function (error, success) {
  */
 const sendConfirmationEmail = async (userData) => {
     const isVerified = userData.paymentStatus === 'verified';
-    const eventList = Array.isArray(userData.registrations) 
-        ? userData.registrations.map(r => r.eventName).join(', ').toUpperCase() 
+    const eventList = Array.isArray(userData.registrations)
+        ? userData.registrations.map(r => r.eventName).join(', ').toUpperCase()
         : 'YOUR QUESTS';
-    
+
     const mailOptions = {
         from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
         to: userData.email,
