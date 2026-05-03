@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 // Email Transporter Configuration with Pooling
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
+    port: 587,
+    secure: false, // Use STARTTLS
     pool: true,
     maxConnections: 5,
     auth: {
