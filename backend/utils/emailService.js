@@ -6,12 +6,11 @@ if (dns.setDefaultResultOrder) {
     dns.setDefaultResultOrder('ipv4first');
 }
 
-// Email Transporter Configuration with Robust Settings
+// Email Transporter Configuration (SSL/TLS Secure Transport on Port 465)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Use STARTTLS
-    family: 4,     // Force IPv4 to avoid ENETUNREACH network errors
+    port: 465,
+    secure: true, // Use SSL/TLS
     pool: true,
     maxConnections: 5,
     auth: {
@@ -25,20 +24,14 @@ transporter.verify(function (error, success) {
     if (error) {
         console.error('❌ EMAIL SERVER CONNECTION ERROR:', error.message);
     } else {
-        console.log('✅ EMAIL SERVER READY: Uplink stable (IPv4)');
+        console.log('✅ EMAIL SERVER READY: Secure SSL Uplink Stable (Port 465)');
     }
 });
 
 /**
  * Sends a thematic confirmation email to the participant
- * @param {Object} userData - The user document from MongoDB
  */
 const sendConfirmationEmail = async (userData) => {
-    // K6 TEST GUARD: Skip email if it's a load test
-    if (userData.transactionId && userData.transactionId.startsWith('K6_TEST')) {
-        return { success: true, message: "K6 Test detected: Email suppressed" };
-    }
-
     const isVerified = userData.paymentStatus === 'verified';
     const eventList = Array.isArray(userData.registrations) 
         ? userData.registrations.map(r => r.eventName).join(', ').toUpperCase() 
@@ -64,18 +57,6 @@ const sendConfirmationEmail = async (userData) => {
                     <p style="color: #f59e0b; font-weight: bold; font-size: 20px; text-align: center; margin-bottom: 20px;">⏱ PENDING VERIFICATION</p>
                     <p style="color: #9ca3af; line-height: 1.6;">We have received your registration and transaction ID (<strong style="color: #fff;">${userData.transactionId}</strong>). Our wardens are currently verifying the tribute. This typically takes 12-24 hours.</p>
                 `}
-                
-                ${userData.registrations ? userData.registrations.map(reg => `
-                    <div style="background-color: #1c1917; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #f59e0b;">
-                        <h2 style="margin: 0; color: #f59e0b; font-size: 18px; text-transform: uppercase; letter-spacing: 2px;">${reg.eventName}</h2>
-                        ${reg.teammates && reg.teammates.length > 0 ? `
-                            <p style="margin: 10px 0 5px; color: #78716c; font-size: 10px; text-transform: uppercase;">Squad Members:</p>
-                            <ul style="margin: 0; padding-left: 15px; color: #d1d5db; font-size: 13px;">
-                                ${reg.teammates.map(t => `<li>${t.name} (${t.usn})</li>`).join('')}
-                            </ul>
-                        ` : ''}
-                    </div>
-                `).join('') : ''}
                 
                 <div style="background-color: #0c0a09; padding: 20px; border-radius: 8px; border: 1px solid #292524; margin-top: 30px;">
                     <p style="margin: 5px 0; color: #78716c; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Primary Participant Details:</p>
@@ -104,19 +85,9 @@ const sendFeedbackEmail = async (feedbackData) => {
     const mailOptions = {
         from: `"INOVEX FEEDBACK" <${process.env.EMAIL_USER}>`,
         to: "prinsonroyal11@gmail.com",
-        subject: `NEW FEEDBACK: ${feedbackData.type?.toUpperCase() || 'GENERAL'} from ${feedbackData.name}`,
-        html: `
-            <div style="background-color: #000; color: #fff; padding: 30px; font-family: sans-serif; border: 1px solid #dc2626; border-radius: 8px;">
-                <h2 style="color: #dc2626; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px;">New Feedback Received</h2>
-                <p><strong>Name:</strong> ${feedbackData.name}</p>
-                <p><strong>Email:</strong> ${feedbackData.email}</p>
-                <div style="background-color: #111; padding: 15px; border-radius: 4px; border-left: 4px solid #dc2626; margin-top: 20px;">
-                    <p style="margin: 0; color: #ccc;">${feedbackData.message}</p>
-                </div>
-            </div>
-        `
+        subject: `NEW FEEDBACK from ${feedbackData.name}`,
+        html: `<p><strong>Name:</strong> ${feedbackData.name}</p><p><strong>Message:</strong> ${feedbackData.message}</p>`
     };
-
     try {
         await transporter.sendMail(mailOptions);
         return { success: true };

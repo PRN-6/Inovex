@@ -152,10 +152,11 @@ const Admin = () => {
                   <p className="text-[10px] font-black text-red-600/60 tracking-[0.4em] uppercase mt-1">Classification: Active Asset</p>
                 </div>
               </div>
-               <div className="flex items-center gap-2">
-                 <button onClick={() => window.print()} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/40 hover:text-white transition-all" title="PRINT INTEL"><Printer size={18} /></button>
-                 <button onClick={onClose} className="p-2.5 bg-red-600/10 hover:bg-red-600/20 border border-red-600/20 rounded-xl text-red-500 hover:text-red-400 transition-all ml-2"><X size={18} /></button>
-              </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => resendEmail(reg._id)} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-amber-500 hover:text-amber-400 transition-all" title="RESEND CONFIRMATION EMAIL"><Mail size={18} /></button>
+                  <button onClick={() => window.print()} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/40 hover:text-white transition-all" title="PRINT INTEL"><Printer size={18} /></button>
+                  <button onClick={onClose} className="p-2.5 bg-red-600/10 hover:bg-red-600/20 border border-red-600/20 rounded-xl text-red-500 hover:text-red-400 transition-all ml-2"><X size={18} /></button>
+                </div>
             </div>
 
             {/* Modal Content - Scrollable */}
@@ -628,10 +629,27 @@ const Admin = () => {
       console.error("Status Update Error:", error);
       alert("CRITICAL ERROR: STATUS UPDATE FAILED");
     }
+  };  const resendEmail = async (id) => {
+    if (!window.confirm("RESEND EMAIL: Are you sure you want to send the confirmation email to this user?")) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/registrations/${id}/resend-email`, {
+        method: 'POST',
+        headers: {
+          'x-admin-key': accessCode
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert("SUCCESS: Confirmation email sent.");
+      } else {
+        alert(`ERROR: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Resend Error:", error);
+      alert("CRITICAL ERROR: EMAIL SEND FAILED");
+    }
   };
-
-
-
   const handleBulkStatusUpdate = async (newStatus) => {
     if (selectedIds.length === 0) return;
     if (!window.confirm(`BULK PROTOCOL: Verify ${selectedIds.length} assets as ${newStatus.toUpperCase()}?`)) return;

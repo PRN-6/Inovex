@@ -88,8 +88,29 @@ router.post('/registrations/:id/resend-email', async (req, res) => {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
         }
 
-        // Route disabled by request
-        res.status(403).json({ success: false, message: "Manual email dispatch is currently disabled." });
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ success: false, message: "Asset not found" });
+
+        // Cooldown logic: 30 seconds for admin manual trigger
+        const COOLDOWN_TIME = 30 * 1000;
+        const lastSent = user.lastEmailSentAt ? new Date(user.lastEmailSentAt).getTime() : 0;
+        
+        if (lastSent > 0 && (Date.now() - lastSent < COOLDOWN_TIME)) {
+            const remaining = Math.ceil((COOLDOWN_TIME - (Date.now() - lastSent)) / 1000);
+            return res.status(429).json({ 
+                success: false, 
+                message: `WAIT: Please wait ${remaining}s before resending.` 
+            });
+        }
+
+        const emailResult = await sendConfirmationEmail(user);
+        if (emailResult.success) {
+            user.lastEmailSentAt = new Date();
+            await user.save();
+            res.json({ success: true, message: "Email dispatched successfully" });
+        } else {
+            res.status(500).json({ success: false, message: "Email dispatch failed", error: emailResult.error });
+        }
     } catch (error) {
         console.error("RESEND EMAIL ERROR:", error);
         res.status(500).json({ success: false, message: "Server error during resend", error: error.message });
