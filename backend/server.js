@@ -17,6 +17,12 @@ const PORT = process.env.PORT || 5000;
 // Connect to Database
 connectDB();
 
+// Environment Diagnostic (Production Only)
+console.log('--- SYSTEM DIAGNOSTIC ---');
+console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'FOUND (✓)' : 'MISSING (X)');
+console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'FOUND (✓)' : 'MISSING (X)');
+console.log('-------------------------');
+
 // Middleware
 app.use(helmet());
 app.use(compression());
