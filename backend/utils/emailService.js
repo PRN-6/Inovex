@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
 
-// Email Transporter Configuration with Pooling
+// Email Transporter Configuration with Robust Settings
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false,
-    family: 4, // Force IPv4 to avoid ENETUNREACH IPv6 errors
+    secure: false, // Use STARTTLS
+    family: 4,     // Force IPv4 to avoid ENETUNREACH network errors
     pool: true,
     maxConnections: 5,
     auth: {
@@ -14,12 +14,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Verify connection configuration
+// Verify connection configuration on startup
 transporter.verify(function (error, success) {
     if (error) {
         console.error('❌ EMAIL SERVER CONNECTION ERROR:', error.message);
     } else {
-        console.log('✅ EMAIL SERVER READY: Uplink stable');
+        console.log('✅ EMAIL SERVER READY: Uplink stable (IPv4)');
     }
 });
 
@@ -43,7 +43,7 @@ const sendConfirmationEmail = async (userData) => {
         to: userData.email,
         subject: isVerified ? `QUESTS CONFIRMED: ${eventList}` : `REGISTRATION RECEIVED: PENDING VERIFICATION`,
         html: `
-            <div style="background-color: #000; color: #fff; padding: 40px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; border: 2px solid #b45309; border-radius: 15px; max-width: 600px; margin: auto;">
+            <div style="background-color: #000; color: #fff; padding: 40px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; border: 2px solid #f59e0b; border-radius: 15px; max-width: 600px; margin: auto;">
                 <div style="text-align: center; margin-bottom: 30px;">
                     <h1 style="color: #f59e0b; text-transform: uppercase; letter-spacing: 8px; margin: 0; font-size: 32px;">INOVEX 2026</h1>
                     <p style="color: #b45309; letter-spacing: 3px; font-weight: bold; margin-top: 5px;">BORN FROM FIRE</p>
@@ -77,12 +77,6 @@ const sendConfirmationEmail = async (userData) => {
                     <p style="margin: 5px 0; color: #d1d5db; font-size: 14px;"><strong>GUILD (COLLEGE):</strong> ${userData.college}</p>
                 </div>
                 
-                ${isVerified ? `
-                    <p style="color: #f59e0b; font-weight: bold; text-align: center; margin-top: 40px; font-style: italic; letter-spacing: 1px;">"Your path is forged. Prepare for the expedition."</p>
-                ` : `
-                    <p style="color: #f59e0b; font-weight: bold; text-align: center; margin-top: 40px; font-style: italic; letter-spacing: 1px;">"Your tribute is being processed. Hold fast."</p>
-                `}
-                
                 <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #292524; text-align: center;">
                     <p style="color: #444; font-size: 10px; text-transform: uppercase; letter-spacing: 2px;">© 2026 INOVEX TECH FEST • SYSTEM GENERATED NOTIFICATION</p>
                 </div>
@@ -100,32 +94,25 @@ const sendConfirmationEmail = async (userData) => {
     }
 };
 
-/**
- * Sends feedback data to the administrator
- * @param {Object} feedbackData - The feedback data from the frontend
- */
 const sendFeedbackEmail = async (feedbackData) => {
     const mailOptions = {
         from: `"INOVEX FEEDBACK" <${process.env.EMAIL_USER}>`,
         to: "prinsonroyal11@gmail.com",
-        subject: `NEW FEEDBACK: ${feedbackData.type.toUpperCase()} from ${feedbackData.name}`,
+        subject: `NEW FEEDBACK: ${feedbackData.type?.toUpperCase() || 'GENERAL'} from ${feedbackData.name}`,
         html: `
             <div style="background-color: #000; color: #fff; padding: 30px; font-family: sans-serif; border: 1px solid #dc2626; border-radius: 8px;">
                 <h2 style="color: #dc2626; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px;">New Feedback Received</h2>
                 <p><strong>Name:</strong> ${feedbackData.name}</p>
                 <p><strong>Email:</strong> ${feedbackData.email}</p>
-                <p><strong>Type:</strong> ${feedbackData.type}</p>
                 <div style="background-color: #111; padding: 15px; border-radius: 4px; border-left: 4px solid #dc2626; margin-top: 20px;">
                     <p style="margin: 0; color: #ccc;">${feedbackData.message}</p>
                 </div>
-                <p style="font-size: 10px; color: #555; margin-top: 30px;">Sent via INOVEX Terminal Feedback Channel</p>
             </div>
         `
     };
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log(`📧 Feedback email sent to admin`);
         return { success: true };
     } catch (error) {
         console.error('❌ Feedback email failed:', error.message);

@@ -153,7 +153,6 @@ const Admin = () => {
                 </div>
               </div>
                <div className="flex items-center gap-2">
-                 <button onClick={() => resendEmail(reg._id)} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-amber-500 hover:text-amber-400 transition-all" title="RESEND CONFIRMATION EMAIL"><Mail size={18} /></button>
                  <button onClick={() => window.print()} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/40 hover:text-white transition-all" title="PRINT INTEL"><Printer size={18} /></button>
                  <button onClick={onClose} className="p-2.5 bg-red-600/10 hover:bg-red-600/20 border border-red-600/20 rounded-xl text-red-500 hover:text-red-400 transition-all ml-2"><X size={18} /></button>
               </div>
@@ -620,14 +619,8 @@ const Admin = () => {
         if (selectedReg && selectedReg._id === id) {
           setSelectedReg({ ...selectedReg, paymentStatus: newStatus });
         }
-        
-        if (newStatus === 'verified') {
-          if (data.emailSuccess) {
-             alert("PROTOCOL COMPLETE: Participant verified and confirmation email dispatched.");
-          } else {
-             alert("WARNING: Participant verified but EMAIL DISPATCH FAILED. Check backend logs.");
-          }
-        }
+        // Simple confirmation of status change
+        console.log(`Status updated to ${newStatus}`);
       } else {
         alert(data.message);
       }
@@ -637,27 +630,7 @@ const Admin = () => {
     }
   };
 
-  const resendEmail = async (id) => {
-    if (!window.confirm("PROTOCOL OVERRIDE: Resend confirmation email to this asset?")) return;
 
-    try {
-      const response = await fetch(`${API_URL}/api/registrations/${id}/resend-email`, {
-        method: 'POST',
-        headers: {
-          'x-admin-key': accessCode
-        }
-      });
-      const data = await response.json();
-      if (data.success) {
-        alert("SUCCESS: Confirmation email dispatched.");
-      } else {
-        alert(`ERROR: ${data.message}`);
-      }
-    } catch (error) {
-      console.error("Resend Error:", error);
-      alert("CRITICAL ERROR: EMAIL RESEND FAILED");
-    }
-  };
 
   const handleBulkStatusUpdate = async (newStatus) => {
     if (selectedIds.length === 0) return;

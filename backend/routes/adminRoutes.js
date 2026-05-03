@@ -60,38 +60,15 @@ router.patch('/registrations/:id/status', async (req, res) => {
 
         const { status } = req.body;
         
-        // Find user first to check current status
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ success: false, message: "Not found" });
 
-        // If status is already verified and we are trying to set it to verified again, stop
-        if (status === 'verified' && user.paymentStatus === 'verified') {
-            return res.status(400).json({ success: false, message: "Participant is already verified. Use 'Resend Email' if needed." });
-        }
-
         user.paymentStatus = status;
-        
-        let emailSent = false;
-        if (status === 'verified') {
-            console.log(`[DEBUG] Attempting to send verification email to: ${user.email}`);
-            const emailResult = await sendConfirmationEmail(user);
-            if (emailResult.success) {
-                console.log(`[DEBUG] Email sent successfully to ${user.email}`);
-                emailSent = true;
-                user.lastEmailSentAt = new Date();
-            } else {
-                console.error("[DEBUG] Email dispatch failed:", emailResult.error);
-            }
-        } else {
-            console.log(`[DEBUG] Status updated to ${status}, no email sent.`);
-        }
-
         await user.save();
 
         res.json({ 
             success: true, 
-            message: `Status updated to ${status}${emailSent ? ' and confirmation email sent' : ''}`, 
-            emailSuccess: emailSent,
+            message: `Status updated to ${status}`, 
             data: user 
         });
     } catch (error) {
@@ -111,29 +88,8 @@ router.post('/registrations/:id/resend-email', async (req, res) => {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
         }
 
-        const user = await User.findById(req.params.id);
-        if (!user) return res.status(404).json({ success: false, message: "Asset not found" });
-
-        // Cooldown logic: 2 minutes (120,000 ms)
-        const COOLDOWN_TIME = 2 * 60 * 1000;
-        const lastSent = user.lastEmailSentAt ? new Date(user.lastEmailSentAt).getTime() : 0;
-        
-        if (lastSent > 0 && (Date.now() - lastSent < COOLDOWN_TIME)) {
-            const remaining = Math.ceil((COOLDOWN_TIME - (Date.now() - lastSent)) / 1000);
-            return res.status(429).json({ 
-                success: false, 
-                message: `COOLDOWN ACTIVE: Please wait ${remaining} seconds before resending.` 
-            });
-        }
-
-        const emailResult = await sendConfirmationEmail(user);
-        if (emailResult.success) {
-            user.lastEmailSentAt = new Date();
-            await user.save();
-            res.json({ success: true, message: "Confirmation email dispatched successfully" });
-        } else {
-            res.status(500).json({ success: false, message: "Email dispatch failed", error: emailResult.error });
-        }
+        // Route disabled by request
+        res.status(403).json({ success: false, message: "Manual email dispatch is currently disabled." });
     } catch (error) {
         console.error("RESEND EMAIL ERROR:", error);
         res.status(500).json({ success: false, message: "Server error during resend", error: error.message });
