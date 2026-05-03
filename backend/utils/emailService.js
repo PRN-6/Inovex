@@ -2,13 +2,23 @@ const nodemailer = require('nodemailer');
 
 // Email Transporter Configuration with Pooling
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    pool: true, // Use pooling to handle multiple emails
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Use SSL
+    pool: true,
     maxConnections: 5,
-    maxMessages: 100,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    }
+});
+
+// Verify connection configuration
+transporter.verify(function (error, success) {
+    if (error) {
+        console.error('❌ EMAIL SERVER CONNECTION ERROR:', error.message);
+    } else {
+        console.log('✅ EMAIL SERVER READY: Uplink stable');
     }
 });
 
@@ -23,11 +33,14 @@ const sendConfirmationEmail = async (userData) => {
     }
 
     const isVerified = userData.paymentStatus === 'verified';
+    const eventList = Array.isArray(userData.registrations) 
+        ? userData.registrations.map(r => r.eventName).join(', ').toUpperCase() 
+        : 'YOUR QUESTS';
     
     const mailOptions = {
         from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
         to: userData.email,
-        subject: isVerified ? `QUESTS CONFIRMED: ${userData.registrations.map(r => r.eventName).join(', ').toUpperCase()}` : `REGISTRATION RECEIVED: PENDING VERIFICATION`,
+        subject: isVerified ? `QUESTS CONFIRMED: ${eventList}` : `REGISTRATION RECEIVED: PENDING VERIFICATION`,
         html: `
             <div style="background-color: #000; color: #fff; padding: 40px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; border: 2px solid #b45309; border-radius: 15px; max-width: 600px; margin: auto;">
                 <div style="text-align: center; margin-bottom: 30px;">

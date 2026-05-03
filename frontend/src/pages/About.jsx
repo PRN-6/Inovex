@@ -135,7 +135,7 @@ const About = () => {
                   </div>
                   <div>
                     <span className="block text-xs font-bold text-white/40 uppercase mb-1">Duration Cycle</span>
-                    <span className="text-sm font-medium">3 Days of Uninterrupted Operation</span>
+                    <span className="text-sm font-medium">2 Days of Uninterrupted Operation</span>
                   </div>
                 </li>
                 <li className="flex gap-4">

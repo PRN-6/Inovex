@@ -1,6 +1,6 @@
 # 🦖 INOVEX 2026: BORN FROM FIRE
 
-**INOVEX** is a high-fidelity, sci-fi themed college festival website. Inspired by the sleek, high-tech aesthetic of InGen (Jurassic Park) and dragon-inspired "Legendary" themes, this platform serves as a battle-hardened gateway for festival registrations.
+**INOVEX** is a high-fidelity, sci-fi themed college festival website. Inspired by the sleek, high-tech aesthetic of InGen (Jurassic Park) and dragon-inspired "Legendary" themes, this platform serves as a battle-hardened gateway for festival registrations and asset management.
 
 ---
 
@@ -8,99 +8,103 @@
 
 ### Frontend
 - **Framework**: [React.js](https://reactjs.org/) (Vite)
-- **Styling**: Tailwind CSS (Custom Design System)
-- **Animations**: [GSAP](https://greensock.com/gsap/) (ScrollTrigger & Contextual)
-- **State Management**: React Hooks (useForm, useMemo)
+- **Styling**: Vanilla CSS + Tailwind Utility Classes (Custom Design System)
+- **Animations**: [GSAP](https://greensock.com/gsap/) (ScrollTrigger, Contextual Hover Effects)
+- **State Management**: React Hooks (useForm, useMemo, useEffect)
 - **Icons**: [Lucide React](https://lucide.dev/)
+- **Data Handling**: FormData for multi-part file uploads (Screenshots)
 
 ### Backend
 - **Runtime**: Node.js / Express.js
-- **Database**: MongoDB Atlas (Mongoose)
-- **Email**: Nodemailer (Pooled Connection / Background Processing)
-- **Security**: Express-Rate-Limit, Helmet, & Honeypot Protection
+- **Database**: MongoDB Atlas (Mongoose ODM)
+- **Asset Storage**: [Cloudinary](https://cloudinary.com/) (Multer-Storage-Cloudinary)
+- **Email**: Nodemailer (SSL/TLS Secure Transport on Port 465)
+- **Security**: 
+    - `Express-Rate-Limit` (DDoS Mitigation)
+    - `Helmet` (Header Security)
+    - `CORS` (Cross-Origin Resource Sharing)
+    - `Honeypot` (Bot Defense)
 
 ---
 
 ## ✨ Key Features
 
 ### 1. Smart Registration Protocol
-- **Identity Sync**: Students can register for multiple events at different times using the same USN. The system automatically merges their registrations into a single profile.
-- **Squad Manifest**: Support for team-based events with real-time teammate tracking.
-- **Conflict Resolution**: Prevents users from registering for the same event twice while allowing them to sign up for new ones.
-- **Spam Defense**: 3-layer protection including IP-based Rate Limiting, Unique Database Constraints, and invisible Honeypot fields.
+- **Identity Sync**: Students can register for multiple events using the same USN. The system automatically merges registrations.
+- **Squad Manifest**: Support for team-based events (4-player squads, 2-player duos) with real-time teammate tracking.
+- **Visual Proofing**: Integrated Cloudinary upload for payment screenshots to ensure manual verification integrity.
 
-### 2. Central Command Terminal (Admin)
-- **Triple-Tier Clearance**: 
-    - **Event Heads**: Restricted access to view only registrations for their specific event.
-    - **Admin**: General view-only access to the entire manifest.
-    - **Super Admin**: Full database purge rights (DELETE) and global configuration.
-- **Temporal Filtering**: Advanced high-fidelity Calendar Picker for date-based data isolation.
-- **Reporting Suite**: Branded exports for Excel (.xls), Word (.doc), and CSV.
+### 2. Central Command Terminal (Admin Dashboard)
+- **Bulk Actions**: Parallel processing for mass verification or data purging.
+- **Real-time Analytics**: Visual Quest Distribution charts and conversion metrics.
+- **Asset Intel Profile**: High-fidelity tactical view of participant data with print and copy-to-clipboard support.
+- **Session Persistence**: Secured admin session recovery via encrypted localStorage.
 
-### 3. Immersive UX Design
-- **Kinetic Cards**: Event cards with 3D tilt effects, eligibility ribbons, and interactive "Begin Expedition" buttons.
-- **Thematic Overlays**: Dragon-themed registration success screens and ember animations.
-- **Mobile Optimized**: Fully responsive layout with custom mobile navigation and touch-friendly sliders.
+### 3. Automated Communication
+- **Verification Uplink**: Instant dispatch of confirmation emails upon admin verification.
+- **Manual Resend**: Admin-controlled manual email override for edge cases.
 
 ---
 
 ## ⚙️ Environment Configuration
 
-### Backend `.env`
-```env
-# SERVER SETTINGS
-PORT=5000
-MONGO_URI=your_mongodb_uri
+### Backend `.env` (`/backend/.env`)
+| Variable | Description |
+| :--- | :--- |
+| `PORT` | Server port (default: 5000) |
+| `MONGO_URI` | MongoDB Atlas Connection String |
+| `ADMIN_SECRET_KEY` | Key for Admin Dashboard access |
+| `SUPER_ADMIN_SECRET_KEY` | Key for Super Admin (Delete/Purge rights) |
+| `EMAIL_USER` | Gmail address for system notifications |
+| `EMAIL_PASS` | **Google App Password** (16 characters) |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary Account Name |
+| `CLOUDINARY_API_KEY` | Cloudinary API Key |
+| `CLOUDINARY_API_SECRET` | Cloudinary API Secret |
+| `MAINTENANCE_MODE` | Set to `true` to halt registrations |
 
-# SECURITY KEYS
-ADMIN_SECRET_KEY=admin_access_key
-SUPER_ADMIN_SECRET_KEY=super_admin_key
-
-# EVENT HEAD MAPPING (JSON)
-# Define access codes for each event lead
-EVENT_HEAD_CODES='{"EH_TECH_2026":"Techsaurus", ...}'
-
-# SYSTEM STATUS
-MAINTENANCE_MODE=false
-```
-
-### Frontend `.env`
-```env
-# API ENDPOINT
-VITE_API_URL=http://localhost:5000
-
-# SYSTEM TOGGLES
-VITE_DISABLE_BACKEND=true # Set to 'true' to disable registration UI and backend dependencies
-```
+### Frontend `.env` (`/frontend/.env`)
+| Variable | Description |
+| :--- | :--- |
+| `VITE_API_URL` | URL of the backend (Local: `http://localhost:5000`) |
+| `VITE_ADMIN_SECRET_KEY` | Matches backend Admin Key |
+| `VITE_SUPER_ADMIN_SECRET_KEY` | Matches backend Super Admin Key |
+| `VITE_DISABLE_BACKEND` | Set to `false` for production connectivity |
 
 ---
 
 ## 🛠 Installation & Setup
 
-1. **Clone & Install**
-   ```bash
-   git clone https://github.com/your-repo/inovex-2026.git
-   cd inovex-2026
-   cd backend && npm install
-   cd ../frontend && npm install
-   ```
+### 1. Clone & Core Install
+```bash
+git clone https://github.com/your-repo/inovex-2026.git
+cd inovex-2026
+```
 
-2. **Run Development Mode**
-   ```bash
-   # Terminal 1 (Backend)
-   cd backend && npm run dev
-   
-   # Terminal 2 (Frontend)
-   cd frontend && npm run dev
-   ```
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+# Create .env and add credentials
+npm run dev
+```
 
-3. **Production Build**
-   ```bash
-   cd frontend && npm run build
-   ```
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+# Create .env and set VITE_API_URL
+npm run dev
+```
+
+---
+
+## 🦖 Site-B Security Protocols
+- **DDoS Mitigation**: The system is capped at 10 registrations per IP per hour to prevent server exhaustion.
+- **Honeypot Protection**: An invisible field `hp_field` traps automated bots instantly.
+- **Encrypted Transmission**: All data is transmitted via HTTPS (production) with custom `x-admin-key` validation headers.
 
 ---
 
 ## 📜 License
 **INOVEX CORE SYSTEMS - SITE-B DATA PROTOCOL.** 
-All rights reserved © 2026. Built with precision for the next generation of innovators.
+All rights reserved © 2026. Built for the next generation of innovators.

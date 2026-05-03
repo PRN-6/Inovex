@@ -13,6 +13,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "cloudinary": "^1.41.3",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "crypto": "^1.0.1",
@@ -22,6 +23,8 @@
     "helmet": "^8.1.0",
     "mongoose": "^9.5.0",
     "morgan": "^1.10.1",
+    "multer": "^2.1.1",
+    "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^8.0.5",
     "razorpay": "^2.9.6"
   },

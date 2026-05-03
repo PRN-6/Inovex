@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema({
     }],
     amount: Number,
     transactionId: String,
+    paymentScreenshot: String,
     paymentStatus: {
         type: String,
         default: 'pending',

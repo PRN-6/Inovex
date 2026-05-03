@@ -3,10 +3,11 @@ const router = express.Router();
 const User = require('../models/User');
 const { registerLimiter } = require('../middlewares/rateLimiter');
 const { sendConfirmationEmail } = require('../utils/emailService');
+const { upload } = require('../config/cloudinaryConfig');
 
 // @route   POST /api/register
 // @desc    Register participant
-router.post('/register', registerLimiter, async (req, res) => {
+router.post('/register', registerLimiter, upload.single('paymentScreenshot'), async (req, res) => {
     if (process.env.MAINTENANCE_MODE === 'true') {
         return res.status(503).json({ 
             success: false, 
@@ -15,10 +16,22 @@ router.post('/register', registerLimiter, async (req, res) => {
     }
 
     try {
-        const { 
+        let { 
             name, email, phone, college, usn, year, department, registrations, amount,
             transactionId, hp_field 
         } = req.body;
+
+        // Handle File Path from Cloudinary
+        const screenshotUrl = req.file ? req.file.path : null;
+
+        // Multer might stringify nested objects/arrays if sent via FormData
+        if (typeof registrations === 'string') {
+            try {
+                registrations = JSON.parse(registrations);
+            } catch (e) {
+                console.error("JSON Parse Error for registrations:", e);
+            }
+        }
 
         if (hp_field) {
             return res.status(400).json({ success: false, message: "UNAUTHORIZED: Automated access detected." });
@@ -90,6 +103,7 @@ router.post('/register', registerLimiter, async (req, res) => {
             user.paymentStatus = 'pending';
             user.phone = phone;
             user.email = email;
+            if (screenshotUrl) user.paymentScreenshot = screenshotUrl;
 
             await user.save();
             console.log(`✅ Registration Updated: ${name}`);
@@ -99,6 +113,7 @@ router.post('/register', registerLimiter, async (req, res) => {
                 name, email, phone, college, usn, year, department, registrations,
                 amount,
                 transactionId: transactionId || `DIR_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+                paymentScreenshot: screenshotUrl,
                 paymentStatus: 'pending',
                 registrationDate: new Date()
             });

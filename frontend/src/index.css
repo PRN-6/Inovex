@@ -9,13 +9,27 @@
   --animate-scan-line: scan-line 4s linear infinite;
 
   @keyframes holo {
-    0%, 100% { opacity: 0.3; transform: translateX(-100%) skewX(-15deg); }
-    50% { opacity: 0.5; transform: translateX(200%) skewX(-15deg); }
+
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: translateX(-100%) skewX(-15deg);
+    }
+
+    50% {
+      opacity: 0.5;
+      transform: translateX(200%) skewX(-15deg);
+    }
   }
 
   @keyframes scan-line {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(400%); }
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(400%);
+    }
   }
 }
 
@@ -28,10 +42,13 @@
 
   /* Global Fallback for Backdrop Blur */
   @supports not (backdrop-filter: blur(1px)) {
-    .backdrop-blur-2xl, .backdrop-blur-xl, .backdrop-blur-lg {
+
+    .backdrop-blur-2xl,
+    .backdrop-blur-xl,
+    .backdrop-blur-lg {
       background-color: rgba(10, 10, 10, 0.95) !important;
     }
-    
+
     .bg-zinc-900\/40 {
       background-color: rgba(24, 24, 27, 0.9) !important;
     }

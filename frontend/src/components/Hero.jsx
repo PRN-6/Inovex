@@ -70,13 +70,12 @@ const Hero = () => {
 
   return (
     <div
-      className={`relative min-h-screen w-full flex flex-col justify-end p-8 md:p-16 lg:p-24 overflow-hidden bg-black transition-all duration-[2000ms] ease-in-out ${
-        backgrounds[currentBg].includes('hero3') 
-          ? 'bg-center md:bg-[82%_top]' 
+      className={`relative min-h-screen w-full flex flex-col justify-end p-8 md:p-16 lg:p-24 overflow-hidden bg-black transition-all duration-[2000ms] ease-in-out ${backgrounds[currentBg].includes('hero3')
+          ? 'bg-center md:bg-[82%_top]'
           : backgrounds[currentBg].includes('hero4')
             ? 'bg-[75%_top] md:bg-[82%_top]'
             : 'bg-[82%_top]'
-      }`}
+        }`}
       style={{
         backgroundImage: `url(${backgrounds[currentBg]})`,
         backgroundSize: 'cover'

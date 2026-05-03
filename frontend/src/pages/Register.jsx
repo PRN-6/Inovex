@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNotification } from '../context/NotificationContext';
 import { gsap } from 'gsap';
-import { User, Mail, School, Phone, ChevronRight, ShieldCheck, Database, Flame, Hash, GraduationCap, BookOpen, Shield, CheckCircle, UserPlus, X } from 'lucide-react';
+import { User, Mail, School, Phone, ChevronRight, ShieldCheck, Database, Flame, Hash, GraduationCap, BookOpen, Shield, CheckCircle, UserPlus, X, Camera, Upload } from 'lucide-react';
 
 const Register = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -13,6 +13,7 @@ const Register = () => {
   const [showPayment, setShowPayment] = useState(false);
   const [tempFormData, setTempFormData] = useState(null);
   const { showNotify } = useNotification();
+  const [screenshot, setScreenshot] = useState(null);
 
   // Dynamic API URL for Local/Production
   const API_URL = import.meta.env.VITE_API_URL || 'https://inovex-backend01.onrender.com';
@@ -140,6 +141,11 @@ const Register = () => {
       return;
     }
 
+    if (!screenshot) {
+      showNotify("MISSION CRITICAL: Payment screenshot is required for verification.", "error");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const registrations = selectedEvents.map(eventName => {
@@ -156,18 +162,23 @@ const Register = () => {
         return { eventName, teammates };
       });
 
-      const finalPayload = {
-        ...tempFormData,
-        registrations,
-        amount: selectedEvents.reduce((total, e) => total + (eventPrices[e] || 0), 0),
-        transactionId: transactionId,
-        hp_field: tempFormData.hp_field
-      };
+      // Prepare FormData for Multi-part submission
+      const formData = new FormData();
+      formData.append('paymentScreenshot', screenshot);
+      formData.append('transactionId', transactionId);
+      formData.append('registrations', JSON.stringify(registrations));
+      formData.append('amount', selectedEvents.reduce((total, e) => total + (eventPrices[e] || 0), 0));
+      
+      // Append other fields from tempFormData
+      Object.keys(tempFormData).forEach(key => {
+        if (key !== 'teammates') { // Teammates are handled inside registrations
+          formData.append(key, tempFormData[key]);
+        }
+      });
 
       const response = await fetch(`${API_URL}/api/register`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(finalPayload)
+        body: formData // Fetch automatically sets content-type for FormData
       });
 
       if (response.ok) {
@@ -401,14 +412,38 @@ const Register = () => {
                     </p>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1">Transaction ID / UTR Number</label>
-                    <input 
-                      id="utr-input"
-                      type="text" 
-                      placeholder="ENTER 12-DIGIT UTR"
-                      className="w-full bg-white/5 border border-amber-500/30 rounded-xl py-4 px-4 text-sm font-black tracking-[0.2em] focus:outline-none focus:border-amber-500 transition-all text-white placeholder:text-white/10"
-                    />
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1">Payment Screenshot</label>
+                      <div className="relative group">
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => setScreenshot(e.target.files[0])}
+                          className="hidden" 
+                          id="screenshot-upload"
+                        />
+                        <label 
+                          htmlFor="screenshot-upload"
+                          className={`w-full flex items-center justify-between bg-white/5 border rounded-xl py-3 px-4 cursor-pointer transition-all hover:bg-white/10 ${screenshot ? 'border-green-500/50' : 'border-amber-500/30'}`}
+                        >
+                          <span className={`text-[10px] font-bold truncate tracking-widest ${screenshot ? 'text-green-500' : 'text-white/40'}`}>
+                            {screenshot ? screenshot.name : 'SELECT SCREENSHOT'}
+                          </span>
+                          {screenshot ? <CheckCircle size={16} className="text-green-500" /> : <Camera size={16} className="text-amber-500/60" />}
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1">Transaction ID / UTR Number</label>
+                      <input 
+                        id="utr-input"
+                        type="text" 
+                        placeholder="ENTER 12-DIGIT UTR"
+                        className="w-full bg-white/5 border border-amber-500/30 rounded-xl py-4 px-4 text-sm font-black tracking-[0.2em] focus:outline-none focus:border-amber-500 transition-all text-white placeholder:text-white/10"
+                      />
+                    </div>
                   </div>
 
                   <button 

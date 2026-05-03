@@ -63,16 +63,49 @@ router.patch('/registrations/:id/status', async (req, res) => {
 
         if (!user) return res.status(404).json({ success: false, message: "Not found" });
 
+        let emailSent = false;
         if (status === 'verified') {
             const emailResult = await sendConfirmationEmail(user);
-            if (!emailResult.success) {
+            if (emailResult.success) {
+                emailSent = true;
+            } else {
                 console.error("Email Error:", emailResult.error);
             }
         }
 
-        res.json({ success: true, message: `Status updated to ${status}`, data: user });
+        res.json({ 
+            success: true, 
+            message: `Status updated to ${status}${emailSent ? ' and confirmation email sent' : ''}`, 
+            emailSuccess: emailSent,
+            data: user 
+        });
     } catch (error) {
         res.status(500).json({ success: false, message: "Update failed" });
+    }
+});
+
+// @route   POST /api/registrations/:id/resend-email
+router.post('/registrations/:id/resend-email', async (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'];
+        const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        if (adminKey !== secretKey && adminKey !== superSecretKey) {
+            return res.status(403).json({ success: false, message: "ADMIN clearance required" });
+        }
+
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ success: false, message: "Asset not found" });
+
+        const emailResult = await sendConfirmationEmail(user);
+        if (emailResult.success) {
+            res.json({ success: true, message: "Confirmation email dispatched successfully" });
+        } else {
+            res.status(500).json({ success: false, message: "Email dispatch failed", error: emailResult.error });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error during resend" });
     }
 });
 
