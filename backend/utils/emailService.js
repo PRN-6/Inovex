@@ -4,7 +4,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false, // Use STARTTLS
+    secure: false,
+    family: 4, // Force IPv4 to avoid ENETUNREACH IPv6 errors
     pool: true,
     maxConnections: 5,
     auth: {

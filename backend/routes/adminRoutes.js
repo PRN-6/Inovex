@@ -73,13 +73,17 @@ router.patch('/registrations/:id/status', async (req, res) => {
         
         let emailSent = false;
         if (status === 'verified') {
+            console.log(`[DEBUG] Attempting to send verification email to: ${user.email}`);
             const emailResult = await sendConfirmationEmail(user);
             if (emailResult.success) {
+                console.log(`[DEBUG] Email sent successfully to ${user.email}`);
                 emailSent = true;
                 user.lastEmailSentAt = new Date();
             } else {
-                console.error("Email Error:", emailResult.error);
+                console.error("[DEBUG] Email dispatch failed:", emailResult.error);
             }
+        } else {
+            console.log(`[DEBUG] Status updated to ${status}, no email sent.`);
         }
 
         await user.save();
