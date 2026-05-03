@@ -4,9 +4,9 @@ const { sendFeedbackEmail } = require('../utils/emailService');
 
 // @route   GET /api/status
 router.get('/status', (req, res) => {
-    res.json({
-        maintenance: process.env.MAINTENANCE_MODE === 'true',
-        maintenanceUntil: process.env.MAINTENANCE_UNTIL
+    res.json({ 
+        maintenance: process.env.MAINTENANCE_MODE === 'true', 
+        maintenanceUntil: process.env.MAINTENANCE_UNTIL 
     });
 });
 

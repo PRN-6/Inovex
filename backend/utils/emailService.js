@@ -1,29 +1,24 @@
 const nodemailer = require('nodemailer');
 
-// Email Transporter Configuration
-// CRITICAL: Ensure EMAIL_USER and EMAIL_PASS are set in your Render/Vercel Dashboard!
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.error('❌ EMAIL SYSTEM CRIPPLED: Credentials missing from Environment Variables.');
-}
-
+// Email Transporter Configuration with Pooling
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Use STARTTLS
+    port: 465,
+    secure: true, // Use SSL
+    pool: true,
+    maxConnections: 5,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    },
-    family: 4 // FORCE IPv4 (This fixes the ENETUNREACH error on Render)
+    }
 });
 
 // Verify connection configuration
 transporter.verify(function (error, success) {
     if (error) {
-        console.error('❌ EMAIL SERVER OFFLINE:', error.message);
-        console.error('💡 TIP: If this is production, double-check your App Password in Render Settings.');
+        console.error('❌ EMAIL SERVER CONNECTION ERROR:', error.message);
     } else {
-        console.log('✅ EMAIL SERVER ONLINE: Ready to dispatch notifications');
+        console.log('✅ EMAIL SERVER READY: Uplink stable');
     }
 });
 
@@ -38,10 +33,10 @@ const sendConfirmationEmail = async (userData) => {
     }
 
     const isVerified = userData.paymentStatus === 'verified';
-    const eventList = Array.isArray(userData.registrations)
-        ? userData.registrations.map(r => r.eventName).join(', ').toUpperCase()
+    const eventList = Array.isArray(userData.registrations) 
+        ? userData.registrations.map(r => r.eventName).join(', ').toUpperCase() 
         : 'YOUR QUESTS';
-
+    
     const mailOptions = {
         from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
         to: userData.email,

@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('dns').setDefaultResultOrder('ipv4first'); // Force Node to prefer IPv4 over IPv6
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -17,12 +16,6 @@ const PORT = process.env.PORT || 5000;
 
 // Connect to Database
 connectDB();
-
-// Environment Diagnostic (Production Only)
-console.log('--- SYSTEM DIAGNOSTIC ---');
-console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'FOUND (✓)' : 'MISSING (X)');
-console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'FOUND (✓)' : 'MISSING (X)');
-console.log('-------------------------');
 
 // Middleware
 app.use(helmet());

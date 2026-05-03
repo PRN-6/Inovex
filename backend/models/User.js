@@ -56,6 +56,9 @@ const userSchema = new mongoose.Schema({
     registrationDate: {
         type: Date,
         default: Date.now
+    },
+    lastEmailSentAt: {
+        type: Date
     }
 });
 
