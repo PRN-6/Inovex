@@ -2,27 +2,21 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNotification } from '../context/NotificationContext';
 import { gsap } from 'gsap';
-import { User, Mail, School, Phone, ChevronRight, ShieldCheck, Database, Flame, Hash, GraduationCap, BookOpen, Shield, CheckCircle, UserPlus, X, Camera, Upload } from 'lucide-react';
+import { User, Database, Flame, Shield, CheckCircle, UserPlus } from 'lucide-react';
 
 const Register = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [participantId, setParticipantId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isMaintenance, setIsMaintenance] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0 });
-  const [showPayment, setShowPayment] = useState(false);
-  const [tempFormData, setTempFormData] = useState(null);
   const { showNotify } = useNotification();
-  const [screenshot, setScreenshot] = useState(null);
 
   // Dynamic API URL for Local/Production
   const API_URL = import.meta.env.VITE_API_URL || 'https://inovex-backend01.onrender.com';
 
-  // Event Pricing & Squad Sizes
-  const eventPrices = {
-    "Techsaurus": 200, "Spy vs Spy": 300, "Rex Rampage": 150, "Cinesaur": 150,
-    "Dinox": 200, "RexHack": 500, "Battle Nexus": 400, "Genesis Reborn": 250
-  };
+
 
   const eventTeamSizes = {
     "Techsaurus": 1, "Spy vs Spy": 4, "Rex Rampage": 2, "Cinesaur": 2,
@@ -121,81 +115,113 @@ const Register = () => {
         }
       }
 
-      setTempFormData(formData);
-      setShowPayment(true);
-      gsap.fromTo(".payment-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-    } catch (err) {
-      console.error("Check Failed:", err);
-      // If the check fails (e.g. network issue), we still allow them to proceed to payment
-      setTempFormData(formData);
-      setShowPayment(true);
-      gsap.fromTo(".payment-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const confirmPayment = async (transactionId) => {
-    if (!transactionId || transactionId.length < 6) {
-      showNotify("ERROR: Please enter a valid Transaction ID / UTR number.", "error");
-      return;
-    }
-
-    if (!screenshot) {
-      showNotify("MISSION CRITICAL: Payment screenshot is required for verification.", "error");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
+      // Prepare registrations data
       const registrations = selectedEvents.map(eventName => {
         const teamSize = getTeamSize(eventName);
         const teammates = [];
         if (teamSize > 1) {
           for (let i = 0; i < teamSize - 1; i++) {
-            const tName = tempFormData.teammates?.[eventName]?.[i]?.name;
-            const tUsn = tempFormData.teammates?.[eventName]?.[i]?.usn;
-            const tEmail = tempFormData.teammates?.[eventName]?.[i]?.email;
+            const tName = formData.teammates?.[eventName]?.[i]?.name;
+            const tUsn = formData.teammates?.[eventName]?.[i]?.usn;
+            const tEmail = formData.teammates?.[eventName]?.[i]?.email;
             if (tName) teammates.push({ name: tName, usn: tUsn, email: tEmail });
           }
         }
         return { eventName, teammates };
       });
 
-      // Prepare FormData for Multi-part submission
-      const formData = new FormData();
-      formData.append('paymentScreenshot', screenshot);
-      formData.append('transactionId', transactionId);
-      formData.append('registrations', JSON.stringify(registrations));
-      formData.append('amount', selectedEvents.reduce((total, e) => total + (eventPrices[e] || 0), 0));
-      
-      // Append other fields from tempFormData
-      Object.keys(tempFormData).forEach(key => {
-        if (key !== 'teammates') { // Teammates are handled inside registrations
-          formData.append(key, tempFormData[key]);
-        }
-      });
+      // Submit Registration
+      const submissionData = {
+        ...formData,
+        registrations
+      };
 
       const response = await fetch(`${API_URL}/api/register`, {
         method: 'POST',
-        body: formData // Fetch automatically sets content-type for FormData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(submissionData)
       });
 
       if (response.ok) {
+        const result = await response.json();
+        setParticipantId(result.participantId);
         setIsSubmitted(true);
-        setShowPayment(false);
         gsap.fromTo(".success-overlay", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" });
+
+        // Auto-download ticket after 1 second
+        setTimeout(() => {
+          downloadTicket(result.participantId, formData.name, selectedEvents);
+        }, 1000);
+
       } else {
         const error = await response.json();
         showNotify(error.message || "Registration failed. Please try again.", 'error');
       }
-    } catch (error) {
-      console.error("Submission Error:", error);
+    } catch (err) {
+      console.error("Registration Error:", err);
       showNotify("System Offline: Could not connect to the registration server.", 'error');
     } finally {
       setIsLoading(false);
     }
   };
+
+  const downloadTicket = (pid, userName, events) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 600;
+    canvas.height = 300;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Inner Border
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
+
+    // Title
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'italic bold 32px Arial';
+    ctx.fillText('INOVEX 2026 - ACCESS PASS', 40, 60);
+
+    // Name
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px Arial';
+    ctx.fillText(`ASSET: ${userName.toUpperCase()}`, 40, 110);
+
+    // Quests
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = '14px Arial';
+    ctx.fillText(`QUESTS: ${events.join(', ')}`, 40, 145);
+
+    // PID Label
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 12px Arial';
+    ctx.fillText('PARTICIPANT ID', 40, 220);
+
+    // PID Value
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'italic bold 42px Arial';
+    ctx.fillText(pid, 40, 260);
+
+    // Instruction Text
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = 'bold 11px Arial';
+    ctx.fillText('PRESENT THIS ID AT THE ENTRANCE', 560, 245);
+    ctx.fillText('FOR PAYMENT VERIFICATION.', 560, 260);
+    ctx.textAlign = 'left';
+
+    // Trigger Download
+    const link = document.createElement('a');
+    link.download = `INOVEX_PASS_${pid}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
+
 
   return (
     <div className="min-h-screen bg-[#050505] text-white relative overflow-hidden font-sans selection:bg-amber-500/30">
@@ -209,7 +235,7 @@ const Register = () => {
 
           {/* REGISTRATION FORM */}
           <div ref={containerRef} className="w-full max-w-md lg:sticky lg:top-28 lg:z-30 border border-amber-500/20 rounded-3xl p-8 bg-zinc-900/40 backdrop-blur-2xl shadow-2xl shadow-amber-900/5 relative">
-            
+
             {isMaintenance ? (
               <div className="flex flex-col items-center py-12 text-center animate-in fade-in zoom-in duration-500">
                 <Shield size={64} className="text-amber-500 mb-6 animate-pulse" />
@@ -257,21 +283,21 @@ const Register = () => {
 
                 <form onSubmit={handleSubmit(handleRegistration)} className="space-y-5">
                   {/* Honeypot field to catch bots - MUST REMAIN HIDDEN */}
-                  <input 
-                    {...register("hp_field")} 
-                    type="text" 
-                    className="hidden" 
-                    tabIndex="-1" 
-                    autoComplete="off" 
+                  <input
+                    {...register("hp_field")}
+                    type="text"
+                    className="hidden"
+                    tabIndex="-1"
+                    autoComplete="off"
                   />
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Full Name</label>
                     <div className="relative group">
                       <User size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.name ? 'text-red-500' : 'text-white/30 group-focus-within:text-amber-500'}`} />
-                      <input 
-                        {...register("name", { required: "Full name is required" })} 
-                        placeholder="E.G. ALEX DRIVER" 
-                        className={`w-full bg-white/5 border rounded-xl py-4 pl-12 pr-4 text-[13px] font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                      <input
+                        {...register("name", { required: "Full name is required" })}
+                        placeholder="E.G. ALEX DRIVER"
+                        className={`w-full bg-white/5 border rounded-xl py-4 pl-12 pr-4 text-[13px] font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
                       />
                     </div>
                     {errors.name && <p className="text-[10px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.name.message}</p>}
@@ -281,26 +307,26 @@ const Register = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Email</label>
-                      <input 
-                        {...register("email", { 
+                      <input
+                        {...register("email", {
                           required: "Email is required",
                           pattern: { value: /^\S+@\S+$/i, message: "Invalid email format" }
-                        })} 
-                        type="email" 
-                        placeholder="EMAIL ADDRESS" 
-                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                        })}
+                        type="email"
+                        placeholder="EMAIL ADDRESS"
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
                       />
                       {errors.email && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.email.message}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Phone</label>
-                      <input 
-                        {...register("phone", { 
+                      <input
+                        {...register("phone", {
                           required: "Phone is required",
                           pattern: { value: /^[0-9]{10}$/, message: "Must be 10 digits" }
-                        })} 
-                        placeholder="10-DIGIT NUMBER" 
-                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.phone ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                        })}
+                        placeholder="10-DIGIT NUMBER"
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.phone ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
                       />
                       {errors.phone && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.phone.message}</p>}
                     </div>
@@ -308,10 +334,10 @@ const Register = () => {
 
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">College / Institution</label>
-                    <input 
-                      {...register("college", { required: "College name is required" })} 
-                      placeholder="COLLEGE NAME" 
-                      className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.college ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                    <input
+                      {...register("college", { required: "College name is required" })}
+                      placeholder="COLLEGE NAME"
+                      className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.college ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
                     />
                     {errors.college && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.college.message}</p>}
                   </div>
@@ -319,17 +345,17 @@ const Register = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">USN / ID</label>
-                      <input 
-                        {...register("usn", { required: "USN is required" })} 
-                        placeholder="USN" 
-                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.usn ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                      <input
+                        {...register("usn", { required: "USN is required" })}
+                        placeholder="USN"
+                        className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.usn ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
                       />
                       {errors.usn && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.usn.message}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Year</label>
-                      <select 
-                        {...register("year", { required: "Required" })} 
+                      <select
+                        {...register("year", { required: "Required" })}
                         className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white ${errors.year ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
                       >
                         <option value="1" className="bg-zinc-900">1ST YEAR</option>
@@ -342,10 +368,10 @@ const Register = () => {
 
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-white/60 uppercase tracking-widest ml-1">Department</label>
-                    <input 
-                      {...register("department", { required: "Department is required" })} 
-                      placeholder="E.G. COMPUTER SCIENCE" 
-                      className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.department ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`} 
+                    <input
+                      {...register("department", { required: "Department is required" })}
+                      placeholder="E.G. COMPUTER SCIENCE"
+                      className={`w-full bg-white/5 border rounded-xl py-3.5 px-4 text-xs font-bold tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white placeholder:text-white/20 ${errors.department ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-amber-500/50'}`}
                     />
                     {errors.department && <p className="text-[9px] text-red-500 font-bold uppercase tracking-tighter ml-1">{errors.department.message}</p>}
                   </div>
@@ -353,7 +379,7 @@ const Register = () => {
                   <div className="pt-6 border-t border-white/5">
                     <label className="text-xs font-black text-amber-500 uppercase tracking-[0.2em] mb-4 block">Select Quests</label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                      {Object.keys(eventPrices).map((eventName) => (
+                      {Object.keys(eventTeamSizes).map((eventName) => (
                         <label key={eventName} className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer touch-manipulation ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
                           <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
                           <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
@@ -375,99 +401,23 @@ const Register = () => {
               </>
             )}
 
-            {showPayment && (
-              <div className="payment-overlay absolute inset-0 bg-black/95 backdrop-blur-xl flex flex-col p-8 z-50 rounded-3xl overflow-y-auto">
-                <button onClick={() => setShowPayment(false)} className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors">
-                  <X size={24} />
-                </button>
-                
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-black italic tracking-tight uppercase text-white">Payment Protocol</h3>
-                  <div className="h-1 w-12 bg-amber-500 mx-auto mt-2 rounded-full"></div>
-                </div>
-
-                <div className="flex-1 space-y-6">
-                  <div className="p-4 bg-white/5 border border-white/10 rounded-2xl text-center">
-                    <p className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase mb-1">Total Tribute Required</p>
-                    <p className="text-3xl font-black text-amber-500 italic">₹{selectedEvents.reduce((total, e) => total + (eventPrices[e] || 0), 0)}</p>
-                  </div>
-
-                  <div className="relative aspect-square w-full max-w-[240px] mx-auto bg-white p-4 rounded-2xl shadow-xl shadow-amber-900/20">
-                    {/* QR Code Placeholder - In a real app, replace with actual QR image */}
-                    <img 
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=your-upi-id@bank&pn=Inovex&am=0" 
-                      alt="Payment QR" 
-                      className="w-full h-full object-contain"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/5 rounded-2xl pointer-events-none border-2 border-dashed border-black/10">
-                    </div>
-                  </div>
-
-                  <div className="text-center space-y-2">
-                    <p className="text-[11px] font-bold text-white/60 leading-relaxed">
-                      Scan the QR code above to complete your transaction via any UPI app (GPay, PhonePe, etc.)
-                    </p>
-                    <p className="text-[9px] font-black text-amber-500/60 tracking-widest uppercase">
-                      IMPORTANT: Verification takes 12-24 hours
-                    </p>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1">Payment Screenshot</label>
-                      <div className="relative group">
-                        <input 
-                          type="file" 
-                          accept="image/*"
-                          onChange={(e) => setScreenshot(e.target.files[0])}
-                          className="hidden" 
-                          id="screenshot-upload"
-                        />
-                        <label 
-                          htmlFor="screenshot-upload"
-                          className={`w-full flex items-center justify-between bg-white/5 border rounded-xl py-3 px-4 cursor-pointer transition-all hover:bg-white/10 ${screenshot ? 'border-green-500/50' : 'border-amber-500/30'}`}
-                        >
-                          <span className={`text-[10px] font-bold truncate tracking-widest ${screenshot ? 'text-green-500' : 'text-white/40'}`}>
-                            {screenshot ? screenshot.name : 'SELECT SCREENSHOT'}
-                          </span>
-                          {screenshot ? <CheckCircle size={16} className="text-green-500" /> : <Camera size={16} className="text-amber-500/60" />}
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1">Transaction ID / UTR Number</label>
-                      <input 
-                        id="utr-input"
-                        type="text" 
-                        placeholder="ENTER 12-DIGIT UTR"
-                        className="w-full bg-white/5 border border-amber-500/30 rounded-xl py-4 px-4 text-sm font-black tracking-[0.2em] focus:outline-none focus:border-amber-500 transition-all text-white placeholder:text-white/10"
-                      />
-                    </div>
-                  </div>
-
-                  <button 
-                    onClick={() => confirmPayment(document.getElementById('utr-input').value)}
-                    disabled={isLoading}
-                    className={`w-full py-4 rounded-xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-amber-500 hover:bg-amber-400 text-black'}`}
-                  >
-                    {isLoading ? <Database size={18} className="animate-spin" /> : <ShieldCheck size={18} />}
-                    <span>{isLoading ? 'VERIFYING...' : 'CONFIRM PAYMENT'}</span>
-                  </button>
-                </div>
-              </div>
-            )}
-
             {isSubmitted && (
               <div className="success-overlay absolute inset-0 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center p-8 text-center z-50 rounded-3xl">
                 <div className="w-24 h-24 bg-amber-500/20 rounded-full flex items-center justify-center mb-6 border border-amber-500/40 animate-bounce">
                   <CheckCircle size={48} className="text-amber-500" />
                 </div>
                 <h3 className="text-3xl font-black italic tracking-tight uppercase mb-4 text-white">QUEST FORGED</h3>
-                <p className="text-xs font-bold tracking-[0.1em] text-white/60 uppercase leading-relaxed">
+                <p className="text-xs font-bold tracking-[0.1em] text-white/60 uppercase leading-relaxed mb-6">
                   Your identity has been verified and your spot is secured.<br />Welcome to INOVEX 2026.
                 </p>
-                <button onClick={() => window.location.href = '/'} className="mt-10 px-8 py-3 bg-amber-500 text-black text-[10px] font-black tracking-[0.3em] rounded-full hover:bg-amber-400 transition-colors uppercase">RETURN TO BASE</button>
+                {participantId && (
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 w-full mb-8">
+                    <p className="text-[10px] font-black text-amber-500/60 uppercase tracking-widest mb-2">Participant ID</p>
+                    <p className="text-2xl font-black text-amber-500 tracking-[0.2em]">{participantId}</p>
+                    <p className="text-[8px] font-bold text-white/40 uppercase tracking-widest mt-2">Keep this ID safe for verification & payment</p>
+                  </div>
+                )}
+                <button onClick={() => window.location.href = '/'} className="mt-2 px-8 py-3 bg-amber-500 text-black text-[10px] font-black tracking-[0.3em] rounded-full hover:bg-amber-400 transition-colors uppercase">RETURN TO BASE</button>
               </div>
             )}
           </div>

@@ -44,7 +44,7 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`
 🚀 ==========================================
-   INOVEX 2026 ENGINE STARTED
+   INOVEX 2026 - CLEAN VERSION (NO PAYMENT)
    PORT: ${PORT}
    MODE: ${process.env.NODE_ENV}
    DB:   CONNECTED

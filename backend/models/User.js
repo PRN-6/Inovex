@@ -45,26 +45,41 @@ const userSchema = new mongoose.Schema({
             email: String
         }]
     }],
-    amount: Number,
-    transactionId: String,
-    paymentScreenshot: String,
-    paymentStatus: {
-        type: String,
-        default: 'pending',
-        enum: ['pending', 'verified', 'failed']
-    },
+
     registrationDate: {
         type: Date,
         default: Date.now
     },
     lastEmailSentAt: {
         type: Date
+    },
+    participantId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['Pending', 'Paid'],
+        default: 'Pending'
     }
 });
 
-// Optimization: Add unique indexes for security and speed
-userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ usn: 1 }, { unique: true });
+// Auto-generate Participant ID before saving
+userSchema.pre('save', async function() {
+    if (!this.participantId) {
+        try {
+            const { generateParticipantId } = require('../utils/idGenerator');
+            this.participantId = await generateParticipantId();
+        } catch (error) {
+            console.error("Error generating Participant ID in hook:", error);
+        }
+    }
+});
+
+// Optimization: Add indexes for speed (removed unique constraints to allow multiple registrations)
+userSchema.index({ email: 1 });
+userSchema.index({ usn: 1 });
 userSchema.index({ registrationDate: -1 });
 
 const User = mongoose.model('User', userSchema);

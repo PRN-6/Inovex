@@ -27,41 +27,19 @@ const faqs = [
     items: [
       {
         q: 'How do I register for events?',
-        a: 'Navigate to the Registration terminal via the "Register Now" portal. Fill in your details, select your events, and complete the payment process via Razorpay. Your slot is only confirmed upon successful payment.',
+        a: 'Navigate to the Registration terminal via the "Register Now" portal. Fill in your details and select your events. Upon submission, you will receive a unique Participant ID (PID). Show this PID at the college entrance desk to complete your physical payment via QR code.',
+      },
+      {
+        q: 'What is the registration fee?',
+        a: 'The registration fee is ₹100 per event. Your total amount due will be displayed on the registration success screen and sent to your registered email address.',
       },
       {
         q: 'Can I register for multiple events?',
-        a: 'Affirmative. You can register for multiple events in a single session. Select all desired events and the registration fee will be calculated dynamically. Solo and team-based events are both supported.',
-      },
-      {
-        q: 'Can teammates register separately?',
-        a: 'For team-based events, the team leader must register the entire team in a single submission. All team member details (Name, USN, College) must be provided during registration.',
-      },
-      {
-        q: 'What happens if I already registered and want to join a new event?',
-        a: 'If you submit with the same USN, the system performs an Identity Sync — automatically merging your new event registrations with your existing profile. You will not be double-registered for events you already enrolled in.',
+        a: 'Affirmative. You can register for multiple events. Every registration (even with the same email) is treated as a unique entry to ensure all team participants are correctly logged.',
       },
       {
         q: 'Is my registration data safe?',
-        a: 'Your data is stored on a secured MongoDB Atlas cluster with strict access control. Payment is processed via Razorpay\'s PCI-DSS compliant gateway. We never store raw card data.',
-      },
-    ],
-  },
-  {
-    category: 'PAYMENT & FEES',
-    icon: '💳',
-    items: [
-      {
-        q: 'What payment methods are accepted?',
-        a: 'All major UPI apps (GPay, PhonePe, Paytm), Net Banking, Credit/Debit Cards, and Wallets are supported via the Razorpay gateway.',
-      },
-      {
-        q: 'What if my payment fails but money was deducted?',
-        a: 'If a deduction occurs without a successful registration confirmation, the amount is typically reversed to your source account within 5–7 business days as per Razorpay\'s refund protocol. For faster resolution, contact our support coordinators with your transaction ID.',
-      },
-      {
-        q: 'Are there any refunds?',
-        a: 'Registration fees are generally non-refundable once confirmed. In case of event cancellation from our side, full refunds will be processed. For exceptional cases, reach out directly to the event coordinators.',
+        a: 'Your data is stored on a secured MongoDB Atlas cluster with strict access control. We prioritize participant privacy and data integrity.',
       },
     ],
   },
@@ -71,7 +49,7 @@ const faqs = [
     items: [
       {
         q: 'How do I know my registration is confirmed?',
-        a: 'Upon successful payment and admin verification, a confirmation email is dispatched to your registered email address. You can also check your registration status via the official coordinators.',
+        a: 'Upon successful registration, a confirmation email with your Participant ID (PID) is dispatched. After you complete the payment at the physical desk, your status will be updated to "PAID" in our systems, and you will receive a final payment verification email.',
       },
       {
         q: 'Can I participate in events without prior registration?',

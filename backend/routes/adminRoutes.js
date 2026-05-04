@@ -3,20 +3,14 @@ const router = express.Router();
 const User = require('../models/User');
 const { sendConfirmationEmail } = require('../utils/emailService');
 
-const EVENT_HEAD_CODES = {
-    [process.env.KEY_TECH]: "Techsaurus",
-    [process.env.KEY_SPY]: "Spy vs Spy – QR Treasure Hunt",
-    [process.env.KEY_REXR]: "Rex Rampage",
-    [process.env.KEY_CINE]: "Cinesaur: Reel Making",
-    [process.env.KEY_DINOX]: "Dinox: From Design to Reality",
-    [process.env.KEY_HACK]: "RexHack: Survival of the Smartest",
-    [process.env.KEY_BATTLE]: "INOVEX: BATTLE NEXUS",
-    [process.env.KEY_GENESIS]: "Genesis Reborn: Product Launch",
-    [process.env.KEY_MUSIC]: "Music Battle",
-    [process.env.KEY_QUIZ]: "Quiz Master",
-    [process.env.KEY_DANCE]: "Dance Showdown",
-    [process.env.KEY_ART]: "Art Exhibition"
-};
+// Define Staff keys for admin access
+const STAFF_KEYS = [
+    process.env.STAFF_KEY_1,
+    process.env.STAFF_KEY_2,
+    process.env.STAFF_KEY_3,
+    process.env.STAFF_KEY_4,
+    process.env.STAFF_KEY_5
+].filter(Boolean);
 
 // @route   GET /api/registrations
 router.get('/registrations', async (req, res) => {
@@ -26,16 +20,12 @@ router.get('/registrations', async (req, res) => {
         const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
 
         let query = {};
-        let roleInfo = { clearance: 1, restrictedEvent: null };
+        let roleInfo = { clearance: 0, restrictedEvent: null };
 
         if (adminKey === superSecretKey) {
             roleInfo.clearance = 2;
-        } else if (adminKey === secretKey) {
+        } else if (STAFF_KEYS.includes(adminKey) || adminKey === secretKey) {
             roleInfo.clearance = 1;
-        } else if (EVENT_HEAD_CODES[adminKey]) {
-            roleInfo.clearance = 0.5;
-            roleInfo.restrictedEvent = EVENT_HEAD_CODES[adminKey];
-            query = { "registrations.eventName": roleInfo.restrictedEvent };
         } else {
             return res.status(401).json({ success: false, message: "Invalid Clearance Key" });
         }
@@ -54,22 +44,25 @@ router.patch('/registrations/:id/status', async (req, res) => {
         const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
         const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
 
-        if (adminKey !== secretKey && adminKey !== superSecretKey) {
+        if (adminKey !== superSecretKey && !STAFF_KEYS.includes(adminKey) && adminKey !== secretKey) {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
         }
 
         const { status } = req.body;
-        
+
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ success: false, message: "Not found" });
 
-        user.paymentStatus = status;
+        if (status) {
+            user.paymentStatus = status;
+        }
+
         await user.save();
 
-        res.json({ 
-            success: true, 
-            message: `Status updated to ${status}`, 
-            data: user 
+        res.json({
+            success: true,
+            message: `Status updated to ${status}`,
+            data: user
         });
     } catch (error) {
         console.error("STATUS UPDATE ERROR:", error);
@@ -84,7 +77,7 @@ router.post('/registrations/:id/resend-email', async (req, res) => {
         const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
         const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
 
-        if (adminKey !== secretKey && adminKey !== superSecretKey) {
+        if (adminKey !== superSecretKey && !STAFF_KEYS.includes(adminKey) && adminKey !== secretKey) {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
         }
 
@@ -94,12 +87,12 @@ router.post('/registrations/:id/resend-email', async (req, res) => {
         // Cooldown logic: 30 seconds for admin manual trigger
         const COOLDOWN_TIME = 30 * 1000;
         const lastSent = user.lastEmailSentAt ? new Date(user.lastEmailSentAt).getTime() : 0;
-        
+
         if (lastSent > 0 && (Date.now() - lastSent < COOLDOWN_TIME)) {
             const remaining = Math.ceil((COOLDOWN_TIME - (Date.now() - lastSent)) / 1000);
-            return res.status(429).json({ 
-                success: false, 
-                message: `WAIT: Please wait ${remaining}s before resending.` 
+            return res.status(429).json({
+                success: false,
+                message: `WAIT: Please wait ${remaining}s before resending.`
             });
         }
 

@@ -17,6 +17,9 @@ const Admin = () => {
   const [isBulkLoading, setIsBulkLoading] = useState(false);
   const [isVerifyingSession, setIsVerifyingSession] = useState(true);
 
+  // Registration Fee configuration
+  const FEE_PER_EVENT = 100; // Change this value to match your actual per-event fee
+
   const API_URL = import.meta.env.VITE_API_URL || 'https://inovex-backend01.onrender.com';
 
   const CalendarPicker = ({ value, onChange, onClear }) => {
@@ -171,10 +174,19 @@ const Admin = () => {
                     </div>
                     <div className="space-y-4">
                        <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl group hover:border-red-600/30 transition-all">
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Asset ID / USN</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-white tracking-widest">{reg.usn}</span>
-                            <button onClick={() => copyToClipboard(reg.usn)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-red-600" /></button>
+                          <div className="mb-3">
+                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Participant ID</p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-black text-red-600 tracking-widest">{reg.participantId || 'PENDING'}</span>
+                              <button onClick={() => copyToClipboard(reg.participantId)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-red-600" /></button>
+                            </div>
+                          </div>
+                          <div className="pt-3 border-t border-white/5">
+                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Asset USN</p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-bold text-white tracking-widest">{reg.usn}</span>
+                              <button onClick={() => copyToClipboard(reg.usn)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-red-600" /></button>
+                            </div>
                           </div>
                        </div>
                        <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl group hover:border-red-600/30 transition-all">
@@ -249,34 +261,25 @@ const Admin = () => {
                   </section>
 
                   <section>
-                    {/* Transaction Intel */}
                     <div className="p-5 bg-white/[0.03] border border-white/5 rounded-2xl space-y-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <CreditCard size={14} className="text-amber-500" />
-                        <h4 className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase">Transaction Intel</h4>
+                        <Ticket size={14} className="text-amber-500" />
+                        <h4 className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase">Registration Info</h4>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="flex justify-between items-end">
                         <div>
-                          <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-1">Tribute Amount</p>
-                          <p className="text-xl font-black text-white italic">₹{reg.amount}</p>
+                          <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-1">Payment Status</p>
+                          <p className={`text-sm font-black tracking-widest uppercase ${reg.paymentStatus === 'Paid' ? 'text-green-500' : 'text-amber-500'}`}>
+                            {reg.paymentStatus === 'Paid' ? 'Paid' : 'Pending'}
+                          </p>
                         </div>
-                        <div>
-                          <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-1">UTR / TRANS_ID</p>
-                          <p className="text-xs font-black text-amber-500 tracking-wider font-mono">{reg.transactionId}</p>
+                        <div className="text-right">
+                          <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-1">Total Amount</p>
+                          <p className="text-lg font-black text-emerald-400 tracking-widest">
+                            ₹{(reg.registrations?.length || 0) * 100}
+                          </p>
                         </div>
                       </div>
-                      
-                      {reg.paymentScreenshot && (
-                        <div className="pt-4 border-t border-white/5">
-                          <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-3">Verification Screenshot</p>
-                          <a href={reg.paymentScreenshot} target="_blank" rel="noreferrer" className="block relative group overflow-hidden rounded-xl border border-white/10 aspect-video bg-black">
-                            <img src={reg.paymentScreenshot} alt="Payment Proof" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-60 group-hover:opacity-100" />
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
-                              <ExternalLink size={20} className="text-white" />
-                            </div>
-                          </a>
-                        </div>
-                      )}
                     </div>
                   </section>
                 </div>
@@ -286,21 +289,7 @@ const Admin = () => {
             {/* Modal Footer: Controls */}
             <div className="p-8 bg-white/[0.02] border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                <div className="flex items-center gap-4">
-                  <p className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">Security Status:</p>
-                  <div className="flex gap-2">
-                    {['pending', 'verified', 'failed'].map(status => (
-                      <button
-                        key={status}
-                        onClick={() => handleStatusUpdate(reg._id, status)}
-                        className={`px-5 py-2.5 text-[9px] font-black tracking-widest uppercase border rounded-xl transition-all ${reg.paymentStatus === status
-                            ? (status === 'verified' ? 'bg-green-600 border-green-400 text-white shadow-[0_0_20px_rgba(34,197,94,0.3)]' : status === 'failed' ? 'bg-red-600 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.3)]' : 'bg-amber-600 border-amber-400 text-white shadow-[0_0_20px_rgba(217,119,6,0.3)]')
-                            : 'bg-white/5 border-white/10 text-white/40 hover:border-white/20 hover:bg-white/[0.08]'
-                          }`}
-                      >
-                        {status}
-                      </button>
-                    ))}
-                  </div>
+                  <p className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">Participant Controls:</p>
                </div>
                
                <div className="text-right space-y-1">
@@ -439,11 +428,14 @@ const Admin = () => {
       const name = String(reg.name || '');
       const usn = String(reg.usn || '');
       const email = String(reg.email || '');
+      const pid = String(reg.participantId || '');
 
       const matchesSearch =
         name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         usn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        email.toLowerCase().includes(searchQuery.toLowerCase());
+        email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        pid.toLowerCase().includes(searchQuery.toLowerCase());
+
 
       const matchesFilter = filterEvent === 'all' ||
         (reg.registrations && Array.isArray(reg.registrations) && reg.registrations.some(r => r && String(r.eventName) === filterEvent));
@@ -460,7 +452,6 @@ const Admin = () => {
   const stats = useMemo(() => {
     const safeRegs = Array.isArray(registrations) ? registrations : [];
     return {
-      totalRevenue: safeRegs.reduce((sum, r) => sum + (Number(r?.amount) || 0), 0),
       totalParticipants: safeRegs.length,
       eventBreakdown: safeRegs.reduce((acc, r) => {
         if (r && r.registrations && Array.isArray(r.registrations)) {
@@ -477,9 +468,10 @@ const Admin = () => {
   }, [registrations]);
 
   const exportCSV = () => {
-    const headers = ["Name", "Email", "Phone", "USN", "College", "Year", "Dept", "Amount", "Transaction ID", "Events"];
+    const headers = ["PID", "Name", "Email", "Phone", "USN", "College", "Year", "Dept", "Events"];
     const csvData = filteredData.map(r => [
-      r.name, r.email, r.phone, r.usn, r.college, r.year, r.department, r.amount, r.transactionId,
+      r.participantId || 'PENDING', r.name, r.email, r.phone, r.usn, r.college, r.year, r.department,
+
       r.registrations.map(ev => ev.eventName).join(" | ")
     ]);
 
@@ -494,9 +486,10 @@ const Admin = () => {
   };
 
   const exportToExcel = () => {
-    const tableHeader = ["NAME", "EMAIL", "PHONE", "USN", "COLLEGE", "YEAR", "DEPT", "AMOUNT", "TRANSACTION ID", "EVENTS"];
+    const tableHeader = ["PID", "NAME", "EMAIL", "PHONE", "USN", "COLLEGE", "YEAR", "DEPT", "EVENTS"];
     const rows = filteredData.map(r => [
-      r.name, r.email, r.phone, r.usn, r.college, r.year, r.department, r.amount, r.transactionId,
+      r.participantId || 'PENDING', r.name, r.email, r.phone, r.usn, r.college, r.year, r.department,
+
       r.registrations?.map(ev => {
         const teamInfo = ev.teammates?.length > 0
           ? ` (Squad: ${ev.teammates.map(t => `${t.name} [USN: ${t.usn}, Email: ${t.email}]`).join(" | ")})`
@@ -563,18 +556,22 @@ const Admin = () => {
         <table>
           <thead>
             <tr>
+              <th>PID</th>
               <th>NAME</th>
               <th>IDENTIFICATION</th>
               <th>COLLEGE / DEPT</th>
               <th>QUESTS & SQUADS</th>
+
             </tr>
           </thead>
           <tbody>
             ${filteredData.map(r => `
               <tr>
+                <td><b>${r.participantId || 'PENDING'}</b></td>
                 <td><b>${r.name}</b><br>${r.email}</td>
                 <td>${r.usn}</td>
                 <td>${r.college}<br>${r.department} (Year ${r.year})</td>
+
                 <td>
                   ${r.registrations?.map(ev => `
                     <div style="margin-bottom: 5px;">
@@ -870,25 +867,6 @@ const Admin = () => {
       <main className="container mx-auto px-6 py-8 space-y-10">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3 relative overflow-hidden group">
-            <div className="flex justify-between items-start">
-              <span className="text-[10px] font-black text-white/40 tracking-widest">TOTAL TRIBUTE</span>
-              <TrendingUp size={16} className="text-green-500" />
-            </div>
-            {clearanceLevel >= 1 ? (
-              <p className="text-3xl font-black italic">₹{stats.totalRevenue.toLocaleString()}</p>
-            ) : (
-              <div className="flex flex-col gap-1">
-                <p className="text-xl font-black italic text-white/20">ACCESS RESTRICTED</p>
-                <p className="text-[8px] font-black text-red-600/40">ADMIN CLEARANCE REQUIRED</p>
-              </div>
-            )}
-            {clearanceLevel < 1 && (
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <Lock size={16} className="text-white/20" />
-              </div>
-            )}
-          </div>
           <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
             <div className="flex justify-between items-start">
               <span className="text-[10px] font-black text-white/40 tracking-widest">ACTIVE ASSETS</span>
@@ -906,29 +884,8 @@ const Admin = () => {
         </div>
 
         {/* Analytics Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <ChartWidget title="QUEST DISTRIBUTION" data={stats.eventBreakdown} />
-          </div>
-          <div className="p-6 border border-white/5 bg-white/[0.02] rounded-2xl space-y-6 flex flex-col justify-center">
-            <div className="text-center space-y-2">
-              <p className="text-[10px] font-black text-white/20 tracking-[0.4em] uppercase">Conversion Metrics</p>
-              <div className="text-5xl font-black italic text-red-600">
-                {stats.totalParticipants > 0 ? Math.round((registrations.filter(r => r.paymentStatus === 'verified').length / stats.totalParticipants) * 100) : 0}%
-              </div>
-              <p className="text-[9px] font-bold text-white/40 tracking-widest">ASSETS VERIFIED</p>
-            </div>
-            <div className="pt-6 border-t border-white/5 grid grid-cols-2 gap-4 text-center">
-              <div>
-                <p className="text-[14px] font-black text-amber-500">{registrations.filter(r => r.paymentStatus === 'pending').length}</p>
-                <p className="text-[7px] font-black text-white/20 tracking-widest">PENDING</p>
-              </div>
-              <div>
-                <p className="text-[14px] font-black text-red-500">{registrations.filter(r => r.paymentStatus === 'failed').length}</p>
-                <p className="text-[7px] font-black text-white/20 tracking-widest">FAILED</p>
-              </div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 gap-6">
+          <ChartWidget title="QUEST DISTRIBUTION" data={stats.eventBreakdown} />
         </div>
 
         {/* Bulk Action Bar - Sticky */}
@@ -941,28 +898,14 @@ const Admin = () => {
               <p className="text-[10px] font-black tracking-widest text-white">ASSETS SELECTED</p>
             </div>
             <div className="flex gap-2">
-              <button 
-                onClick={() => handleBulkStatusUpdate('verified')}
-                disabled={isBulkLoading}
-                className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white text-[9px] font-black tracking-widest uppercase rounded-lg transition-all flex items-center gap-2"
-              >
-                {isBulkLoading ? <Activity size={12} className="animate-spin" /> : <ShieldCheck size={12} />}
-                VERIFY ALL
-              </button>
-              <button 
-                onClick={() => handleBulkStatusUpdate('failed')}
-                disabled={isBulkLoading}
-                className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-[9px] font-black tracking-widest uppercase rounded-lg transition-all flex items-center gap-2"
-              >
-                MARK FAILED
-              </button>
               {clearanceLevel >= 2 && (
                 <button 
                   onClick={handleBulkDelete}
                   disabled={isBulkLoading}
-                  className="px-4 py-2 bg-red-800 hover:bg-red-700 text-white text-[9px] font-black tracking-widest uppercase rounded-lg transition-all flex items-center gap-2"
+                  className="px-6 py-2 bg-red-800 hover:bg-red-700 text-white text-[10px] font-black tracking-widest uppercase rounded-lg transition-all flex items-center gap-2"
                 >
-                  PURGE SELECTED
+                  {isBulkLoading ? <Activity size={12} className="animate-spin" /> : <Database size={14} />}
+                  PURGE SELECTED ASSETS
                 </button>
               )}
             </div>
@@ -1020,11 +963,12 @@ const Admin = () => {
                       {selectedIds.length === filteredData.length && filteredData.length > 0 && <CheckCircle size={10} className="text-white" />}
                     </button>
                   </th>
+                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">PID</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">PARTICIPANT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">CONTACT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">GUILD / DEPT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">QUESTS</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">TRIBUTE</th>
+                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">AMOUNT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30 text-center">STATUS</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">DATE</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30 text-right">ACTION</th>
@@ -1033,14 +977,14 @@ const Admin = () => {
               <tbody className="divide-y divide-white/5">
                 {isLoading ? (
                   <tr>
-                    <td colSpan="6" className="p-20 text-center">
+                    <td colSpan="10" className="p-20 text-center">
                       <div className="inline-block w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                       <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-red-600 animate-pulse">SYNCHRONIZING...</p>
                     </td>
                   </tr>
                 ) : filteredData.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="p-20 text-center text-white/20 italic tracking-widest text-xs">
+                    <td colSpan="10" className="p-20 text-center text-white/20 italic tracking-widest text-xs">
                       NO ASSETS FOUND IN THE CURRENT SECTOR.
                     </td>
                   </tr>
@@ -1054,6 +998,13 @@ const Admin = () => {
                         >
                           {selectedIds.includes(reg._id) && <CheckCircle size={10} className="text-white" />}
                         </button>
+                      </td>
+                      <td className="p-4">
+                        <div className="inline-flex items-center">
+                          <p className="text-[11px] font-black text-amber-500 tracking-[0.2em] bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded-md">
+                            {reg.participantId || 'PENDING'}
+                          </p>
+                        </div>
                       </td>
                       <td className="p-4">
                         <div className="space-y-1">
@@ -1094,20 +1045,26 @@ const Admin = () => {
                         </div>
                       </td>
                       <td className="p-4">
-                        <div className="space-y-1">
-                          <p className="text-xs font-black text-white">₹{reg.amount || 0}</p>
-                          <p className="text-[9px] font-black text-amber-500 mt-1 tracking-wider font-mono bg-amber-500/5 px-1.5 py-0.5 rounded border border-amber-500/10 inline-block" title={reg.transactionId}>
-                            UTR: {reg.transactionId || 'NOT PROVIDED'}
+                        <div className="flex items-center">
+                          <p className="text-xs font-black text-emerald-400 tracking-widest">
+                            ₹{(reg.registrations?.length || 0) * FEE_PER_EVENT}
                           </p>
                         </div>
                       </td>
-                      <td className="p-4 text-[10px] font-black tracking-widest">
-                        <span className={`px-2 py-0.5 rounded-full border ${reg.paymentStatus === 'verified' ? 'bg-green-600/10 text-green-500 border-green-500/20' :
-                            reg.paymentStatus === 'failed' ? 'bg-red-600/10 text-red-500 border-red-500/20' :
-                              'bg-amber-600/10 text-amber-500 border-amber-500/20'
-                          }`}>
-                          {reg.paymentStatus?.toUpperCase() || 'PENDING'}
-                        </span>
+                      <td className="p-4">
+                        <button
+                          onClick={() => handleStatusUpdate(reg._id, reg.paymentStatus === 'Paid' ? 'Pending' : 'Paid')}
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl w-fit transition-all ${
+                            reg.paymentStatus === 'Paid'
+                              ? 'text-green-500 bg-green-500/10 border border-green-500/20 hover:bg-green-500/20'
+                              : 'text-amber-500 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20'
+                          }`}
+                        >
+                          <CheckCircle size={14} />
+                          <span className="text-[10px] font-black tracking-widest uppercase">
+                            {reg.paymentStatus === 'Paid' ? 'Paid' : 'Pending'}
+                          </span>
+                        </button>
                       </td>
                       <td className="p-4">
                         <div className="space-y-1">

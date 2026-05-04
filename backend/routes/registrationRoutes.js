@@ -5,9 +5,13 @@ const { registerLimiter } = require('../middlewares/rateLimiter');
 const { sendConfirmationEmail } = require('../utils/emailService');
 const { upload } = require('../config/cloudinaryConfig');
 
+
+
+
 // @route   POST /api/register
 // @desc    Register participant
-router.post('/register', registerLimiter, upload.single('paymentScreenshot'), async (req, res) => {
+router.post('/register', registerLimiter, async (req, res) => {
+    console.log("!!! HITTING THE NEW REGISTRATION ROUTE - NO PAYMENT LOGIC !!!");
     if (process.env.MAINTENANCE_MODE === 'true') {
         return res.status(503).json({ 
             success: false, 
@@ -17,115 +21,28 @@ router.post('/register', registerLimiter, upload.single('paymentScreenshot'), as
 
     try {
         let { 
-            name, email, phone, college, usn, year, department, registrations, amount,
-            transactionId, hp_field 
+            name, email, phone, college, usn, year, department, registrations,
+            hp_field 
         } = req.body;
-
-        // Handle File Path from Cloudinary
-        const screenshotUrl = req.file ? req.file.path : null;
-
-        // Multer might stringify nested objects/arrays if sent via FormData
-        if (typeof registrations === 'string') {
-            try {
-                registrations = JSON.parse(registrations);
-            } catch (e) {
-                console.error("JSON Parse Error for registrations:", e);
-            }
-        }
 
         if (hp_field) {
             return res.status(400).json({ success: false, message: "UNAUTHORIZED: Automated access detected." });
         }
 
-        let user = await User.findOne({ usn: usn.toUpperCase() });
+        // Create a new registration entry every time (Duplicates allowed as per request)
+        const user = new User({
+            name, email, phone, college, usn: usn.toUpperCase(), year, department, registrations,
+            registrationDate: new Date()
+        });
 
-        // 1. Global Conflict Check: Ensure no teammate is already in these events
-        for (const reg of registrations) {
-            const allConflictUSNs = [usn.toUpperCase(), ...reg.teammates.map(t => t.usn.toUpperCase())];
-            
-            for (const checkUSN of allConflictUSNs) {
-                // Check if this USN is a primary registrant for this event
-                const primaryConflict = await User.findOne({ 
-                    usn: checkUSN, 
-                    "registrations.eventName": reg.eventName 
-                });
-
-                // Check if this USN is a teammate in any other team for this event
-                const teammateConflict = await User.findOne({ 
-                    "registrations": { 
-                        $elemMatch: { 
-                            "eventName": reg.eventName, 
-                            "teammates.usn": checkUSN 
-                        } 
-                    } 
-                });
-
-                if (primaryConflict || teammateConflict) {
-                    // Ignore if the conflict is actually with the user's OWN existing registration (handled by update logic later)
-                    if (primaryConflict && primaryConflict.usn === usn.toUpperCase()) continue;
-
-                    return res.status(400).json({ 
-                        success: false, 
-                        message: `CONFLICT DETECTED: Participant ${checkUSN} is already registered for ${reg.eventName}. Duplicate entries are not permitted.` 
-                    });
-                }
-            }
-        }
-
-        // 2. Check if transactionId is already used by someone else
-        if (transactionId && !transactionId.startsWith('DIR_')) {
-            const existingPayment = await User.findOne({ 
-                transactionId, 
-                usn: { $ne: usn.toUpperCase() } 
-            });
-            if (existingPayment) {
-                return res.status(400).json({ 
-                    success: false, 
-                    message: "PAYMENT ALREADY CLAIMED: This Transaction ID has already been submitted by another participant." 
-                });
-            }
-        }
-
-        if (user) {
-            const existingEvents = user.registrations.map(r => r.eventName);
-            const duplicateEvents = registrations.filter(r => existingEvents.includes(r.eventName));
-
-            if (duplicateEvents.length > 0) {
-                return res.status(400).json({ 
-                    success: false, 
-                    message: `ALREADY REGISTERED: You are already part of: ${duplicateEvents.map(e => e.eventName).join(', ')}.` 
-                });
-            }
-
-            user.registrations.push(...registrations);
-            user.amount = (user.amount || 0) + amount;
-            user.transactionId = transactionId;
-            user.paymentStatus = 'pending';
-            user.phone = phone;
-            user.email = email;
-            if (screenshotUrl) user.paymentScreenshot = screenshotUrl;
-
-            await user.save();
-            console.log(`✅ Registration Updated: ${name}`);
-            sendConfirmationEmail(user).catch(err => console.error("Email Error:", err));
-        } else {
-            user = new User({
-                name, email, phone, college, usn, year, department, registrations,
-                amount,
-                transactionId: transactionId || `DIR_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-                paymentScreenshot: screenshotUrl,
-                paymentStatus: 'pending',
-                registrationDate: new Date()
-            });
-
-            await user.save();
-            console.log(`✅ New Registration: ${name}`);
-            sendConfirmationEmail(user).catch(err => console.error("Email Error:", err));
-        }
+        await user.save();
+        console.log(`✅ New Registration: ${name}`);
+        sendConfirmationEmail(user).catch(err => console.error("Email Error:", err));
 
         res.status(201).json({
             success: true,
-            message: "Registration received! Your quest logs will be updated once verified."
+            message: "Registration successful! Welcome to the expedition.",
+            participantId: user.participantId
         });
 
     } catch (error) {
