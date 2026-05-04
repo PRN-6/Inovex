@@ -14,6 +14,10 @@ const miscRoutes = require('./routes/miscRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Tell Express it's behind a proxy (like Render/Vercel)
+// This is required for express-rate-limit to work correctly
+app.set('trust proxy', 1);
+
 // Connect to Database
 connectDB();
 
