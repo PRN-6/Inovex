@@ -3,12 +3,13 @@ const nodemailer = require('nodemailer');
 // Brevo SMTP Configuration (using your xsmtpsib key)
 const transporter = nodemailer.createTransport({
     host: 'smtp-relay.brevo.com',
-    port: 587,
-    secure: false, // TLS
+    port: 465,
+    secure: true, // Use SSL
     auth: {
         user: process.env.EMAIL_USER, // Your prinsonroyal11@gmail.com
         pass: process.env.BREVO_API_KEY // Your xsmtpsib key
-    }
+    },
+    connectionTimeout: 10000, // 10 seconds timeout
 });
 
 const sendConfirmationEmail = async (userData) => {
@@ -35,6 +36,8 @@ const sendConfirmationEmail = async (userData) => {
             </div>
         </div>
     `;
+
+    console.log(`📡 Attempting to send confirmation email to: ${userData.email}...`);
 
     try {
         await transporter.sendMail({

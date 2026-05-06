@@ -2,18 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { eventsData } from '../data/eventsData';
 
-const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(selectedIndex || 0);
+const MobileCard = ({ isVisible, eventId, shouldSpin, setShouldSpin }) => {
+  const [currentEventId, setCurrentEventId] = useState(eventId || 1);
   const mobileCardRef = useRef(null);
 
   // Safely get event data
-  const event = eventsData && eventsData[currentImageIndex + 1];
+  const event = eventsData && eventsData[currentEventId];
 
   useEffect(() => {
     if (!shouldSpin) {
-      setCurrentImageIndex(selectedIndex || 0);
+      setCurrentEventId(eventId || 1);
     }
-  }, [selectedIndex, shouldSpin]);
+  }, [eventId, shouldSpin]);
 
   // Unified GSAP Spinning Animation
   useEffect(() => {
@@ -26,7 +26,7 @@ const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => 
           onUpdate: function () {
             // Smoothly change images during the spin
             if (this.progress() > 0.4 && this.progress() < 0.6) {
-              setCurrentImageIndex(selectedIndex || 0);
+              setCurrentEventId(eventId || 1);
             }
           },
           onComplete: () => {
@@ -37,7 +37,7 @@ const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => 
       });
       return () => ctx.revert();
     }
-  }, [shouldSpin, selectedIndex, setShouldSpin]);
+  }, [shouldSpin, eventId, setShouldSpin]);
 
   // Standardized GSAP Tilt Logic
   const handleMouseMove = (e) => {
@@ -79,26 +79,21 @@ const MobileCard = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => 
   return (
     <div
       ref={mobileCardRef}
-      className="relative w-56 max-w-full cursor-pointer overflow-visible"
+      className="relative w-64 max-w-full cursor-pointer overflow-visible will-change-transform"
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="bg-white rounded-2xl shadow-2xl h-80 relative overflow-hidden pointer-events-none">
+      <div className="bg-white rounded-2xl shadow-2xl h-96 relative overflow-hidden pointer-events-none">
         <img
-          src={`/images/cards/card${currentImageIndex + 1}.webp`}
-          alt="Event card"
+          src={event?.image || `/images/cards/card${currentEventId}.webp`}
+          alt={event?.title || "Event card"}
           className="w-full h-full object-cover"
           loading="lazy"
           decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60" />
         {/* Eligibility Ribbon */}
-        {event?.participants?.includes('UG Students') && (
-          <div className="absolute top-3 right-[-30px] bg-red-600 text-white text-[8px] font-black px-8 py-1 rotate-45 shadow-lg z-10">
-            UG ONLY
-          </div>
-        )}
         {event?.participants?.includes('PG Students') && (
           <div className="absolute top-3 right-[-30px] bg-blue-600 text-white text-[8px] font-black px-8 py-1 rotate-45 shadow-lg z-10">
             PG ONLY

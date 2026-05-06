@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 // Sub-component for a single scrambling digit
-const ScrambleDigit = ({ value, isSyncing }) => {
+const ScrambleDigit = React.memo(({ value, isSyncing }) => {
   const [displayValue, setDisplayValue] = useState(value)
   const prevValue = useRef(value)
 
@@ -26,8 +26,8 @@ const ScrambleDigit = ({ value, isSyncing }) => {
     }
   }, [value, isSyncing])
 
-  return <span>{displayValue}</span>
-}
+  return <span className="will-change-contents">{displayValue}</span>
+})
 
 const InovexSection = () => {
   const containerRef = useRef(null)

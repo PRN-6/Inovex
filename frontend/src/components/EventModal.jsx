@@ -172,12 +172,6 @@ const EventModal = ({ event, isOpen, onClose }) => {
           </button>
 
           {/* Eligibility Badge */}
-          {event.participants?.includes('UG Students') && (
-            <div className="px-4 py-1.5 bg-red-600/20 border border-red-500/50 rounded-full flex items-center gap-2 animate-pulse">
-              <ShieldCheck className="w-4 h-4 text-red-500" />
-              <span className="text-[10px] font-black tracking-[0.2em] text-red-500">ONLY FOR UG STUDENTS</span>
-            </div>
-          )}
           {event.participants?.includes('PG Students') && (
             <div className="px-4 py-1.5 bg-green-600/20 border border-green-500/50 rounded-full flex items-center gap-2 animate-pulse">
               <ShieldCheck className="w-4 h-4 text-green-500" />
@@ -290,8 +284,8 @@ const EventModal = ({ event, isOpen, onClose }) => {
                 </ul>
               </div>
 
-              {/* Coordinator */}
-              <div className="mb-8">
+              {/* Student Coordinator */}
+              <div className="mb-6">
                 <h3 className="text-lg font-bold mb-4 text-jurassic-yellow">
                   {event.coordinators && event.coordinators.length > 1 ? "Event Coordinators" : "Event Coordinator"}
                 </h3>
@@ -337,6 +331,45 @@ const EventModal = ({ event, isOpen, onClose }) => {
                   )}
                 </div>
               </div>
+
+              {/* Faculty Coordinators */}
+              {event.facultyCoordinators && event.facultyCoordinators.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold mb-4 text-jurassic-yellow flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5" />
+                    Faculty Coordinators
+                  </h3>
+                  <div className="bg-black/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
+                    {event.facultyCoordinators.map((coord, idx) => (
+                      <div key={idx} className={`flex items-center gap-4 ${idx !== 0 ? "pt-4 border-t border-white/5" : ""}`}>
+                        {coord.photo ? (
+                          <img
+                            src={coord.photo}
+                            alt={coord.name}
+                            className="w-20 h-20 rounded-full object-cover border-2 border-jurassic-yellow/40 shrink-0 cursor-pointer hover:ring-2 hover:ring-jurassic-yellow hover:scale-105 transition-all duration-200"
+                            onClick={() => setSelectedCoord(coord)}
+                          />
+                        ) : (
+                          <div
+                            className="w-20 h-20 rounded-full bg-jurassic-yellow/10 border-2 border-jurassic-yellow/30 flex items-center justify-center shrink-0 cursor-pointer hover:ring-2 hover:ring-jurassic-yellow hover:scale-105 transition-all duration-200"
+                            onClick={() => setSelectedCoord(coord)}
+                          >
+                            <span className="text-jurassic-yellow font-black text-2xl uppercase">
+                              {coord.name?.charAt(0) || '?'}
+                            </span>
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-semibold text-white">{coord.name}</p>
+                          {coord.contact && (
+                            <p className="text-white/50 text-sm">📞 {coord.contact}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Action Button */}
               {!isBackendDisabled && (

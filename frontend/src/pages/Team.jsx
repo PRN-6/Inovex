@@ -225,6 +225,18 @@ const Team = () => {
 
           return (
             <>
+              {/* HOD Section */}
+              <div className="mb-16">
+                <h2 className="text-2xl md:text-3xl font-black italic tracking-wide text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">
+                  Head of <span className="text-white/40">Department</span>
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
+                  {teamData.filter(m => m.category === 'hod').map(member =>
+                    renderMemberCard(member)
+                  )}
+                </div>
+              </div>
+
               {/* Faculty Coordinators Section */}
               <div className="mb-16">
                 <h2 className="text-2xl md:text-3xl font-black italic tracking-wide text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">

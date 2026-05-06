@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNotification } from '../context/NotificationContext';
 import { gsap } from 'gsap';
 import { User, Database, Flame, Shield, CheckCircle, UserPlus } from 'lucide-react';
+import { eventsData } from '../data/eventsData';
 
 const Register = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -16,15 +17,42 @@ const Register = () => {
   // Dynamic API URL for Local/Production
   const API_URL = import.meta.env.VITE_API_URL || 'https://inovex-backend01.onrender.com';
 
-
-
-  const eventTeamSizes = {
-    "Techsaurus": 1, "Spy vs Spy": 4, "Rex Rampage": 2, "Cinesaur": 2,
-    "Dinox": 2, "RexHack": 4, "Battle Nexus": 4, "Genesis Reborn": 2
-  };
+  const eventTeamSizes = useMemo(() => {
+    return {
+      "Techsaurus: IT Manager": 1,
+      "Hidden Horizon - QR Treasure Hunt": 4,
+      "Cinesaur: Reel Making": 2,
+      "Dinox: Web Design": 2,
+      "RexHack: Hackathon": 4,
+      "BATTLE NEXUS: Gaming": 4,
+      "Cretaceous Couture: Fashion Walk": 6,
+      "Jurassic Jams: Group Song": 3,
+      "Echoes Of Extinction: Group Dance": 8,
+      "Rex Rhythm: Solo Dance": 1,
+      "Dna Architecture: Best HR Team": 2,
+      "Roar & Reach: Best Marketing Team": 1,
+      "T-Rex Command: Best Manager": 2,
+      "Golden Fossils: Best Finance Team": 4,
+      "Era Unlocked: Face Off": 1
+    };
+  }, []);
 
   const selectedEvents = watch("events") || [];
   const getTeamSize = (eventName) => eventTeamSizes[eventName] || 1;
+
+  // Filter and group events from data
+  const { technicalEvents, managementEvents, culturalEvents } = useMemo(() => {
+    const tech = [];
+    const mgmt = [];
+    const cult = [];
+    Object.values(eventsData).forEach(event => {
+      if (!event.title) return;
+      if (event.type === 'technical') tech.push(event.title);
+      else if (event.type === 'management') mgmt.push(event.title);
+      else if (event.type === 'cultural') cult.push(event.title);
+    });
+    return { technicalEvents: tech, managementEvents: mgmt, culturalEvents: cult };
+  }, []);
 
   const containerRef = useRef(null);
   const embersRef = useRef([]);
@@ -377,17 +405,83 @@ const Register = () => {
                   </div>
 
                   <div className="pt-6 border-t border-white/5">
-                    <label className="text-xs font-black text-amber-500 uppercase tracking-[0.2em] mb-4 block">Select Quests</label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                      {Object.keys(eventTeamSizes).map((eventName) => (
-                        <label key={eventName} className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer touch-manipulation ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
-                          <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
-                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
-                            {selectedEvents.includes(eventName) && <Database size={14} className="text-black" />}
-                          </div>
-                          <span className="text-[11px] font-black uppercase truncate tracking-tight">{eventName}</span>
-                        </label>
-                      ))}
+                    <label className="text-xs font-black text-amber-500 uppercase tracking-[0.2em] mb-4 block underline underline-offset-8 decoration-amber-500/20">Select Quests</label>
+
+                    <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                      {/* Technical Section */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-black text-white/40 tracking-[0.3em] uppercase">// Technical</span>
+                          <div className="h-px flex-1 bg-white/5"></div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {technicalEvents.map((eventName) => (
+                            <label key={eventName} className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer touch-manipulation ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
+                              <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
+                              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
+                                {selectedEvents.includes(eventName) && <Database size={14} className="text-black" />}
+                              </div>
+                              <span className="text-[11px] font-black uppercase truncate tracking-tight">
+                                {eventName.includes(':')
+                                  ? eventName.split(':').pop().trim()
+                                  : eventName.includes('-')
+                                    ? eventName.split('-').pop().trim()
+                                    : eventName}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Management Section */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-black text-white/40 tracking-[0.3em] uppercase">// Management</span>
+                          <div className="h-px flex-1 bg-white/5"></div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {managementEvents.map((eventName) => (
+                            <label key={eventName} className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer touch-manipulation ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
+                              <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
+                              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
+                                {selectedEvents.includes(eventName) && <Database size={14} className="text-black" />}
+                              </div>
+                              <span className="text-[11px] font-black uppercase truncate tracking-tight">
+                                {eventName.includes(':')
+                                  ? eventName.split(':').pop().trim()
+                                  : eventName.includes('-')
+                                    ? eventName.split('-').pop().trim()
+                                    : eventName}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Cultural Section */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-black text-white/40 tracking-[0.3em] uppercase">// Cultural</span>
+                          <div className="h-px flex-1 bg-white/5"></div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {culturalEvents.map((eventName) => (
+                            <label key={eventName} className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer touch-manipulation ${selectedEvents.includes(eventName) ? 'bg-amber-500/10 border-amber-500/50 text-amber-500' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}>
+                              <input type="checkbox" value={eventName} {...register("events", { required: "Select one" })} className="hidden" />
+                              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedEvents.includes(eventName) ? 'bg-amber-500 border-amber-500' : 'border-white/30'}`}>
+                                {selectedEvents.includes(eventName) && <Database size={14} className="text-black" />}
+                              </div>
+                              <span className="text-[11px] font-black uppercase truncate tracking-tight">
+                                {eventName.includes(':')
+                                  ? eventName.split(':').pop().trim()
+                                  : eventName.includes('-')
+                                    ? eventName.split('-').pop().trim()
+                                    : eventName}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
 

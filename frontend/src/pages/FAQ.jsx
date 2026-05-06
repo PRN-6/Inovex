@@ -13,7 +13,7 @@ const faqs = [
       },
       {
         q: 'When and where does INOVEX take place?',
-        a: 'INOVEX is a 3-day event held on the main campus of AJ Institute of Engineering & Technology, Mangalore. Exact dates and venue specifics will be broadcast via official communication channels.',
+        a: 'INOVEX is a 2-day event held on the main campus of AJ Institute of Engineering & Technology, Mangalore. Exact dates and venue specifics will be broadcast via official communication channels.',
       },
       {
         q: 'Who can attend INOVEX?',
@@ -27,19 +27,37 @@ const faqs = [
     items: [
       {
         q: 'How do I register for events?',
-        a: 'Navigate to the Registration terminal via the "Register Now" portal. Fill in your details and select your events. Upon submission, you will receive a unique Participant ID (PID). Show this PID at the college entrance desk to complete your physical payment via QR code.',
+        a: 'Navigate to the Registration portal and fill in your details. You can select multiple Technical and Cultural events in a single session. Upon completion, the system generates a unique Participant ID (PID) and an Access Pass which is automatically downloaded for you.',
       },
       {
-        q: 'What is the registration fee?',
-        a: 'The registration fee is ₹100 per event. Your total amount due will be displayed on the registration success screen and sent to your registered email address.',
+        q: 'What is the Participant ID (PID)?',
+        a: 'The PID is your unique digital identifier for INOVEX 2026. It links your personal details, squad members, and selected events. You must present this PID at the College Entrance Desk for verification and physical payment.',
       },
       {
-        q: 'Can I register for multiple events?',
-        a: 'Affirmative. You can register for multiple events. Every registration (even with the same email) is treated as a unique entry to ensure all team participants are correctly logged.',
+        q: 'How does the payment process work?',
+        a: 'INOVEX uses an "On-Arrival" payment protocol. After registering online and receiving your PID, head to the registration desk at AJIET campus. Show your PID, and you can complete the payment via the official QR codes provided at the counter.',
       },
       {
-        q: 'Is my registration data safe?',
-        a: 'Your data is stored on a secured MongoDB Atlas cluster with strict access control. We prioritize participant privacy and data integrity.',
+        q: 'Can I register for more events later?',
+        a: 'Yes. If you decide to join more events, simply return to the registration page and select the new events. The system will prevent you from double-registering for the same event but will allow you to expand your quest list.',
+      },
+      {
+        q: 'How does squad formation work?',
+        a: 'For team-based events (e.g., RexHack, Battle Nexus), selecting the event will unlock a "Squad Configuration" panel. You must provide the name, USN, and email for each teammate to sync your entire squad to your PID.',
+      },
+    ],
+  },
+  {
+    category: 'EVENT CLASSIFICATION',
+    icon: '📊',
+    items: [
+      {
+        q: 'What is the difference between Technical and Cultural events?',
+        a: 'Technical events focus on engineering, coding, and logical challenges (e.g., Techsaurus, RexHack). Cultural events showcase creative and performing arts (e.g., HR Team, Dance Showdown). You can filter these on the Events page to find your specific area of interest.',
+      },
+      {
+        q: 'Are there specific eligibility rules?',
+        a: 'Affirmative. Some events are exclusive to UG or PG students. Check the "Eligibility Ribbon" on each event card (Top-Right) or the event details for specific restrictions before registering.',
       },
     ],
   },
@@ -108,11 +126,10 @@ const FAQItem = ({ question, answer, index }) => {
   return (
     <div
       ref={itemRef}
-      className={`border transition-all duration-300 overflow-hidden ${
-        isOpen
+      className={`border transition-all duration-300 overflow-hidden ${isOpen
           ? 'border-red-600/50 bg-red-950/10'
           : 'border-white/10 bg-[#0a0a0a] hover:border-white/20'
-      }`}
+        }`}
     >
       <button
         id={`faq-item-${index}`}

@@ -2,20 +2,20 @@ import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { eventsData } from '../data/eventsData';
 
-const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
+const Card = ({ isVisible, eventId, shouldSpin, setShouldSpin }) => {
   const mobileCardRef = useRef(null);
   const cardRef = useRef(null);
   const [hasAnimated, setHasAnimated] = React.useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = React.useState(selectedIndex !== null ? selectedIndex : 0);
+  const [currentEventId, setCurrentEventId] = React.useState(eventId || 1);
 
-  const event = eventsData[currentImageIndex + 1];
+  const event = eventsData[currentEventId];
 
-  // Update currentImageIndex when selectedIndex changes
+  // Update currentEventId when eventId changes
   useEffect(() => {
-    if (selectedIndex !== null && !shouldSpin) {
-      setCurrentImageIndex(selectedIndex);
+    if (eventId !== null && !shouldSpin) {
+      setCurrentEventId(eventId);
     }
-  }, [selectedIndex, shouldSpin]);
+  }, [eventId, shouldSpin]);
 
   // Handle tilt animation on hover
   const handleMouseMove = (e, cardElement) => {
@@ -52,37 +52,16 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
     });
   };
 
-  // Animate first card on scroll
-  useEffect(() => {
-    if (cardRef.current && selectedIndex === 0 && !hasAnimated) {
-      const handleScroll = () => {
-        const scrollPosition = window.scrollY;
-        const windowHeight = window.innerHeight;
-
-        if (scrollPosition >= windowHeight * 0.5 && !hasAnimated) {
-          setHasAnimated(true);
-
-          gsap.fromTo(cardRef.current,
-            { x: 200, opacity: 0, rotationY: 45, scale: 0.8 },
-            { x: 0, opacity: 1, rotationY: 0, scale: 1, duration: 1.0, ease: "power3.out" }
-          );
-        }
-      };
-
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
-  }, [selectedIndex, hasAnimated]);
-
   // Animate card when visibility changes
   useEffect(() => {
-    if (cardRef.current && isVisible && !(selectedIndex === 0 && hasAnimated)) {
+    if (cardRef.current && isVisible && !hasAnimated) {
+      setHasAnimated(true);
       gsap.fromTo(cardRef.current,
         { x: 200, opacity: 0, rotationY: 45, scale: 0.8 },
         { x: 0, opacity: 1, rotationY: 0, scale: 1, duration: 1.0, ease: "power3.out" }
       );
     }
-  }, [isVisible, selectedIndex, hasAnimated]);
+  }, [isVisible, hasAnimated]);
 
   // Handle spinning animation
   useEffect(() => {
@@ -96,7 +75,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
             duration: 0.6,
             ease: "power1.inOut",
             onUpdate: function () {
-              if (this.progress() > 0.45) setCurrentImageIndex(selectedIndex);
+              if (this.progress() > 0.45) setCurrentEventId(eventId);
             }
           })
             .to(mobileCardRef.current, {
@@ -121,7 +100,7 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       });
       return () => ctx.revert();
     }
-  }, [shouldSpin, selectedIndex, setShouldSpin]);
+  }, [shouldSpin, eventId, setShouldSpin]);
 
   if (!isVisible) return null;
 
@@ -130,25 +109,20 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       {/* Mobile Card */}
       <div
         ref={mobileCardRef}
-        className="md:hidden relative w-64"
+        className="md:hidden relative w-64 will-change-transform"
         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
         onMouseMove={(e) => handleMouseMove(e, mobileCardRef.current)}
         onMouseLeave={() => handleMouseLeave(mobileCardRef.current)}
       >
         <div className="bg-white rounded-2xl shadow-2xl h-96 relative overflow-hidden">
           <img
-            src={`/images/cards/card${currentImageIndex + 1}.webp`}
-            alt="Event card"
+            src={event?.image || `/images/cards/card${currentEventId}.webp`}
+            alt={event?.title || "Event card"}
             className="w-full h-full object-cover"
             loading="lazy"
             decoding="async"
           />
           {/* Eligibility Ribbon */}
-          {event?.participants?.includes('UG Students') && (
-            <div className="absolute top-4 right-[-35px] bg-red-600 text-white text-[10px] font-black px-10 py-1 rotate-45 shadow-lg">
-              UG ONLY
-            </div>
-          )}
           {event?.participants?.includes('PG Students') && (
             <div className="absolute top-4 right-[-35px] bg-blue-600 text-white text-[10px] font-black px-10 py-1 rotate-45 shadow-lg">
               PG ONLY
@@ -160,15 +134,15 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
       {/* Desktop Card */}
       <div
         ref={cardRef}
-        className="hidden md:block relative w-96"
+        className="hidden md:block relative w-80 will-change-transform"
         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
         onMouseMove={(e) => handleMouseMove(e, cardRef.current)}
         onMouseLeave={() => handleMouseLeave(cardRef.current)}
       >
-        <div className="bg-white rounded-2xl shadow-2xl h-144 relative overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-2xl h-120 relative overflow-hidden">
           <img
-            src={`/images/cards/card${currentImageIndex + 1}.webp`}
-            alt="Event card"
+            src={event?.image || `/images/cards/card${currentEventId}.webp`}
+            alt={event?.title || "Event card"}
             className="w-full h-full object-cover"
             loading="lazy"
             decoding="async"
@@ -176,11 +150,6 @@ const Card = ({ isVisible, selectedIndex, shouldSpin, setShouldSpin }) => {
           <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
 
           {/* Eligibility Ribbon */}
-          {event?.participants?.includes('UG Students') && (
-            <div className="absolute top-6 right-[-45px] bg-red-600 text-white text-[12px] font-black px-12 py-2 rotate-45 shadow-lg z-10">
-              UG ONLY
-            </div>
-          )}
           {event?.participants?.includes('PG Students') && (
             <div className="absolute top-6 right-[-45px] bg-blue-600 text-white text-[12px] font-black px-12 py-2 rotate-45 shadow-lg z-10">
               PG ONLY

@@ -1,34 +1,76 @@
 export const teamData = [
   {
+    id: 101,
+    name: "Dr. Bruce Mathew",
+    role: "HOD, MCA",
+    category: "hod",
+    image: "/images/team/Bruce-Mathew.webp",
+    socials: {}
+  },
+  {
     id: 1,
-    name: "Dr.Vijesh Krishnan",
-    role: "Faculty Coordinator",
-    category: "faculty",
+    name: "Dr. Vijesh Krishnan",
+    role: "HOD & Faculty Coordinator",
+    category: "hod",
     image: "/images/team/member1.webp",
     socials: {
       instagram: "https://www.instagram.com/viju._caz?igsh=MXNpamV2bmQ4NXY2Ng==",
     }
   },
   {
+    id: 102,
+    name: "Dignitary 2",
+    role: "Position TBD",
+    category: "hod",
+    image: "/images/team/placeholder.webp",
+    socials: {}
+  },
+  {
+    id: 103,
+    name: "Dignitary 3",
+    role: "Position TBD",
+    category: "hod",
+    image: "/images/team/placeholder.webp",
+    socials: {}
+  },
+  {
+    id: 104,
+    name: "Dignitary 4",
+    role: "Position TBD",
+    category: "hod",
+    image: "/images/team/placeholder.webp",
+    socials: {}
+  },
+  {
     id: 2,
     name: "Mr.Ragesh Raju",
     role: "Faculty Coordinator",
     category: "faculty",
-    image: "/images/team/member2.webp",
+    image: "/images/team/Ragesh-Raju.webp",
     socials: {
       instagram: "https://www.instagram.com/rageshraju?igsh=dHhneWZjd2w5M21z",
     }
   },
   {
     id: 3,
-    name: "Mrs.Jayashree J",
+    name: "Mr. Sunith Kumar T",
     role: "Faculty Coordinator",
     category: "faculty",
-    image: "/images/team/member3.webp",
+    image: "/images/team/Sunith.webp",
     socials: {
-      instagram: "https://www.instagram.com/____shree.gowda____?igsh=MXYxY3NhdTIwcDBx",
+      instagram: "", // No Instagram
     }
   },
+  // {
+  //   id: 3,
+  //   name: "Mrs.Jayashree J",
+  //   role: "Faculty Coordinator",
+  //   category: "faculty",
+  //   image: "/images/team/member3.webp",
+  //   socials: {
+  //     instagram: "https://www.instagram.com/____shree.gowda____?igsh=MXYxY3NhdTIwcDBx",
+  //   }
+  // },
   {
     id: 4,
     name: "Rohit Durgappa Kattimani",

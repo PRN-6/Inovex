@@ -2,14 +2,26 @@ import React from 'react';
 import { Home, Calendar, Activity, Film, BookOpen, Users, MessageSquare, Mail, Phone, ShieldCheck, FileText } from 'lucide-react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
+import { eventsData } from '../data/eventsData';
 
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleNavClick = (e, path) => {
+  const handleNavClick = (e, path, type = null) => {
     e.preventDefault();
     const externalPages = ['team', 'about', 'privacy', 'terms', 'faq', 'contact'];
+
+    if (type) {
+      navigate(`/?type=${type}`);
+      setTimeout(() => {
+        const element = document.getElementById('events');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      return;
+    }
 
     if (location.pathname === '/' && !externalPages.includes(path)) {
       const element = document.getElementById(path);
@@ -42,16 +54,26 @@ const Footer = () => {
     { label: 'Media', path: 'media', icon: Film },
   ];
 
-  const eventsLinks = [
-    { label: 'Techsaurus', path: 'events' },
-    { label: 'Hidden Horizon', path: 'events' },
-    { label: 'Rex Rampage', path: 'events' },
-    { label: 'Cinesaur', path: 'events' },
-    { label: 'Dinox', path: 'events' },
-    { label: 'RexHack', path: 'events' },
-    { label: 'Battle Nexus', path: 'events' },
-    { label: 'Genesis Reborn', path: 'events' },
-  ];
+  const technicalLinks = Object.values(eventsData)
+    .filter(event => event.type === 'technical')
+    .map(event => ({
+      label: event.title,
+      path: 'events'
+    }));
+
+  const culturalLinks = Object.values(eventsData)
+    .filter(event => event.type === 'cultural')
+    .map(event => ({
+      label: event.title,
+      path: 'events'
+    }));
+
+  const managementLinks = Object.values(eventsData)
+    .filter(event => event.type === 'management')
+    .map(event => ({
+      label: event.title,
+      path: 'events'
+    }));
 
   const resourceLinks = [
     { label: 'Team', path: 'team', icon: BookOpen },
@@ -74,7 +96,7 @@ const Footer = () => {
       <div className="max-w-screen-2xl mx-auto pl-10 pr-6 relative z-10 md:pl-20 md:pr-12 lg:pl-48 lg:pr-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
 
-          {/* Section 1: InGen Corporate Overlay */}
+          {/* Section 1: Branding Overlay */}
           <div className="lg:col-span-3 space-y-8">
             <div className="space-y-2">
               <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter leading-none">INOVEX</h2>
@@ -85,24 +107,24 @@ const Footer = () => {
             </div>
 
             <p className="text-gray-500 text-[11px] leading-relaxed max-w-xs font-bold tracking-widest normal-case">
-              ALL BIOLOGICAL ASSETS ON THIS SERVER ARE PROTECTED BY THE INOVEX SECURITY DIVISION. UNAUTHORIZED DATA EXTRACTION IS PUNISHABLE BY INTERNATIONAL MARITIME LAW.
+              INOVEX 2026 IS THE PREMIER TECHNICAL SYMPOSIUM OF AJIET. ALL RIGHTS RESERVED. ANY UNAUTHORIZED REPRODUCTION OF BRAND ASSETS IS PROHIBITED.
             </p>
 
             {/* Diagnostic Terminal Panel */}
             <div className="border border-white/5 bg-white/[0.02] p-5 rounded-sm space-y-4 max-w-xs">
               <div className="flex justify-between items-end border-b border-white/5 pb-2">
                 <span className="text-[9px] font-black text-white/30 tracking-widest uppercase">System Integrity</span>
-                <span className="text-[10px] font-black text-green-500 tracking-widest">98.4% STABLE</span>
+                <span className="text-[10px] font-black text-green-500 tracking-widest">99.9% STABLE</span>
               </div>
               <div className="flex justify-between items-end border-b border-white/5 pb-2">
-                <span className="text-[9px] font-black text-white/30 tracking-widest uppercase">Asset Sync</span>
-                <span className="text-[10px] font-black text-red-600 tracking-widest animate-pulse">ACTIVE SCAN</span>
+                <span className="text-[9px] font-black text-white/30 tracking-widest uppercase">Encryption</span>
+                <span className="text-[10px] font-black text-red-600 tracking-widest animate-pulse">AES-256 ACTIVE</span>
               </div>
             </div>
           </div>
 
           {/* Section 2: Protocols, Events, Resources & Legal */}
-          <div className="lg:col-span-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-4">
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-4">
 
             <div className="space-y-6 lg:space-y-8">
               <h3 className="text-[10px] font-black tracking-[0.5em] text-white/40 flex items-center gap-3">
@@ -128,21 +150,39 @@ const Footer = () => {
             <div className="space-y-6 lg:space-y-8">
               <h3 className="text-[10px] font-black tracking-[0.5em] text-white/40 flex items-center gap-3">
                 <span className="w-6 h-[1px] bg-white/20"></span>
-                Quests
+                Events
               </h3>
               <ul className="space-y-4">
-                {eventsLinks.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={`#${link.path}`}
-                      onClick={(e) => handleNavClick(e, link.path)}
-                      className="text-xs font-black tracking-widest text-gray-400 hover:text-red-500 transition-all flex items-center gap-3"
-                    >
-                      <span className="w-1.5 h-1.5 bg-red-500/20 rounded-full group-hover:bg-red-500"></span>
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
+                <li>
+                  <a
+                    href="#events?type=technical"
+                    onClick={(e) => handleNavClick(e, 'events', 'technical')}
+                    className="text-xs font-black tracking-widest text-gray-400 hover:text-blue-500 transition-all flex items-center gap-3"
+                  >
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                    Technical
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#events?type=cultural"
+                    onClick={(e) => handleNavClick(e, 'events', 'cultural')}
+                    className="text-xs font-black tracking-widest text-gray-400 hover:text-pink-500 transition-all flex items-center gap-3"
+                  >
+                    <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
+                    Cultural
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#events?type=management"
+                    onClick={(e) => handleNavClick(e, 'events', 'management')}
+                    className="text-xs font-black tracking-widest text-gray-400 hover:text-amber-500 transition-all flex items-center gap-3"
+                  >
+                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                    Management
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -191,7 +231,7 @@ const Footer = () => {
 
 
           {/* Section 3: Connectivity & Geolocation */}
-          <div className="lg:col-span-3 space-y-8 lg:text-right flex flex-col items-start lg:items-end">
+          <div className="lg:col-span-2 space-y-8 lg:text-right flex flex-col items-start lg:items-end">
             <h3 className="text-[10px] font-black tracking-[0.5em] text-white/40 flex items-center gap-3">
               <span className="w-6 h-[1px] bg-white/20"></span>
               SYNC
@@ -201,13 +241,13 @@ const Footer = () => {
               <div className="space-y-1">
                 <span className="text-[9px] font-black text-white/30 tracking-widest block uppercase">Coordinate Delta</span>
                 <span className="text-xs font-black tracking-widest text-white leading-relaxed">
-                  07° 24′ N // 87° 00′ W<br />
-                  Isla Nublar // Site-B
+                  12.9197° N // 74.8324° E<br />
+                  AJIET // MANGALORE
                 </span>
               </div>
 
               <div className="space-y-1 ">
-                <span className="text-[9px] font-black text-white/30 tracking-widest block uppercase">Contact InGen</span>
+                <span className="text-[9px] font-black text-white/30 tracking-widest block uppercase">Contact AJIET</span>
                 <a href="mailto:inovex2026@gmail.com" className="text-xs font-black tracking-widest text-white hover:text-red-500 transition-all flex items-center gap-2 lg:justify-end lowercase">
                   <Mail className="w-3 h-3 opacity-40" />
                   inovex2026@gmail.com
