@@ -5,13 +5,15 @@ import { gsap } from 'gsap';
 import FeedbackModal from './FeedbackModal';
 
 const isBackendDisabled = import.meta.env.VITE_DISABLE_BACKEND === 'true';
+const isMediaEnabled = import.meta.env.VITE_ENABLE_MEDIA === 'true';
+const isTeamEnabled = import.meta.env.VITE_ENABLE_TEAM === 'true';
 
 const mainNavItems = [
   { icon: Home, label: 'Home', path: 'home' },
   { icon: Calendar, label: 'Events', path: 'events' },
   { icon: Activity, label: 'Timeline', path: 'timeline' },
-  { icon: Film, label: 'Media', path: 'media' },
-  { icon: Users, label: 'Team', path: 'team' },
+  ...(isMediaEnabled ? [{ icon: Film, label: 'Media', path: 'media' }] : []),
+  ...(isTeamEnabled ? [{ icon: Users, label: 'Team', path: 'team' }] : []),
   { icon: Info, label: 'About', path: 'about' },
   { icon: HelpCircle, label: 'FAQ', path: 'faq' },
   ...(isBackendDisabled ? [] : [{ icon: UserPlus, label: 'Register', path: 'register' }]),
@@ -100,7 +102,7 @@ const Navbar = () => {
           if (location.pathname !== '/') return;
 
           const windowHeight = window.innerHeight;
-          const sections = ['home', 'events', 'timeline', 'media'];
+          const sections = ['home', 'events', 'timeline', ...(isMediaEnabled ? ['media'] : [])];
           let currentSection = 'home';
 
           for (const sectionId of sections) {

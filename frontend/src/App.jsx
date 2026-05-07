@@ -24,6 +24,8 @@ const AppContent = () => {
   const location = useLocation();
   const hideFooter = location.pathname === '/inovex-terminal-2026' || location.pathname.startsWith('/event/');
   const isBackendDisabled = import.meta.env.VITE_DISABLE_BACKEND === 'true';
+  const isMediaEnabled = import.meta.env.VITE_ENABLE_MEDIA === 'true';
+  const isTeamEnabled = import.meta.env.VITE_ENABLE_TEAM === 'true';
 
   return (
     <div className="main-app-container">
@@ -35,10 +37,14 @@ const AppContent = () => {
               <Home />
               <Events />
               <InovexSection />
-              <Media />
+              {isMediaEnabled && <Media />}
             </>
           } />
-          <Route path="/team" element={<Team />} />
+          {isTeamEnabled ? (
+            <Route path="/team" element={<Team />} />
+          ) : (
+            <Route path="/team" element={<Navigate to="/" replace />} />
+          )}
           <Route path="/about" element={<About />} />
           {!isBackendDisabled ? (
             <Route path="/register" element={<Register />} />
