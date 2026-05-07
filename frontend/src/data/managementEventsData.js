@@ -5,7 +5,7 @@ export const managementEventsData = {
     type: "management",
     category: "Management",
     date: "March 15, 2026",
-    time: "10:00 AM - 1:00 PM",
+    // time: "10:00 AM - 1:00 PM",
     // location: "Business Hall",
     participants: "Team of 2",
     entryFee: "₹300",
@@ -29,7 +29,7 @@ export const managementEventsData = {
     facultyCoordinators: [
       {
         name: "Mrs Krithi V Rao",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card13.webp"
@@ -64,7 +64,7 @@ export const managementEventsData = {
     facultyCoordinators: [
       {
         name: "Mrs Shriraksha T N",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card14.webp"
@@ -75,7 +75,7 @@ export const managementEventsData = {
     type: "management",
     category: "Management",
     date: "May 15, 2026",
-    time: "11:00 AM - 2:00 PM",
+    // time: "11:00 AM - 2:00 PM",
     // location: "Finance Lab",
     participants: "Individual",
     entryFee: "₹150",
@@ -93,13 +93,13 @@ export const managementEventsData = {
       {
         name: "Bhumika A",
         contact: "8217491733",
-        photo: "/images/event-heads/mba/bhumika.webp"
+        photo: "/images/event-heads/mba/Bhumika.webp"
       }
     ],
     facultyCoordinators: [
       {
         name: "Mrs Latha B",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card15.webp"
@@ -110,7 +110,7 @@ export const managementEventsData = {
     type: "management",
     category: "Finance",
     date: "May 15, 2026",
-    time: "10:00 AM - 1:00 PM",
+    // time: "10:00 AM - 1:00 PM",
     // location: "Incubation Center",
     participants: "Team of 2",
     entryFee: "₹300",
@@ -135,7 +135,7 @@ export const managementEventsData = {
     facultyCoordinators: [
       {
         name: "Mr. Dr Rakesh M",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card16.webp"
@@ -145,7 +145,7 @@ export const managementEventsData = {
     title: "Cinesaur: Reel Making",
     type: "management",
     category: "Creative",
-    date: "May 15, 2026",
+    // date: "May 15, 2026",
     time: "10:30",
     // location: "College Campus",
     participants: "Team of 2",
@@ -173,7 +173,7 @@ export const managementEventsData = {
     facultyCoordinators: [
       {
         name: "Dr Keerthan Dixit A",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card4.webp",

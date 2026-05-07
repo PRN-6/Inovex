@@ -35,7 +35,7 @@ export const technicalEventsData = {
     facultyCoordinators: [
       {
         name: "Mr. Gururaja",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card1.webp",
@@ -46,7 +46,7 @@ export const technicalEventsData = {
     title: "Hidden Horizon - Treasure Hunt",
     type: "technical",
     category: "Adventure",
-    date: "May 16, 2026",
+    date: "May 15, 2026",
     time: "11:00",
     // location: "College Campus",
     participants: "Team of 4",
@@ -76,7 +76,7 @@ export const technicalEventsData = {
     facultyCoordinators: [
       {
         name: "Dr. Vijesh K",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card2.webp",
@@ -149,7 +149,7 @@ export const technicalEventsData = {
     facultyCoordinators: [
       {
         name: "Mr. Ragesh Raju",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card4.webp",
@@ -195,7 +195,7 @@ export const technicalEventsData = {
     facultyCoordinators: [
       {
         name: "Mrs. Rashmi K.A",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card5.webp",
@@ -235,7 +235,7 @@ export const technicalEventsData = {
     facultyCoordinators: [
       {
         name: "Mrs. Manasa",
-        contact: "TBD",
+        // contact: "TBD",
       }
     ],
     image: "/images/cards/card6.webp",
