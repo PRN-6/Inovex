@@ -3,7 +3,7 @@ export const mediaData = [
     id: 1,
     type: 'Event Highlight',
     date: '2026-03-12',
-    title: 'INOVEX: The Grand Opening [Night at the Museum]',
+    title: 'A J ASTRIX: The Grand Opening [Night at the Museum]',
     image: '/images/cards/card1.webp',
     videoUrl: '/videos/media1.webm',
   },

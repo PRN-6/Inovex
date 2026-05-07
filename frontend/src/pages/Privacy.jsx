@@ -21,7 +21,7 @@ const Privacy = () => {
               <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter">DATA PROTOCOL</h1>
             </div>
             <p className="text-gray-500 text-xs font-black tracking-[0.5em]">
-              INOVEX PRIVACY POLICY // VERSION 1.0.4-B
+              A J ASTRIX PRIVACY POLICY // VERSION 1.0.4-B
             </p>
           </div>
 
@@ -52,7 +52,7 @@ const Privacy = () => {
             <div className="space-y-4 text-[11px] leading-relaxed tracking-widest text-gray-400 normal-case">
               <p>All extracted data is utilized exclusively for:</p>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Validation of participant credentials for INOVEX 2026.</li>
+                <li>Validation of participant credentials for A J ASTRIX 2026.</li>
                 <li>Generation of secure access tokens and digital certifications.</li>
                 <li>Transmission of critical mission updates and emergency alerts.</li>
                 <li>Refinement of system UX through anonymized telemetry.</li>
@@ -67,7 +67,7 @@ const Privacy = () => {
               03. EXTERNAL TRANSFERS
             </h2>
             <div className="p-6 border border-white/5 bg-white/[0.02] text-[11px] leading-relaxed tracking-widest text-gray-400 normal-case">
-              <p>INOVEX does not trade biological assets with external entities. Data is only shared with authorized partners (e.g., Razorpay for financial clearance) under strict non-disclosure protocols. We do not sell your data to black-market aggregators.</p>
+              <p>A J ASTRIX does not trade biological assets with external entities. Data is only shared with authorized partners (e.g., Razorpay for financial clearance) under strict non-disclosure protocols. We do not sell your data to black-market aggregators.</p>
             </div>
           </section>
 
@@ -87,7 +87,7 @@ const Privacy = () => {
             <p className="text-[10px] font-black tracking-[0.4em] text-white/30">
               QUESTIONS REGARDING DATA INTEGRITY?
             </p>
-            <a href="mailto:inovex2026@gmail.com" className="inline-block px-8 py-3 border border-red-600/50 hover:bg-red-600 transition-all text-xs font-black tracking-widest italic">
+            <a href="mailto:ajastrix2026@gmail.com" className="inline-block px-8 py-3 border border-red-600/50 hover:bg-red-600 transition-all text-xs font-black tracking-widest italic">
               CONTACT SECURITY DIVISION
             </a>
           </section>

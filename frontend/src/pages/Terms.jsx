@@ -21,7 +21,7 @@ const Terms = () => {
               <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter">OPERATING TERMS</h1>
             </div>
             <p className="text-gray-500 text-xs font-black tracking-[0.5em]">
-              INOVEX TERMS & CONDITIONS // VERSION 2.1.0-A
+              A J ASTRIX TERMS & CONDITIONS // VERSION 2.1.0-A
             </p>
           </div>
 
@@ -32,7 +32,7 @@ const Terms = () => {
               01. PARTICIPANT AGREEMENT
             </h2>
             <div className="p-6 border border-white/5 bg-white/[0.02] text-[11px] leading-relaxed tracking-widest text-gray-400 normal-case">
-              <p>By accessing the INOVEX 2026 terminal and registering for designated quests, you legally bind yourself to these operational protocols. Unauthorized tampering, false identity usage, or violation of these terms will result in immediate termination of access and potential exclusion from future INOVEX operations.</p>
+              <p>By accessing the A J ASTRIX 2026 terminal and registering for designated quests, you legally bind yourself to these operational protocols. Unauthorized tampering, false identity usage, or violation of these terms will result in immediate termination of access and potential exclusion from future A J ASTRIX operations.</p>
             </div>
           </section>
 
@@ -49,7 +49,7 @@ const Terms = () => {
               </div>
               <div className="p-6 border border-white/5 bg-white/[0.02] space-y-4">
                 <h3 className="font-black text-white uppercase italic">Asset Interaction</h3>
-                <p>Respect for event hardware, venue infrastructure, and coordination personnel is mandatory. Any physical or digital damage to INOVEX property will result in severe penalties and institutional notification.</p>
+                <p>Respect for event hardware, venue infrastructure, and coordination personnel is mandatory. Any physical or digital damage to A J ASTRIX property will result in severe penalties and institutional notification.</p>
               </div>
             </div>
           </section>
@@ -61,7 +61,7 @@ const Terms = () => {
               03. SCHEDULE ADJUSTMENTS
             </h2>
             <div className="space-y-4 text-[11px] leading-relaxed tracking-widest text-gray-400 normal-case">
-              <p>The INOVEX control center reserves the right to:</p>
+              <p>The A J ASTRIX control center reserves the right to:</p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>Modify quest timelines without prior external notice.</li>
                 <li>Alter problem statements or evaluation criteria based on real-time operational needs.</li>
@@ -78,7 +78,7 @@ const Terms = () => {
               04. RISK ASSUMPTION
             </h2>
             <div className="p-6 border border-white/5 bg-white/[0.02] text-[11px] leading-relaxed tracking-widest text-gray-400 normal-case">
-              <p>Participation in INOVEX 2026 is strictly at your own risk. The organizing committee, affiliated institution, and INOVEX corporate sponsors shall not be held liable for personal injury, hardware failure, data loss, or emotional distress experienced during the execution of high-stress competitive tasks.</p>
+              <p>Participation in A J ASTRIX 2026 is strictly at your own risk. The organizing committee, affiliated institution, and A J ASTRIX corporate sponsors shall not be held liable for personal injury, hardware failure, data loss, or emotional distress experienced during the execution of high-stress competitive tasks.</p>
             </div>
           </section>
 
@@ -87,7 +87,7 @@ const Terms = () => {
             <p className="text-[10px] font-black tracking-[0.4em] text-white/30">
               REQUIRE CLARIFICATION ON PROTOCOLS?
             </p>
-            <a href="mailto:inovex2026@gmail.com" className="inline-block px-8 py-3 border border-red-600/50 hover:bg-red-600 transition-all text-xs font-black tracking-widest italic">
+            <a href="mailto:ajastrix2026@gmail.com" className="inline-block px-8 py-3 border border-red-600/50 hover:bg-red-600 transition-all text-xs font-black tracking-widest italic">
               CONTACT LEGAL DIVISION
             </a>
           </section>

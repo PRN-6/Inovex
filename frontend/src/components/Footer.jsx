@@ -107,7 +107,7 @@ const Footer = () => {
             </div>
 
             <p className="text-gray-500 text-[11px] leading-relaxed max-w-xs font-bold tracking-widest normal-case">
-              INOVEX 2026 IS THE PREMIER TECHNICAL SYMPOSIUM OF AJIET. ALL RIGHTS RESERVED. ANY UNAUTHORIZED REPRODUCTION OF BRAND ASSETS IS PROHIBITED.
+              AJ ASTRIX 2026 IS THE PREMIER TECHNICAL SYMPOSIUM OF AJIET. ALL RIGHTS RESERVED. ANY UNAUTHORIZED REPRODUCTION OF BRAND ASSETS IS PROHIBITED.
             </p>
 
             {/* Diagnostic Terminal Panel */}
@@ -254,7 +254,11 @@ const Footer = () => {
                 </a>
                 <div className="text-xs font-black tracking-widest text-white flex items-center gap-2 lg:justify-end">
                   <Phone className="w-3 h-3 opacity-40" />
-                  +91 93635 08381
+                  +91 62357 11495
+                </div>
+                <div className="text-xs font-black tracking-widest text-white flex items-center gap-2 lg:justify-end">
+                  <Phone className="w-3 h-3 opacity-40" />
+                  +91 96067 99617
                 </div>
               </div>
 

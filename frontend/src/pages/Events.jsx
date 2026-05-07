@@ -142,10 +142,10 @@ const Events = () => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Background INOVEX Text */}
+      {/* Background A J ASTRIX Text */}
       <div className="absolute inset-0 flex items-center justify-center md:pr-20 md:justify-end overflow-hidden pointer-events-none">
         <h1 className="text-[15rem] font-black text-white/5 tracking-tighter uppercase select-none md:rotate-0 rotate-90">
-          INOVEX
+          A J ASTRIX
         </h1>
       </div>
 

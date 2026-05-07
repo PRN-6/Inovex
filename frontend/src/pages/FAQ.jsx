@@ -8,16 +8,16 @@ const faqs = [
     icon: '🦖',
     items: [
       {
-        q: 'What is INOVEX?',
-        a: 'INOVEX is the premier annual techno-cultural symposium hosted by AJ Institute of Engineering & Technology. It is a multi-day expedition into technology, innovation, and culture — engineered for the next generation of visionaries.',
+        q: 'What is A J ASTRIX?',
+        a: 'A J ASTRIX is the premier annual techno-cultural symposium hosted by AJ Institute of Engineering & Technology. It is a multi-day expedition into technology, innovation, and culture — engineered for the next generation of visionaries.',
       },
       {
-        q: 'When and where does INOVEX take place?',
-        a: 'INOVEX is a 2-day event held on the main campus of AJ Institute of Engineering & Technology, Mangalore. Exact dates and venue specifics will be broadcast via official communication channels.',
+        q: 'When and where does A J ASTRIX take place?',
+        a: 'A J ASTRIX is a 2-day event held on the main campus of AJ Institute of Engineering & Technology, Mangalore. Exact dates and venue specifics will be broadcast via official communication channels.',
       },
       {
-        q: 'Who can attend INOVEX?',
-        a: 'INOVEX is open to all students — UG and PG — from colleges across the region. Some events are restricted to specific student categories (UG or PG only); this will be clearly indicated on each event\'s detail panel.',
+        q: 'Who can attend A J ASTRIX?',
+        a: 'A J ASTRIX is open to all students — UG and PG — from colleges across the region. Some events are restricted to specific student categories (UG or PG only); this will be clearly indicated on each event\'s detail panel.',
       },
     ],
   },
@@ -31,11 +31,11 @@ const faqs = [
       },
       {
         q: 'What is the Participant ID (PID)?',
-        a: 'The PID is your unique digital identifier for INOVEX 2026. It links your personal details, squad members, and selected events. You must present this PID at the College Entrance Desk for verification and physical payment.',
+        a: 'The PID is your unique digital identifier for A J ASTRIX 2026. It links your personal details, squad members, and selected events. You must present this PID at the College Entrance Desk for verification and physical payment.',
       },
       {
         q: 'How does the payment process work?',
-        a: 'INOVEX uses an "On-Arrival" payment protocol. After registering online and receiving your PID, head to the registration desk at AJIET campus. Show your PID, and you can complete the payment via the official QR codes provided at the counter.',
+        a: 'A J ASTRIX uses an "On-Arrival" payment protocol. After registering online and receiving your PID, head to the registration desk at AJIET campus. Show your PID, and you can complete the payment via the official QR codes provided at the counter.',
       },
       {
         q: 'Can I register for more events later?',
@@ -93,7 +93,7 @@ const faqs = [
       },
       {
         q: 'The website is not loading properly. What should I do?',
-        a: 'Try clearing your browser cache and reloading. INOVEX is optimized for modern browsers (Chrome, Firefox, Edge). If issues persist, try disabling browser extensions or switching to a different device/network.',
+        a: 'Try clearing your browser cache and reloading. A J ASTRIX is optimized for modern browsers (Chrome, Firefox, Edge). If issues persist, try disabling browser extensions or switching to a different device/network.',
       },
     ],
   },

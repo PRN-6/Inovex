@@ -53,7 +53,7 @@ const About = () => {
             <span className="text-xs font-black tracking-[0.4em] uppercase">Highly Confidential File</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-4">
-            Project <span className="text-red-600">Inovex</span>
+            Project <span className="text-red-600">A J ASTRIX</span>
           </h1>
           <div className="flex items-center gap-6 text-xs font-black tracking-widest text-white/30 uppercase">
             <span>Facility: Main Campus</span>
@@ -77,7 +77,7 @@ const About = () => {
 
               <div className="space-y-4 text-white/70 leading-relaxed font-light">
                 <p>
-                  Welcome to INOVEX, a premier technical and cultural symposium. What began as a mere experiment has morphed into a revolutionary timeline of events, blurring the line between technology and primal creativity.
+                  Welcome to A J ASTRIX, a premier technical and cultural symposium. What began as a mere experiment has morphed into a revolutionary timeline of events, blurring the line between technology and primal creativity.
                 </p>
                 <p>
                   Our engineers have spared no expense to bring this festival to life. By extracting ideas from the bedrock of innovation and sequencing them with cultural talent, we have engineered an experience that cannot be contained.

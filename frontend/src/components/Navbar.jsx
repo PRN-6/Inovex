@@ -223,7 +223,7 @@ const Navbar = () => {
           }}
         >
           <h1 className="text-xl font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-0 group-hover:w-auto overflow-hidden text-white whitespace-nowrap">
-            INOVEX
+            A J ASTRIX
           </h1>
         </div>
 

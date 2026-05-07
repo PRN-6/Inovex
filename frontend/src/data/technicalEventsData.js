@@ -4,10 +4,11 @@ export const technicalEventsData = {
     title: "Techsaurus: IT Manager",
     type: "technical",
     category: "Technical",
-    date: "March 15-17, 2026",
-    time: "11:30 AM - 12:30 PM",
-    location: "Tech Hub, Building A",
+    date: "May 15, 2026",
+    time: "10:30 AM",
+    // location: "Tech Hub, Building A",
     participants: "Individual",
+    entryFee: "₹150",
     description: "Test your IT management skills in this challenging competition. Participants will face real-world scenarios involving network management, system administration, and IT infrastructure planning.",
     rules: [
       "All participants must report 15 minutes before the event starts.",
@@ -42,21 +43,23 @@ export const technicalEventsData = {
   },
   2: {
     id: 2,
-    title: "Hidden Horizon - QR Treasure Hunt",
+    title: "Hidden Horizon - Treasure Hunt",
     type: "technical",
     category: "Adventure",
-    date: "March 16, 2026",
-    time: "10:00 AM - 4:00 PM",
-    location: "College Campus",
-    participants: "Team of 3-4",
-    prize: "₹8,000",
-    description: "A spy-themed treasure hunt where teams act as secret agents. Solve clues, complete activities, and move across checkpoints to uncover the final secret mission using a volunteer-guided QR system.",
+    date: "May 16, 2026",
+    time: "11:00",
+    // location: "College Campus",
+    participants: "Team of 4",
+    entryFee: "₹300",
+    description: "Hidden Horizon is an adventurous dinosaur-themed treasure hunt where participants enter a mysterious lost world filled with ancient fossils, hidden clues, secret riddles, and thrilling challenges. Trapped inside the Dino World, teams must work together to solve puzzles, decode mysteries with the help of a secret spy, rescue the endangered Dino Egg, and collect powerful Dino Fossils to uncover the final secret. Successfully solving the fossil mystery will lead teams back to the real world with a grand treasure as their reward.",
     rules: [
-      "No personal phones used for clue scanning; only volunteer phone allowed",
-      "One volunteer assigned per team to verify tasks",
-      "Staggered start times and unique routes to avoid crowding",
-      "Complete the checkpoint task to receive the next QR clue",
-      "Assemble all QR fragments at the finale"
+      "Mobile phones are strictly prohibited during the event",
+      "Following other teams or clue sharing is prohibited",
+      "Complete every checkpoint challenge to move to the next level",
+      "Teams must follow volunteer instructions throughout the event",
+      "If no team completes the final mission within the given time limit, winners will be selected based on time, accuracy, and overall performance",
+      "Judges’ and organizers’ decisions will be final",
+      "Spot and online registrations are allowed"
     ],
     coordinators: [
       {
@@ -72,7 +75,7 @@ export const technicalEventsData = {
     ],
     facultyCoordinators: [
       {
-        name: "Mrs. Jayashree J",
+        name: "Dr. Vijesh K",
         contact: "TBD",
       }
     ],
@@ -118,12 +121,12 @@ export const technicalEventsData = {
     title: "Cinesaur: Reel Making",
     type: "technical",
     category: "Creative",
-    date: "TBD",
-    time: "On the Spot",
-    location: "College Campus",
+    date: "May 15, 2026",
+    time: "10:30",
+    // location: "College Campus",
     participants: "Team of 2",
-    prize: "₹7,000 Pool",
-    description: "Cinesaur is a Jurassic-themed reel making competition! Shoot an original 30–60 second reel based on a surprise theme given on the spot. Entire shoot must happen inside the campus — classroom scenes are mandatory.",
+    entryFee: "₹300",
+    description: "Cinesaur is a jurassic-themed reel making competition! Shoot an original 30-60 seconds reel based on a surprise theme given on the spot. Entire shoot must happen inside the campus - classroom scenes are mandatory.",
     rules: [
       "Teams of exactly 2 members; open to all students",
       "Reel duration: minimum 30 seconds, maximum 60 seconds",
@@ -133,13 +136,13 @@ export const technicalEventsData = {
     ],
     coordinators: [
       {
-        name: "Darshan Acharya",
-        contact: "TBD",
-        photo: "/images/event-heads/mca/darshan-acharya.webp"
+        name: "Darshan Prabhakar",
+        contact: "9480979158",
+        photo: "/images/event-heads/mca/darshan.webp"
       },
       {
         name: "Joycil Britto",
-        contact: "TBD",
+        contact: "7411318752",
         photo: "/images/event-heads/mca/joycil.webp"
       }
     ],
@@ -150,25 +153,25 @@ export const technicalEventsData = {
       }
     ],
     image: "/images/cards/card4.webp",
-    roundsConducted: 1,
-    roundsData: [
-      {
-        name: "Reel Shoot & Submission",
-        time: "On the Day",
-        desc: "Theme is revealed on the spot. Teams shoot an original 30–60 second reel across campus (classroom scene mandatory), then submit for judging on creativity, originality, editing quality, and theme relevance."
-      }
-    ]
+    // roundsConducted: 1,
+    // roundsData: [
+    //   {
+    //     name: "Reel Shoot & Submission",
+    //     time: "On the Day",
+    //     desc: "Theme is revealed on the spot. Teams shoot an original 30–60 second reel across campus (classroom scene mandatory), then submit for judging on creativity, originality, editing quality, and theme relevance."
+    //   }
+    // ]
   },
   5: {
     id: 5,
     title: "Dinox: Web Design",
     type: "technical",
     category: "Technical",
-    date: "March 19, 2026",
-    time: "11:00 AM - 4:00 PM",
+    date: "May 16, 2026",
+    time: "11:00 AM",
     location: "College Lab",
     participants: "Team of 2",
-    prize: "₹3,000",
+    entryFee: "₹300",
     description: "From Design to Reality! An intense two-round web development competition utilizing pristine HTML, CSS, and JS. Systems equipped with VS Code will be provided. Can you recreate perfection and outcode the rest?",
     rules: [
       "Teams of exactly 2 members. Must report 30 minutes before 11:00 AM",
@@ -184,37 +187,38 @@ export const technicalEventsData = {
         photo: "/images/event-heads/mca/shreyas-acharya.webp"
       },
       {
-        name: "Swathi",
-        contact: "TBD",
+        name: "Swathi Kumari",
+        contact: "9353174809",
         photo: "/images/event-heads/mca/swathi.webp"
       }
     ],
     facultyCoordinators: [
       {
-        name: "Dr. Vijesh Krishnan",
+        name: "Mrs. Rashmi K.A",
         contact: "TBD",
       }
     ],
     image: "/images/cards/card5.webp",
-    roundsConducted: 2,
   },
   6: {
     id: 6,
-    title: "RexHack: Hackathon",
+    title: "RexHack: CodeRex",
     type: "technical",
     category: "Technical",
-    date: "TBD",
-    time: "6 Hours Duration",
-    location: "Room no: 426 (AJIET Lab)",
-    participants: "Team of 4",
-    prize: "From ₹5,000 Pool",
-    description: "Welcome to RexHack, a Jurassic-themed department hackathon! In this intensive 6-hour event, teams collaborate to build innovative solutions to real-world problems. Evolve your code and survive the pressure!",
+    date: "May 15, 2026",
+    time: "10:30 AM",
+    // location: "Room no: 426 (AJIET Lab)",
+    participants: "Team of 2",
+    entryFee: "₹300",
+    description: "Welcome to Code Rex, a Jurassic-themed department hackathon! In this intensive 6-hour event, teams collaborate to build innovative solutions to real-world problems. Evolve your code and survive the pressure!",
     rules: [
-      "Teams of exactly 4 members",
-      "Event duration is strictly 6 hours",
-      "Participants must bring their own laptops and chargers (Wi-Fi will be provided)",
-      "Problem statements/themes are announced at the beginning of the hackathon",
-      "Final evaluation is based on a live presentation and functionality demonstration"
+      "The event consists of two stages and all coding must be done in Java language only",
+      "Teams of exactly 2 members",
+      "Participants must follow all instructions and maintain discipline throughout the event",
+      "Mobile phones and any external help are strictly not allowed",
+      "Any unfair practice will lead to disqualification and judges’ decision will be final",
+      "Evaluation will be based on correctness of output, logic, and code accuracy",
+      "Teamwork, communication, and performance under time pressure will also be considered"
     ],
     coordinators: [
       {
@@ -230,7 +234,7 @@ export const technicalEventsData = {
     ],
     facultyCoordinators: [
       {
-        name: "Mr. Ragesh Raju",
+        name: "Mrs. Manasa",
         contact: "TBD",
       }
     ],

@@ -6,9 +6,9 @@ export const managementEventsData = {
     category: "Management",
     date: "March 15, 2026",
     time: "10:00 AM - 1:00 PM",
-    location: "Business Hall",
+    // location: "Business Hall",
     participants: "Team of 2",
-    prize: "₹5,000",
+    entryFee: "₹300",
     description: "A dynamic HR showcase highlighting talent identification, development, and strong team culture through strategic decision-making. It emphasizes building future-ready professionals by recognizing people as the core strength of every successful organization.",
     rules: [
       "Each team consists of 2 participants.",
@@ -28,7 +28,7 @@ export const managementEventsData = {
     ],
     facultyCoordinators: [
       {
-        name: "Mr. Ragesh Raju",
+        name: "Mrs Krithi V Rao",
         contact: "TBD",
       }
     ],
@@ -40,10 +40,10 @@ export const managementEventsData = {
     type: "management",
     category: "Management",
     date: "May 15, 2026",
-    time: "9:00 AM - 5:00 PM",
-    location: "Main Auditorium",
+    // time: "9:00 ",
+    // location: "Main Auditorium",
     participants: "Team of 2",
-    prize: "₹10,000",
+    entryFee: "₹300",
     description: "“Best Marketing Team – Roar & Reach” is a dynamic competition designed to test creativity, strategic thinking, and teamwork in the ever-evolving world of marketing. Set in the thrilling Jurassic Park theme, this event challenges participants to survive the competitive market jungle by adapting to changing scenarios, innovating bold ideas, and delivering powerful marketing strategies. Just like the mightiest dinosaurs ruled their territory, teams must showcase their ability to think fast, communicate effectively, and make the world hear their brand roar.",
     rules: [
       "This is a team event, and each team must consist of 2 participants only.",
@@ -63,7 +63,7 @@ export const managementEventsData = {
     ],
     facultyCoordinators: [
       {
-        name: "Mrs. Jayashree J",
+        name: "Mrs Shriraksha T N",
         contact: "TBD",
       }
     ],
@@ -76,9 +76,9 @@ export const managementEventsData = {
     category: "Management",
     date: "May 15, 2026",
     time: "11:00 AM - 2:00 PM",
-    location: "Finance Lab",
+    // location: "Finance Lab",
     participants: "Individual",
-    prize: "₹6,000",
+    entryFee: "₹150",
     description: "Represents the ultimate leadership challenge where participants are tested on their ability to think, decide, and lead with authority—just like the apex predator ruling the Jurassic world.",
     rules: [
       "This is an individual (solo event) and each entry must consist of only one participant.",
@@ -98,7 +98,7 @@ export const managementEventsData = {
     ],
     facultyCoordinators: [
       {
-        name: "Dr. Vijesh Krishnan",
+        name: "Mrs Latha B",
         contact: "TBD",
       }
     ],
@@ -111,9 +111,9 @@ export const managementEventsData = {
     category: "Finance",
     date: "May 15, 2026",
     time: "10:00 AM - 1:00 PM",
-    location: "Incubation Center",
+    // location: "Incubation Center",
     participants: "Team of 2",
-    prize: "₹8,000",
+    entryFee: "₹300",
     description: "Golden Fossils is a thrilling finance and strategy-based management game designed to test participants’ decision-making, negotiation, analytical thinking, and risk management skills.",
     rules: [
       "Each team must consist of 2 participants.",
@@ -134,7 +134,7 @@ export const managementEventsData = {
     ],
     facultyCoordinators: [
       {
-        name: "Mr. Ragesh Raju",
+        name: "Mr. Dr Rakesh M",
         contact: "TBD",
       }
     ],
@@ -145,11 +145,11 @@ export const managementEventsData = {
     title: "Cinesaur: Reel Making",
     type: "management",
     category: "Creative",
-    date: "TBD",
-    time: "On the Spot",
-    location: "College Campus",
+    date: "May 15, 2026",
+    time: "10:30",
+    // location: "College Campus",
     participants: "Team of 2",
-    prize: "₹7,000 Pool",
+    entryFee: "₹300",
     description: "Cinesaur is a Jurassic-themed reel making competition! Shoot an original 30–60 second reel based on a surprise theme given on the spot. Entire shoot must happen inside the campus — classroom scenes are mandatory.",
     rules: [
       "Teams of exactly 2 members; open to all students",
@@ -160,31 +160,23 @@ export const managementEventsData = {
     ],
     coordinators: [
       {
-        name: "Darshan Acharya",
-        contact: "TBD",
-        photo: "/images/event-heads/mba/darshan-acharya.webp"
+        name: "Akshath Shetty K",
+        contact: "6235280508",
+        photo: "/images/event-heads/mba/Akshath.webp"
       },
       {
-        name: "Joycil Britto",
-        contact: "TBD",
-        photo: "/images/event-heads/mba/joycil.webp"
+        name: "Pratham d pakkala",
+        contact: "9353695801",
+        photo: "/images/event-heads/mba/Pratham.webp"
       }
     ],
     facultyCoordinators: [
       {
-        name: "Mrs. Jayashree J",
+        name: "Dr Keerthan Dixit A",
         contact: "TBD",
       }
     ],
     image: "/images/cards/card4.webp",
-    roundsConducted: 1,
-    roundsData: [
-      {
-        name: "Reel Shoot & Submission",
-        time: "On the Day",
-        desc: "Theme is revealed on the spot. Teams shoot an original 30–60 second reel across campus (classroom scene mandatory), then submit for judging on creativity, originality, editing quality, and theme relevance."
-      }
-    ]
   },
 
 };

@@ -248,7 +248,7 @@ const Register = () => {
 
     ctx.fillStyle = '#f59e0b';
     ctx.font = 'italic 900 42px Arial';
-    ctx.fillText('INOVEX 2026', 45, 80);
+    ctx.fillText('A J ASTRIX 2026', 45, 80);
 
     ctx.font = 'bold 13px Arial';
     ctx.fillText('OFFICIAL EXPEDITION ACCESS MANIFEST', 45, 105);
@@ -334,7 +334,7 @@ const Register = () => {
     ctx.fillText('ACCESS GRANTED UPON INTEL VERIFICATION', 555, (canvas.height / scale) - 45);
 
     const link = document.createElement('a');
-    link.download = `INOVEX_2026_MASTER_PASS_${pid}.png`;
+    link.download = `AJ_ASTRIX_2026_MASTER_PASS_${pid}.png`;
     link.href = canvas.toDataURL('image/png', 1.0);
     link.click();
   };

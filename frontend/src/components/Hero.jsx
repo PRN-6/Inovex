@@ -188,11 +188,14 @@ const Hero = () => {
         </div>
 
         {/* Right Side: Primary Logo */}
-        <div ref={logoRef} className="mb-8 md:mb-0 md:-mt-48 md:mr-32 lg:mr-48 flex items-center justify-center drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] will-change-transform will-change-opacity order-first md:order-last">
+        <div ref={logoRef} className="relative mb-8 md:mb-0 md:-mt-48 md:mr-32 lg:mr-48 flex items-center justify-center will-change-transform will-change-opacity order-first md:order-last group">
+          {/* Background Glow - Shadowy Amber */}
+          <div className="absolute inset-0 bg-amber-950/40 blur-[80px] md:blur-[120px] rounded-full scale-150 animate-pulse pointer-events-none z-0"></div>
+          
           <img
             src="/images/astrix.svg"
-            alt="INOVEX Logo"
-            className="w-36 md:w-56 lg:w-72 xl:w-96 h-auto object-contain"
+            alt="A J ASTRIX Logo"
+            className="w-36 md:w-56 lg:w-72 xl:w-96 h-auto object-contain relative z-10 drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:scale-105"
           />
         </div>
       </div>
