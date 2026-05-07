@@ -256,7 +256,10 @@ const Navbar = () => {
             {socialIcons.map((social, index) => (
               <button
                 key={index}
-                onClick={() => social.label === 'Feedback' ? setIsFeedbackOpen(true) : null}
+                onClick={() => {
+                  if (social.label === 'Feedback') setIsFeedbackOpen(true);
+                  else if (social.url) window.open(social.url, '_blank');
+                }}
                 className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-red-900/30 rounded-lg w-full flex justify-center cursor-pointer"
                 title={social.label}
               >

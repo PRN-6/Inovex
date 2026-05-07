@@ -226,6 +226,26 @@ const EventModal = ({ event, isOpen, onClose }) => {
                       <p className="text-sm font-semibold">{event.participants}</p>
                     </div>
                   </div>
+                  {event.prize && (
+                    <div className="flex items-center gap-3">
+                      <Trophy className="w-5 h-5 text-jurassic-yellow" />
+                      <div>
+                        <p className="text-xs text-white/60">Prize Pool</p>
+                        <p className="text-sm font-semibold text-yellow-400">{event.prize}</p>
+                      </div>
+                    </div>
+                  )}
+                  {event.entryFee && (
+                    <div className="flex items-center gap-3 bg-red-950/40 border border-red-500/30 rounded-xl p-2 -ml-2">
+                      <div className="p-2 bg-red-500/20 rounded-lg">
+                        <Tag className="w-5 h-5 text-red-400" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-red-200/80 font-black uppercase tracking-widest">Registration Fee</p>
+                        <p className="text-base font-black text-red-400 drop-shadow-[0_0_5px_rgba(248,113,113,0.8)]">{event.entryFee}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

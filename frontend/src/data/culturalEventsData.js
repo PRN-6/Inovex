@@ -9,6 +9,7 @@ export const culturalEventsData = {
     location: "Auditorium",
     participants: "Individual/Group",
     prize: "₹12,000",
+    entryFee: "₹500",
     description: "Showcase your musical talent in this electrifying competition. Solo artists and bands welcome to compete.",
     rules: [
       "Solo or group participation (max 6 members)",
@@ -42,6 +43,7 @@ export const culturalEventsData = {
     location: "Auditorium",
     participants: "Team of 3",
     prize: "₹9,000",
+    entryFee: "₹400",
     description: "Challenge your knowledge across various domains. From science to pop culture, test your trivia skills.",
     rules: [
       "Teams of 3 participants",
@@ -75,6 +77,7 @@ export const culturalEventsData = {
     location: "Auditorium",
     participants: "Individual/Group",
     prize: "₹15,000",
+    entryFee: "₹400",
     description: "Express yourself through dance. Any style welcome - from classical to contemporary, hip-hop to traditional.",
     rules: [
       "Solo or group participation (max 8 members)",
@@ -108,6 +111,7 @@ export const culturalEventsData = {
     location: "Auditorium",
     participants: "Individual",
     prize: "₹10,000",
+    entryFee: "₹100",
     description: "Display your artistic talent in this two-day exhibition. Paintings, sketches, digital art, and sculptures welcome.",
     rules: [
       "Individual participation only",
@@ -163,5 +167,48 @@ export const culturalEventsData = {
       }
     ],
     image: "/images/cards/card17.webp"
-  }
+  },
+  20: {
+    id: 20,
+    title: "BATTLE NEXUS: Gaming",
+    type: "cultural",
+    category: "Gaming",
+    date: "TBD",
+    time: "Starts at 10:00 AM / 11:00 AM",
+    location: "Computer Lab",
+    participants: "Team of 4 (Squad)",
+    prize: "Trophy + Cash",
+    description: "Ultimate Free Fire tournament! Battle out in squad format to prove your survival strategy. The tournament features a League or Knockout format depending on team entries.",
+    rules: [
+      "Each team must consist of 4 players",
+      "No player can participate in multiple teams",
+      "Participants must report 10 minutes before the match",
+      "No emulators or unfair tools allowed",
+      "Personal accessories (thumb grips, etc.) are allowed",
+      "Any form of cheating leads to disqualification",
+      "Organizer’s decision will be final",
+      "Map will be decided on the spot",
+      "All participants are responsible for bringing their own necessary devices and accessories (e.g., mobile phones, cooling pads, chargers, etc.) required for participation. No additional equipment will be provided by the organizers."
+    ],
+    coordinators: [
+      {
+        name: "Surya",
+        contact: "6362006510",
+        photo: "/images/event-heads/mca/surya.webp"
+      },
+      {
+        name: "Niyam Shetty",
+        contact: "8431984083",
+        photo: "/images/event-heads/mca/niyam-shetty.webp"
+      }
+    ],
+    facultyCoordinators: [
+      {
+        name: "Mrs. Jayashree J",
+        contact: "TBD",
+      }
+    ],
+    image: "/images/cards/card7.webp",
+    roundsConducted: 2,
+  },
 };

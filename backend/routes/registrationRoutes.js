@@ -31,7 +31,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 
         // Create a new registration entry every time (Duplicates allowed as per request)
         const user = new User({
-            name, email, phone, college, usn: usn.toUpperCase(), year, department, registrations,
+            name, email, phone, college, usn: usn ? usn.toUpperCase() : undefined, year, department, registrations,
             registrationDate: new Date()
         });
 
@@ -58,11 +58,11 @@ router.post('/register', registerLimiter, async (req, res) => {
     }
 });
 
-// @route   GET /api/check-registration/:usn
-router.get('/check-registration/:usn', async (req, res) => {
+// @route   GET /api/check-registration/:email
+router.get('/check-registration/:email', async (req, res) => {
     try {
-        const { usn } = req.params;
-        const user = await User.findOne({ usn: usn.toUpperCase() });
+        const { email } = req.params;
+        const user = await User.findOne({ email: email.toLowerCase() });
         res.json({ success: true, registeredEvents: user ? user.registrations.map(r => r.eventName) : [] });
     } catch (error) {
         res.status(500).json({ success: false, message: "Verification failed" });

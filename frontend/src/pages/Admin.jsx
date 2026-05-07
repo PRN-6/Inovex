@@ -152,7 +152,7 @@ const Admin = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-black italic text-white tracking-tight leading-none">{reg.name?.toUpperCase()}</h3>
-                  <p className="text-[10px] font-black text-red-600/60 tracking-[0.4em] uppercase mt-1">Classification: Active Asset</p>
+                  <p className="text-[10px] font-black text-red-600/60 tracking-[0.4em] uppercase mt-1">Classification: Representative</p>
                 </div>
               </div>
                 <div className="flex items-center gap-2">
@@ -170,22 +170,15 @@ const Admin = () => {
                   <section>
                     <div className="flex items-center gap-2 mb-4">
                        <User size={14} className="text-red-600" />
-                       <h4 className="text-[10px] font-black tracking-[0.3em] text-white/40 uppercase">Identity Intel</h4>
+                       <h4 className="text-[10px] font-black tracking-[0.3em] text-white/40 uppercase">Representative Intel</h4>
                     </div>
                     <div className="space-y-4">
                        <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl group hover:border-red-600/30 transition-all">
-                          <div className="mb-3">
+                          <div className="">
                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Participant ID</p>
                             <div className="flex items-center justify-between">
                               <span className="text-sm font-black text-red-600 tracking-widest">{reg.participantId || 'PENDING'}</span>
                               <button onClick={() => copyToClipboard(reg.participantId)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-red-600" /></button>
-                            </div>
-                          </div>
-                          <div className="pt-3 border-t border-white/5">
-                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Asset USN</p>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm font-bold text-white tracking-widest">{reg.usn}</span>
-                              <button onClick={() => copyToClipboard(reg.usn)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-red-600" /></button>
                             </div>
                           </div>
                        </div>
@@ -248,9 +241,11 @@ const Admin = () => {
                                   <div key={ti} className="flex flex-col p-2 bg-black/40 rounded-lg border border-white/5">
                                     <p className="text-[10px] font-black text-white flex items-center gap-2">
                                       <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
-                                      SQUAD {ti + 2}: {t.name}
+                                      SQUAD {ti + 1}: {t.name}
                                     </p>
-                                    <p className="text-[8px] font-bold text-white/30 ml-3.5 tracking-widest">{t.usn} // {t.email}</p>
+                                    <p className="text-[8px] font-bold text-white/30 ml-3.5 tracking-widest">
+                                      {t.phone || (t.email ? `${t.email}` : 'NO CONTACT')}
+                                    </p>
                                   </div>
                                 ))}
                              </div>
@@ -426,13 +421,11 @@ const Admin = () => {
     return registrations.filter(reg => {
       if (!reg) return false;
       const name = String(reg.name || '');
-      const usn = String(reg.usn || '');
       const email = String(reg.email || '');
       const pid = String(reg.participantId || '');
 
       const matchesSearch =
         name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        usn.toLowerCase().includes(searchQuery.toLowerCase()) ||
         email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         pid.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -468,9 +461,9 @@ const Admin = () => {
   }, [registrations]);
 
   const exportCSV = () => {
-    const headers = ["PID", "Name", "Email", "Phone", "USN", "College", "Year", "Dept", "Events"];
+    const headers = ["PID", "Name", "Email", "Phone", "College", "Year", "Dept", "Events"];
     const csvData = filteredData.map(r => [
-      r.participantId || 'PENDING', r.name, r.email, r.phone, r.usn, r.college, r.year, r.department,
+      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, r.year, r.department,
 
       r.registrations.map(ev => ev.eventName).join(" | ")
     ]);
@@ -486,13 +479,13 @@ const Admin = () => {
   };
 
   const exportToExcel = () => {
-    const tableHeader = ["PID", "NAME", "EMAIL", "PHONE", "USN", "COLLEGE", "YEAR", "DEPT", "EVENTS"];
+    const tableHeader = ["PID", "NAME", "EMAIL", "PHONE", "COLLEGE", "YEAR", "DEPT", "EVENTS"];
     const rows = filteredData.map(r => [
-      r.participantId || 'PENDING', r.name, r.email, r.phone, r.usn, r.college, r.year, r.department,
+      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, r.year, r.department,
 
       r.registrations?.map(ev => {
         const teamInfo = ev.teammates?.length > 0
-          ? ` (Squad: ${ev.teammates.map(t => `${t.name} [USN: ${t.usn}, Email: ${t.email}]`).join(" | ")})`
+          ? ` (Squad: ${ev.teammates.map(t => `${t.name} [${t.phone || `Email: ${t.email}`}]`).join(" | ")})`
           : "";
         return `${ev.eventName}${teamInfo}`;
       }).join(" | ")
@@ -558,7 +551,6 @@ const Admin = () => {
             <tr>
               <th>PID</th>
               <th>NAME</th>
-              <th>IDENTIFICATION</th>
               <th>COLLEGE / DEPT</th>
               <th>QUESTS & SQUADS</th>
 
@@ -569,7 +561,6 @@ const Admin = () => {
               <tr>
                 <td><b>${r.participantId || 'PENDING'}</b></td>
                 <td><b>${r.name}</b><br>${r.email}</td>
-                <td>${r.usn}</td>
                 <td>${r.college}<br>${r.department} (Year ${r.year})</td>
 
                 <td>
@@ -578,7 +569,7 @@ const Admin = () => {
                       <b>${ev.eventName}</b>
                       ${ev.teammates?.length > 0 ? `
                         <div class="squad">
-                          ${ev.teammates.map(t => `${t.name} (${t.usn})`).join(", ")}
+                          ${ev.teammates.map(t => `${t.name} (${t.phone || t.email || ''})`).join(", ")}
                         </div>
                       ` : ''}
                     </div>
@@ -964,7 +955,7 @@ const Admin = () => {
                     </button>
                   </th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">PID</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">PARTICIPANT</th>
+                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">REPRESENTATIVE</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">CONTACT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">GUILD / DEPT</th>
                   <th className="p-4 text-[10px] font-black tracking-widest text-white/30">QUESTS</th>
@@ -1035,7 +1026,7 @@ const Admin = () => {
                                 <div className="ml-2 pl-2 border-l border-red-900/30 flex flex-col gap-1">
                                   {ev.teammates.map((t, ti) => (
                                     <p key={ti} className="text-[7px] font-bold text-white/40 tracking-wider">
-                                      <span className="text-red-500/60 mr-1">SQUAD {ti + 2}:</span> {t.name} [{t.usn}]
+                                      <span className="text-red-500/60 mr-1">SQUAD {ti + 1}:</span> {t.name} [{t.phone || t.usn || '?'}]
                                     </p>
                                   ))}
                                 </div>

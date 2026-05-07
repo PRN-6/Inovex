@@ -99,7 +99,7 @@ const Footer = () => {
           {/* Section 1: Branding Overlay */}
           <div className="lg:col-span-3 space-y-8">
             <div className="space-y-2">
-              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter leading-none">INOVEX</h2>
+              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter leading-none">A J ASTRIX</h2>
               <div className="flex items-center gap-2 text-[10px] font-black tracking-[0.4em] text-red-600">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
                 Code the Future // Create the Change
@@ -248,9 +248,9 @@ const Footer = () => {
 
               <div className="space-y-1 ">
                 <span className="text-[9px] font-black text-white/30 tracking-widest block uppercase">Contact AJIET</span>
-                <a href="mailto:inovex2026@gmail.com" className="text-xs font-black tracking-widest text-white hover:text-red-500 transition-all flex items-center gap-2 lg:justify-end lowercase">
+                <a href="mailto:ajastrix2026@gmail.com" className="text-xs font-black tracking-widest text-white hover:text-red-500 transition-all flex items-center gap-2 lg:justify-end lowercase">
                   <Mail className="w-3 h-3 opacity-40" />
-                  inovex2026@gmail.com
+                  ajastrix2026@gmail.com
                 </a>
                 <div className="text-xs font-black tracking-widest text-white flex items-center gap-2 lg:justify-end">
                   <Phone className="w-3 h-3 opacity-40" />
@@ -264,7 +264,7 @@ const Footer = () => {
                   <a href="#" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group" title="TERMINAL CHAT">
                     <MessageSquare size={18} className="opacity-60 group-hover:opacity-100" />
                   </a>
-                  <a href="#" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group" title="INSTAGRAM FEED">
+                  <a href="https://www.instagram.com/astrix_.2026/" target="_blank" rel="noopener noreferrer" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group" title="INSTAGRAM FEED">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 group-hover:opacity-100"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                   </a>
                   <a href="#" className="p-2 border border-white/10 hover:border-red-600 hover:text-red-600 transition-all group" title="YOUTUBE FEED">
@@ -280,7 +280,7 @@ const Footer = () => {
         {/* Global Footer Meta */}
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black tracking-[0.4em] text-white/20">
           <div className="flex items-center gap-4 text-center md:text-left">
-            <span>© 2026 INOVEX</span>
+            <span>© 2026 A J ASTRIX</span>
             <span className="hidden md:block w-4 h-[1px] bg-white/10"></span>
             <span>ALL ASSETS SECURED</span>
           </div>
@@ -294,7 +294,7 @@ const Footer = () => {
 
       {/* Extreme Background Aesthetic */}
       <div className="absolute -bottom-10 -right-10 text-[25vw] font-black italic opacity-[0.02] pointer-events-none translate-y-20 select-none overflow-hidden">
-        INOVEX
+        A J ASTRIX
       </div>
 
     </footer>

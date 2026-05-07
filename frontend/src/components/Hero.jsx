@@ -151,7 +151,7 @@ const Hero = () => {
               {/* MBA Logo */}
               <div className="relative w-36 h-36 md:w-56 md:h-56 transition-all duration-500 flex items-center justify-center group">
                 <img
-                  src="/images/logo.svg"
+                  src="/images/mba-logo.svg"
                   alt="MBA Logo"
                   className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]"
                 />
@@ -188,11 +188,11 @@ const Hero = () => {
         </div>
 
         {/* Right Side: Primary Logo */}
-        <div ref={logoRef} className="mb-8 md:mb-0 md:-mt-48 md:mr-4 lg:mr-8 flex items-center justify-center drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] will-change-transform will-change-opacity order-first md:order-last">
+        <div ref={logoRef} className="mb-8 md:mb-0 md:-mt-48 md:mr-32 lg:mr-48 flex items-center justify-center drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] will-change-transform will-change-opacity order-first md:order-last">
           <img
-            src="/images/logo.svg"
+            src="/images/astrix.svg"
             alt="INOVEX Logo"
-            className="w-64 md:w-96 lg:w-[32rem] xl:w-[40rem] h-auto object-contain"
+            className="w-36 md:w-56 lg:w-72 xl:w-96 h-auto object-contain"
           />
         </div>
       </div>

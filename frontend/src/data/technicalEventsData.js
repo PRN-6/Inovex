@@ -10,16 +10,19 @@ export const technicalEventsData = {
     participants: "Individual",
     description: "Test your IT management skills in this challenging competition. Participants will face real-world scenarios involving network management, system administration, and IT infrastructure planning.",
     rules: [
-      "Individual participation only",
-      "Bring your own laptop",
-      "Internet access will be provided",
-      "No external storage devices allowed",
-      "Decision of judges will be final"
+      "All participants must report 15 minutes before the event starts.",
+      "Participants must carry their college ID cards.",
+      "Mobile phones are not allowed during rounds unless permitted.",
+      "Use of unfair means or malpractice leads to immediate disqualification.",
+      "Participants must maintain discipline and respect judges’ decisions.",
+      "Late entries may not be permitted once a round begins.",
+      "Only shortlisted participants will move to the next round.",
+      "Judges’ decisions will be final and binding."
     ],
     coordinators: [
       {
         name: "Swathi Naik",
-        contact: "9876543210",
+        contact: "9353174809",
         photo: "/images/event-heads/mca/swathi-naik.webp"
       },
       {
@@ -30,11 +33,7 @@ export const technicalEventsData = {
     ],
     facultyCoordinators: [
       {
-        name: "Dr. Vijesh Krishnan",
-        contact: "TBD",
-      },
-      {
-        name: "Mr. Ragesh Raju",
+        name: "Mr. Gururaja",
         contact: "TBD",
       }
     ],
@@ -238,45 +237,7 @@ export const technicalEventsData = {
     image: "/images/cards/card6.webp",
     roundsConducted: 2,
   },
-  7: {
-    id: 7,
-    title: "BATTLE NEXUS: Gaming",
-    type: "technical",
-    category: "Entertainment",
-    date: "TBD",
-    time: "Starts at 10:00 AM / 11:00 AM",
-    location: "Computer Lab",
-    participants: "Team of 4 (Squad)",
-    prize: "Trophy + Cash",
-    description: "Ultimate Free Fire tournament! Battle out in squad format to prove your survival strategy. The tournament features a League or Knockout format depending on team entries.",
-    rules: [
-      "Each team must have 4 players; no player can join multiple teams",
-      "Personal accessories like powder, thumb grips, etc., are allowed",
-      "No emulators or unfair tools allowed; c  heating leads to disqualification",
-      "Report to the Computer Lab 10 minutes prior to the match",
-      "Organizer's decision is final and maps will be decided on the spot"
-    ],
-    coordinators: [
-      {
-        name: "Durgashree",
-        contact: "6362006510",
-        photo: "/images/event-heads/mca/durgashree.webp"
-      },
-      {
-        name: "Niyam Shetty",
-        contact: "8431984083",
-        photo: "/images/event-heads/mca/niyam-shetty.webp"
-      }
-    ],
-    facultyCoordinators: [
-      {
-        name: "Mrs. Jayashree J",
-        contact: "TBD",
-      }
-    ],
-    image: "/images/cards/card7.webp",
-    roundsConducted: 2,
-  },
+
   // 8: {
   //   id: 8,
   //   title: "Genesis Reborn: Product Launch",

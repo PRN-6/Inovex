@@ -24,7 +24,6 @@ const userSchema = new mongoose.Schema({
     },
     usn: {
         type: String,
-        required: [true, 'USN is required'],
         trim: true,
         uppercase: true
     },
@@ -41,6 +40,7 @@ const userSchema = new mongoose.Schema({
         eventName: String,
         teammates: [{
             name: String,
+            phone: String,
             usn: String,
             email: String
         }]
