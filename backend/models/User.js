@@ -22,11 +22,7 @@ const userSchema = new mongoose.Schema({
         required: [true, 'College name is required'],
         trim: true
     },
-    usn: {
-        type: String,
-        trim: true,
-        uppercase: true
-    },
+
     year: {
         type: String,
         required: [true, 'Year of study is required']
@@ -41,7 +37,6 @@ const userSchema = new mongoose.Schema({
         teammates: [{
             name: String,
             phone: String,
-            usn: String,
             email: String
         }]
     }],
@@ -79,7 +74,6 @@ userSchema.pre('save', async function() {
 
 // Optimization: Add indexes for speed (removed unique constraints to allow multiple registrations)
 userSchema.index({ email: 1 });
-userSchema.index({ usn: 1 });
 userSchema.index({ registrationDate: -1 });
 
 const User = mongoose.model('User', userSchema);

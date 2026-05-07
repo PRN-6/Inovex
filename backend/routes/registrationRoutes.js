@@ -21,7 +21,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 
     try {
         let { 
-            name, email, phone, college, usn, year, department, registrations,
+            name, email, phone, college, year, department, registrations,
             hp_field 
         } = req.body;
 
@@ -31,7 +31,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 
         // Create a new registration entry every time (Duplicates allowed as per request)
         const user = new User({
-            name, email, phone, college, usn: usn ? usn.toUpperCase() : undefined, year, department, registrations,
+            name, email, phone, college, year, department, registrations,
             registrationDate: new Date()
         });
 
