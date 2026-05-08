@@ -136,24 +136,24 @@ const Hero = () => {
 
             {/* Logos Row */}
             <div className="flex flex-row items-center gap-1 md:gap-2">
-              {/* MCA Logo */}
-              <div className="relative w-36 h-36 md:w-56 md:h-56 transition-all duration-500 flex items-center justify-center group">
-                <img
-                  src="/images/logo.svg"
-                  alt="MCA Logo"
-                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-                />
-              </div>
-
-              {/* Collaboration X */}
-              <div className="text-2xl md:text-4xl font-black text-white/20 select-none">X</div>
-
               {/* MBA Logo */}
               <div className="relative w-36 h-36 md:w-56 md:h-56 transition-all duration-500 flex items-center justify-center group">
                 <img
                   src="/images/mba-logo.svg"
                   alt="MBA Logo"
                   className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+                />
+              </div>
+
+              {/* Collaboration X */}
+              <div className="text-2xl md:text-4xl font-black text-white/20 select-none">X</div>
+
+              {/* MCA Logo */}
+              <div className="relative w-36 h-36 md:w-56 md:h-56 transition-all duration-500 flex items-center justify-center group">
+                <img
+                  src="/images/logo.svg"
+                  alt="MCA Logo"
+                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
                 />
               </div>
             </div>
@@ -191,7 +191,7 @@ const Hero = () => {
         <div ref={logoRef} className="relative mb-8 md:mb-0 md:-mt-48 md:mr-32 lg:mr-48 flex items-center justify-center will-change-transform will-change-opacity order-first md:order-last group">
           {/* Background Glow - Shadowy Amber */}
           <div className="absolute inset-0 bg-amber-950/40 blur-[80px] md:blur-[120px] rounded-full scale-150 animate-pulse pointer-events-none z-0"></div>
-          
+
           <img
             src="/images/astrix.svg"
             alt="A J ASTRIX Logo"
