@@ -22,33 +22,28 @@ const Register = () => {
   // Dynamic API URL for Local/Production
   const API_URL = import.meta.env.VITE_API_URL || 'https://inovex-backend01.onrender.com';
 
-  const eventTeamSizes = useMemo(() => {
-    return {
-      // Technical
-      "Techsaurus: IT Manager": 1,
-      "Hidden Horizon - QR Treasure Hunt": 4,
-      "Cinesaur: Reel Making": 2,
-      "Dinox: Web Design": 2,
-      "RexHack: Hackathon": 4,
-      "BATTLE NEXUS: Gaming": 4,
-      // Management
-      "DNA ARCHITECTS (BEST HR TEAM)": 2,
-      "Best Marketing Team – Roar & Reach": 2,
-      "T-REX COMMAND (BEST MANAGER)": 1,
-      "GOLDEN FOSSILS (BEST FINANCE TEAM)": 2,
-      // Cultural
-      "Cretaceous Couture: Fashion Walk": 6,
-      "Jurassic Jams: Group Song": 3,
-      "Echoes Of Extinction: Group Dance": 8,
-      "Rex Rhythm: Solo Dance": 1,
-      "Era Unlocked: Face Off": 12
-    };
-  }, []);
+  const getTeamMetrics = (eventName) => {
+    const event = Object.values(eventsData).find(e => e.title === eventName);
+    if (!event) return { min: 1, max: 1 };
+    const matches = event.participants?.match(/\d+/g);
+    if (!matches) return { min: 1, max: 1 };
+    const nums = matches.map(n => parseInt(n, 10));
+    return { min: nums[0], max: nums[nums.length - 1] };
+  };
+
+  const getEventFee = (eventName) => {
+    const event = Object.values(eventsData).find(e => e.title === eventName);
+    if (!event) return 0;
+    const feeStr = event.entryFee || "₹0";
+    return parseInt(feeStr.replace(/[^\d]/g, ''), 10) || 0;
+  };
 
   const selectedEvents = watch("events") || [];
   const leaderName = watch("name") || "TEAM LEADER";
 
-  const getTeamSize = (eventName) => eventTeamSizes[eventName] || 1;
+  const totalFee = useMemo(() => {
+    return selectedEvents.reduce((sum, eventName) => sum + getEventFee(eventName), 0);
+  }, [selectedEvents]);
 
   // Filter and group events from data
   const { technicalEvents, managementEvents, culturalEvents } = useMemo(() => {
@@ -166,9 +161,9 @@ const Register = () => {
 
       // Prepare registrations data
       const registrations = selectedEvents.map(eventName => {
-        const teamSize = getTeamSize(eventName);
+        const { max } = getTeamMetrics(eventName);
         const teammates = [];
-        for (let i = 0; i < teamSize; i++) {
+        for (let i = 0; i < max; i++) {
           const tName = formData.teammates?.[eventName]?.[i]?.name;
           const tPhone = formData.teammates?.[eventName]?.[i]?.phone;
           if (tName) teammates.push({ name: tName, phone: tPhone });
@@ -215,126 +210,170 @@ const Register = () => {
 
   const downloadTicket = (pid, userName, registrations, userDetails) => {
     const canvas = document.createElement('canvas');
-    const scale = 1.6;
+    const scale = 2.0; // Increased scale for higher resolution
 
-    let baseHeight = 350;
+    // Dynamic height calculation with better spacing
+    let baseHeight = 450; 
     registrations.forEach(reg => {
-      baseHeight += 45;
+      baseHeight += 80; // More space per event
       if (reg.teammates && reg.teammates.length > 0) {
-        baseHeight += reg.teammates.length * 28;
+        baseHeight += reg.teammates.length * 35;
       } else {
-        baseHeight += 28;
+        baseHeight += 40;
       }
     });
 
-    canvas.width = 600 * scale;
-    canvas.height = Math.max(baseHeight, 500) * scale;
+    const width = 700;
+    const height = Math.max(baseHeight, 650);
+    canvas.width = width * scale;
+    canvas.height = height * scale;
     const ctx = canvas.getContext('2d');
 
     ctx.scale(scale, scale);
 
-    ctx.fillStyle = '#050505';
-    ctx.fillRect(0, 0, 600, canvas.height / scale);
+    // 1. Background & Base Layer
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, width, height);
 
-    const grad = ctx.createRadialGradient(550, 50, 0, 550, 50, 400);
-    grad.addColorStop(0, 'rgba(245, 158, 11, 0.2)');
-    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    // Decorative gradients
+    const grad = ctx.createLinearGradient(0, 0, width, height);
+    grad.addColorStop(0, '#111111');
+    grad.addColorStop(0.5, '#0a0a0a');
+    grad.addColorStop(1, '#151515');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 600, canvas.height / scale);
+    ctx.fillRect(0, 0, width, height);
 
+    // Subtle Grid Pattern
+    ctx.strokeStyle = 'rgba(245, 158, 11, 0.03)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < width; i += 30) {
+      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, height); ctx.stroke();
+    }
+    for (let i = 0; i < height; i += 30) {
+      ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(width, i); ctx.stroke();
+    }
+
+    // Border
     ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 5;
-    ctx.strokeRect(15, 15, 600 - 30, (canvas.height / scale) - 30);
+    ctx.lineWidth = 4;
+    ctx.strokeRect(25, 25, width - 50, height - 50);
 
+    // 2. Header Section
     ctx.fillStyle = '#f59e0b';
-    ctx.font = 'italic 900 42px Arial';
-    ctx.fillText('A J ASTRIX 2026', 45, 80);
+    ctx.font = 'italic 900 52px Arial';
+    ctx.fillText('A J ASTRIX 2026', 60, 100);
 
-    ctx.font = 'bold 13px Arial';
-    ctx.fillText('OFFICIAL EXPEDITION ACCESS MANIFEST', 45, 105);
+    ctx.font = 'bold 16px Arial';
+    ctx.letterSpacing = '2px';
+    ctx.fillText('OFFICIAL EXPEDITION ACCESS MANIFEST', 60, 130);
+    ctx.letterSpacing = '0px';
 
+    // 3. Participant Info
     ctx.fillStyle = '#ffffff';
-    ctx.font = '900 32px Arial';
-    ctx.fillText(userName.toUpperCase(), 45, 160);
+    ctx.font = '900 42px Arial';
+    ctx.fillText(userName.toUpperCase(), 60, 200);
 
     ctx.fillStyle = '#f59e0b';
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText(`${userDetails.college.toUpperCase()}`, 45, 188);
+    ctx.font = 'bold 18px Arial';
+    ctx.fillText(userDetails.college.toUpperCase(), 60, 235);
 
     ctx.fillStyle = '#888888';
-    ctx.font = 'bold 12px Arial';
-    ctx.fillText(`${userDetails.department.toUpperCase()} - YEAR ${userDetails.year}`, 45, 210);
+    ctx.font = 'bold 15px Arial';
+    ctx.fillText(`${userDetails.department.toUpperCase()} • YEAR ${userDetails.year}`, 60, 260);
 
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([8, 4]);
+    // Divider Line
+    ctx.strokeStyle = 'rgba(245, 158, 11, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([10, 5]);
     ctx.beginPath();
-    ctx.moveTo(45, 230);
-    ctx.lineTo(555, 230);
+    ctx.moveTo(60, 290);
+    ctx.lineTo(width - 60, 290);
     ctx.stroke();
     ctx.setLineDash([]);
 
+    // 4. Deployment Section
     ctx.fillStyle = '#f59e0b';
-    ctx.font = '900 16px Arial';
-    ctx.fillText('DEPLOYMENT MANIFEST', 45, 265);
+    ctx.font = '900 20px Arial';
+    ctx.fillText('DEPLOYMENT MANIFEST', 60, 335);
 
-    let yPos = 300;
+    let yPos = 385;
     registrations.forEach((reg, idx) => {
+      // Event Badge Background
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.1)';
+      ctx.roundRect ? ctx.roundRect(60, yPos - 30, width - 120, 45, 8) : ctx.fillRect(60, yPos - 30, width - 120, 45);
+      ctx.fill();
+
       ctx.fillStyle = '#ffffff';
-      ctx.font = '900 18px Arial';
-      ctx.fillText(`${idx + 1}. ${reg.eventName.toUpperCase()}`, 55, yPos);
-      yPos += 30;
+      ctx.font = '900 22px Arial';
+      ctx.fillText(`${idx + 1}. ${reg.eventName.toUpperCase()}`, 80, yPos);
+      yPos += 55;
 
       if (reg.teammates && reg.teammates.length > 0) {
         reg.teammates.forEach((t, tIdx) => {
-          ctx.font = 'bold 14px Arial';
+          ctx.font = 'bold 16px Arial';
           ctx.fillStyle = '#f59e0b';
-          ctx.fillText('   >', 60, yPos);
+          ctx.fillText('  ›', 85, yPos);
 
           ctx.fillStyle = '#bbbbbb';
-          ctx.font = 'bold 14px Arial';
+          ctx.font = 'bold 16px Arial';
           const tText = `SQUAD MEMBER ${tIdx + 2}: ${t.name.toUpperCase()}`;
-          ctx.fillText(tText, 85, yPos);
+          ctx.fillText(tText, 115, yPos);
 
           if (t.phone) {
-            ctx.font = '12px Arial';
+            ctx.font = '14px Arial';
             ctx.fillStyle = '#666666';
-            ctx.fillText(` [${t.phone}]`, 85 + ctx.measureText(tText).width + 8, yPos);
+            ctx.fillText(` [PH: ${t.phone}]`, 115 + ctx.measureText(tText).width + 12, yPos);
           }
-          yPos += 25;
+          yPos += 35;
         });
       } else {
-        ctx.font = 'italic bold 13px Arial';
+        ctx.font = 'italic bold 15px Arial';
         ctx.fillStyle = '#555555';
-        ctx.fillText('   > SOLO OPERATION PROTOCOL ACTIVE', 65, yPos);
-        yPos += 25;
+        ctx.fillText('  › SOLO OPERATION PROTOCOL ACTIVE', 90, yPos);
+        yPos += 35;
       }
-      yPos += 15;
+      yPos += 25; // Gap between events
     });
 
-    const footerY = (canvas.height / scale) - 75;
-
-    ctx.fillStyle = 'rgba(245, 158, 11, 0.08)';
-    ctx.fillRect(15, (canvas.height / scale) - 120, 600 - 30, 105);
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.5)';
+    // 5. Footer Section (Pinned to bottom)
+    const footerTop = height - 160;
+    
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.05)';
+    ctx.fillRect(25, footerTop, width - 50, 135);
+    ctx.strokeStyle = 'rgba(245, 158, 11, 0.3)';
     ctx.lineWidth = 1;
-    ctx.strokeRect(15, (canvas.height / scale) - 120, 600 - 30, 105);
+    ctx.strokeRect(25, footerTop, width - 50, 135);
 
+    // Left Side of Footer: Identifier
+    ctx.textAlign = 'left';
     ctx.fillStyle = '#f59e0b';
-    ctx.font = '900 12px Arial';
-    ctx.fillText('PARTICIPANT IDENTIFIER', 45, (canvas.height / scale) - 92);
+    ctx.font = '900 14px Arial';
+    ctx.fillText('PARTICIPANT IDENTIFIER', 55, footerTop + 40);
 
-    ctx.font = 'italic 900 58px Arial';
-    ctx.fillText(pid, 45, (canvas.height / scale) - 35);
+    ctx.font = 'italic 900 64px Arial';
+    ctx.fillText(pid, 55, footerTop + 105);
 
+    // Right Side of Footer: Institutional Info
     ctx.textAlign = 'right';
-    ctx.font = '900 11px Arial';
-    ctx.fillStyle = '#555555';
-    ctx.fillText('PRESENT FOR ENTRY AT BASE', 555, (canvas.height / scale) - 60);
-    ctx.fillText('ACCESS GRANTED UPON INTEL VERIFICATION', 555, (canvas.height / scale) - 45);
+    ctx.font = '900 12px Arial';
+    ctx.fillStyle = '#666666';
+    ctx.fillText('A J INSTITUTE OF ENGINEERING AND TECHNOLOGY', width - 55, footerTop + 35);
+    ctx.fillText('PRESENT AT BASE CAMP FOR INTEL VERIFICATION', width - 55, footerTop + 55);
+    
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.6)';
+    ctx.font = 'bold 12px Arial';
+    ctx.fillText('VALID FOR ASTRIX 2026 ONLY', width - 55, footerTop + 75);
+    
+    // Add a small "Generated on" timestamp at the very bottom
+    ctx.fillStyle = '#333333';
+    ctx.font = '8px Arial';
+    ctx.fillText(`TRANS-LINK SECURED: ${new Date().toLocaleString()}`, width - 55, footerTop + 115);
+
+    // Reset alignment for safety
+    ctx.textAlign = 'left';
 
     const link = document.createElement('a');
-    link.download = `AJ_ASTRIX_2026_MASTER_PASS_${pid}.png`;
+    link.download = `AJ_ASTRIX_26_PASS_${pid}.png`;
     link.href = canvas.toDataURL('image/png', 1.0);
     link.click();
   };
@@ -473,7 +512,7 @@ const Register = () => {
                               </div>
                               <span className="text-[10px] font-black uppercase tracking-wider truncate">{e}</span>
                               <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 text-[8px] font-black border border-white/5">
-                                <Users size={10} /> {getTeamSize(e)}
+                                <Users size={10} /> {getTeamMetrics(e).max}
                               </div>
                             </label>
                           ))}
@@ -492,7 +531,7 @@ const Register = () => {
                               </div>
                               <span className="text-[10px] font-black uppercase tracking-wider truncate">{e}</span>
                               <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 text-[8px] font-black border border-white/5">
-                                <Users size={10} /> {getTeamSize(e)}
+                                <Users size={10} /> {getTeamMetrics(e).max}
                               </div>
                             </label>
                           ))}
@@ -511,7 +550,7 @@ const Register = () => {
                               </div>
                               <span className="text-[10px] font-black uppercase tracking-wider truncate">{e}</span>
                               <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 text-[8px] font-black border border-white/5">
-                                <Users size={10} /> {getTeamSize(e)}
+                                <Users size={10} /> {getTeamMetrics(e).max}
                               </div>
                             </label>
                           ))}
@@ -520,9 +559,14 @@ const Register = () => {
                     </div>
                   </div>
 
-                  <button type="submit" disabled={isLoading} className={`w-full py-5 rounded-2xl font-black italic tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 group relative overflow-hidden ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-amber-500 hover:bg-amber-400 text-black shadow-xl shadow-amber-900/40'}`}>
-                    {isLoading ? <Database size={20} className="animate-spin" /> : <Flame size={20} />}
-                    <span>{isLoading ? 'SYNCING...' : 'FINALIZE EXPEDITION'}</span>
+                  <button type="submit" disabled={isLoading} className={`w-full py-5 rounded-2xl font-black italic tracking-[0.3em] uppercase transition-all flex flex-col items-center justify-center gap-1 group relative overflow-hidden ${isLoading ? 'bg-zinc-800 text-white/20' : 'bg-amber-500 hover:bg-amber-400 text-black shadow-xl shadow-amber-900/40'}`}>
+                    <div className="flex items-center gap-3">
+                      {isLoading ? <Database size={20} className="animate-spin" /> : <Flame size={20} />}
+                      <span>{isLoading ? 'SYNCING...' : 'FINALIZE EXPEDITION'}</span>
+                    </div>
+                    {!isLoading && totalFee > 0 && (
+                      <span className="text-[9px] font-black tracking-widest opacity-60">TOTAL DUE: ₹{totalFee}</span>
+                    )}
                   </button>
                 </form>
               )}
@@ -542,7 +586,7 @@ const Register = () => {
             ) : (
               <div className="space-y-12">
                 {selectedEvents.map((eventName) => {
-                  const teamSize = getTeamSize(eventName);
+                  const { min, max } = getTeamMetrics(eventName);
                   return (
                     <div key={eventName} className="squad-card animate-in fade-in slide-in-from-bottom-4 duration-500">
                       <div className="flex items-center gap-6 mb-6">
@@ -551,28 +595,32 @@ const Register = () => {
                         <div className="h-px flex-1 bg-white/10"></div>
                         <div className="flex items-center gap-2 text-[10px] font-black text-amber-500/60 uppercase tracking-widest">
                           <Users size={14} />
-                          <span>{teamSize} Participants Required</span>
+                          <span>{min === max ? `${max} Participants Required` : `${min}-${max} Participants Required`}</span>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                         {/* All Slots are now editable */}
-                        {[...Array(teamSize)].map((_, i) => (
+                        {[...Array(max)].map((_, i) => (
                           <div key={i} className="p-6 rounded-2xl bg-zinc-900/60 backdrop-blur-xl border border-white/10 hover:border-amber-500/30 transition-all group relative overflow-hidden">
                             <div className="flex items-center gap-3 mb-5">
-                              <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40 font-black text-xs group-hover:bg-amber-500/10 group-hover:text-amber-500 transition-colors">{String(i + 1).padStart(2, '0')}</div>
-                              <span className="text-[10px] font-black text-white/40 uppercase tracking-widest group-hover:text-amber-500/60">Participant</span>
+                              <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40 font-black text-xs group-hover:bg-amber-500/10 group-hover:text-amber-500 transition-colors">
+                                {i === 0 ? 'LDR' : String(i + 1).padStart(2, '0')}
+                              </div>
+                              <span className="text-[10px] font-black text-white/40 uppercase tracking-widest group-hover:text-amber-500/60">
+                                {i === 0 ? 'Squad Leader' : 'Participant'} {i >= min && <span className="opacity-50 italic">(Optional)</span>}
+                              </span>
                             </div>
                             <div className="space-y-3">
                               <input
-                                {...register(`teammates.${eventName}.${i}.name`, { required: true })}
-                                placeholder="FULL NAME"
-                                className="w-full bg-white/5 border border-white/5 rounded-xl py-3 px-4 text-[11px] font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/10"
+                                {...register(`teammates.${eventName}.${i}.name`, { required: i < min })}
+                                placeholder={i < min ? "FULL NAME (REQUIRED)" : "FULL NAME (OPTIONAL)"}
+                                className={`w-full bg-white/5 border rounded-xl py-3 px-4 text-[11px] font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/10 ${errors.teammates?.[eventName]?.[i]?.name ? 'border-red-500/50' : 'border-white/5'}`}
                               />
                               <input
-                                {...register(`teammates.${eventName}.${i}.phone`, { required: true, pattern: /^[0-9]{10}$/ })}
-                                placeholder="PHONE NUMBER"
-                                className="w-full bg-white/5 border border-white/5 rounded-xl py-3 px-4 text-[11px] font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/10"
+                                {...register(`teammates.${eventName}.${i}.phone`, { required: i < min, pattern: /^[0-9]{10}$/ })}
+                                placeholder={i < min ? "PHONE (REQUIRED)" : "PHONE (OPTIONAL)"}
+                                className={`w-full bg-white/5 border rounded-xl py-3 px-4 text-[11px] font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/10 ${errors.teammates?.[eventName]?.[i]?.phone ? 'border-red-500/50' : 'border-white/5'}`}
                               />
                             </div>
                           </div>

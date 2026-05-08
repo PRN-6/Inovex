@@ -1,6 +1,34 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame } from 'lucide-react';
+import { technicalEventsData } from '../data/technicalEventsData';
+import { managementEventsData } from '../data/managementEventsData';
+import { culturalEventsData } from '../data/culturalEventsData';
 import { gsap } from 'gsap';
+
+// Create a consolidated fee lookup mapping
+const ALL_EVENTS = {
+  ...technicalEventsData,
+  ...managementEventsData,
+  ...culturalEventsData
+};
+
+const EVENT_FEE_MAP = Object.values(ALL_EVENTS).reduce((acc, ev) => {
+  if (ev && ev.title) {
+    // Extract number from "₹300" string
+    const feeStr = ev.entryFee || "₹0";
+    const fee = parseInt(feeStr.replace(/[^\d]/g, ''), 10) || 0;
+    acc[ev.title.toUpperCase()] = fee;
+  }
+  return acc;
+}, {});
+
+const calculateTotalFee = (regs) => {
+  if (!regs || !Array.isArray(regs)) return 0;
+  return regs.reduce((sum, ev) => {
+    const eventName = ev.eventName?.toUpperCase();
+    return sum + (EVENT_FEE_MAP[eventName] || 0);
+  }, 0);
+};
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -135,85 +163,108 @@ const Admin = () => {
     };
 
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={onClose}></div>
+      <div className="fixed inset-0 z-[100] bg-black animate-in fade-in duration-500 overflow-y-auto custom-scrollbar">
+        {/* Cinematic Background */}
+        <div className="fixed inset-0 z-0">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(223,31,38,0.05)_0%,rgba(0,0,0,1)_100%)]"></div>
+          <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-[0_0_20px_rgba(223,31,38,0.5)]"></div>
+        </div>
         
-        <div className="relative w-full max-w-3xl bg-zinc-950 border border-red-600/30 rounded-3xl shadow-[0_0_50px_rgba(223,31,38,0.2)] overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="relative z-10 min-h-screen flex flex-col">
           {/* Immersive Background Texture */}
           <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full"></div>
           
-          <div className="relative z-10 flex flex-col max-h-[90vh]">
+          <div className="relative z-10 flex flex-col flex-1">
             {/* Modal Header */}
-            <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-red-600/10 border border-red-600/20 rounded-2xl flex items-center justify-center">
-                  <ShieldCheck size={24} className="text-red-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-black italic text-white tracking-tight leading-none">{reg.name?.toUpperCase()}</h3>
-                  <p className="text-[10px] font-black text-red-600/60 tracking-[0.4em] uppercase mt-1">Classification: Representative</p>
+            {/* Top Navigation Bar */}
+            <div className="p-6 md:px-12 border-b border-white/5 flex justify-between items-center sticky top-0 bg-black/80 backdrop-blur-xl z-20">
+              <div className="flex items-center gap-6">
+                <button 
+                  onClick={onClose}
+                  className="group flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-red-600/10 border border-white/10 hover:border-red-600/30 rounded-xl transition-all"
+                >
+                  <ChevronRight size={18} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+                  <span className="text-[10px] font-black tracking-[0.2em] uppercase">Return to Terminal</span>
+                </button>
+                <div className="hidden md:block h-8 w-[1px] bg-white/10"></div>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-red-600/10 border border-red-600/20 rounded-xl flex items-center justify-center">
+                    <ShieldCheck size={20} className="text-red-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black italic text-white tracking-tight leading-none">{reg.name?.toUpperCase()}</h3>
+                    <p className="text-[9px] font-black text-red-600/60 tracking-[0.3em] uppercase mt-1">ASSET_ID: {reg.participantId || 'PENDING'}</p>
+                  </div>
                 </div>
               </div>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => resendEmail(reg._id)} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-amber-500 hover:text-amber-400 transition-all" title="RESEND CONFIRMATION EMAIL"><Mail size={18} /></button>
-                  <button onClick={() => window.print()} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/40 hover:text-white transition-all" title="PRINT INTEL"><Printer size={18} /></button>
-                  <button onClick={onClose} className="p-2.5 bg-red-600/10 hover:bg-red-600/20 border border-red-600/20 rounded-xl text-red-500 hover:text-red-400 transition-all ml-2"><X size={18} /></button>
-                </div>
+              <div className="flex items-center gap-3">
+                <button onClick={() => resendEmail(reg._id)} className="p-3 bg-white/5 hover:bg-amber-600/10 border border-white/10 hover:border-amber-600/30 rounded-xl text-amber-500 transition-all" title="RESEND ENCRYPTED CONFIRMATION"><Mail size={18} /></button>
+                <button onClick={() => window.print()} className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/40 hover:text-white transition-all" title="GENERATE HARDCOPY"><Printer size={18} /></button>
+              </div>
             </div>
 
             {/* Modal Content - Scrollable */}
-            <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-              <div className="grid md:grid-cols-2 gap-8">
+            <div className="flex-1 p-6 md:p-12 max-w-7xl mx-auto w-full">
+              <div className="grid lg:grid-cols-12 gap-12">
                 {/* Left Column: Identity & Contact */}
-                <div className="space-y-8">
-                  <section>
-                    <div className="flex items-center gap-2 mb-4">
-                       <User size={14} className="text-red-600" />
-                       <h4 className="text-[10px] font-black tracking-[0.3em] text-white/40 uppercase">Representative Intel</h4>
+                <div className="lg:col-span-4 space-y-10">
+                  <section className="animate-in slide-in-from-left duration-500">
+                    <div className="flex items-center gap-3 mb-6">
+                       <div className="p-2 bg-red-600/10 rounded-lg"><User size={16} className="text-red-600" /></div>
+                       <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Representative Intel</h4>
                     </div>
                     <div className="space-y-4">
-                       <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl group hover:border-red-600/30 transition-all">
-                          <div className="">
-                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Participant ID</p>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm font-black text-red-600 tracking-widest">{reg.participantId || 'PENDING'}</span>
-                              <button onClick={() => copyToClipboard(reg.participantId)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-red-600" /></button>
-                            </div>
+                       <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl group hover:border-red-600/30 transition-all shadow-xl">
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-2">Internal USN / ID</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-black text-red-600 tracking-widest">{reg.usn || 'NOT_PROVIDED'}</span>
+                            <button onClick={() => copyToClipboard(reg.usn)} className="p-2 hover:bg-white/5 rounded-lg transition-all opacity-40 hover:opacity-100"><Copy size={14} className="text-white" /></button>
                           </div>
                        </div>
-                       <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl group hover:border-red-600/30 transition-all">
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Contact Matrix</p>
-                          <div className="space-y-2">
-                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-bold text-white flex items-center gap-2"><Mail size={14} className="text-red-600/40" /> {reg.email}</span>
-                             </div>
-                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-bold text-amber-500 flex items-center gap-2"><Phone size={14} className="text-amber-500/40" /> {reg.phone}</span>
-                             </div>
+                       <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl space-y-6 shadow-xl">
+                          <div>
+                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-3">Communication Matrix</p>
+                            <div className="space-y-4">
+                               <div className="flex items-center justify-between p-3 bg-black/40 rounded-2xl border border-white/5 group hover:border-red-600/20 transition-all">
+                                  <div className="flex items-center gap-3">
+                                    <Mail size={14} className="text-red-600/40" />
+                                    <span className="text-sm font-bold text-white/90">{reg.email}</span>
+                                  </div>
+                                  <button onClick={() => copyToClipboard(reg.email)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-white/40" /></button>
+                               </div>
+                               <div className="flex items-center justify-between p-3 bg-black/40 rounded-2xl border border-white/5 group hover:border-amber-600/20 transition-all">
+                                  <div className="flex items-center gap-3">
+                                    <Phone size={14} className="text-amber-500/40" />
+                                    <span className="text-sm font-bold text-amber-500">{reg.phone}</span>
+                                  </div>
+                                  <button onClick={() => copyToClipboard(reg.phone)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-white/40" /></button>
+                               </div>
+                            </div>
                           </div>
                        </div>
                     </div>
                   </section>
 
-                  <section>
-                    <div className="flex items-center gap-2 mb-4">
-                       <Building2 size={14} className="text-red-600" />
-                       <h4 className="text-[10px] font-black tracking-[0.3em] text-white/40 uppercase">Institutional Roots</h4>
+                  <section className="animate-in slide-in-from-left duration-500 delay-100">
+                    <div className="flex items-center gap-3 mb-6">
+                       <div className="p-2 bg-red-600/10 rounded-lg"><Building2 size={16} className="text-red-600" /></div>
+                       <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Institutional Roots</h4>
                     </div>
-                    <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl space-y-3">
-                       <div>
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Guild (College)</p>
-                          <p className="text-sm font-bold text-white">{reg.college}</p>
+                    <div className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl space-y-8 shadow-xl">
+                       <div className="space-y-2">
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Origin (College)</p>
+                          <p className="text-lg font-black text-white italic tracking-tight leading-tight">{reg.college?.toUpperCase()}</p>
                        </div>
-                       <div className="pt-3 border-t border-white/5 flex justify-between">
-                          <div>
-                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Sector</p>
-                             <p className="text-xs font-bold text-red-600">{reg.department}</p>
+                       <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
+                          <div className="space-y-2">
+                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Sector</p>
+                             <p className="text-sm font-black text-red-600">{reg.department || 'GENERAL'}</p>
                           </div>
-                          <div className="text-right">
-                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-1">Generation</p>
-                             <p className="text-xs font-bold text-white">Year {reg.year}</p>
+                          <div className="space-y-2 text-right">
+                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Generation</p>
+                             <p className="text-sm font-black text-white">YEAR {reg.year || '?'}</p>
                           </div>
                        </div>
                     </div>
@@ -221,59 +272,72 @@ const Admin = () => {
                 </div>
 
                 {/* Right Column: Quests & Squads */}
-                <div className="space-y-8">
-                  <section>
-                    <div className="flex items-center gap-2 mb-4">
-                       <Ticket size={14} className="text-red-600" />
-                       <h4 className="text-[10px] font-black tracking-[0.3em] text-white/40 uppercase">Mission Manifest</h4>
+                <div className="lg:col-span-8 space-y-10">
+                  <section className="animate-in slide-in-from-right duration-500">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                         <div className="p-2 bg-red-600/10 rounded-lg"><Ticket size={16} className="text-red-600" /></div>
+                         <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Mission Manifest</h4>
+                      </div>
+                      <span className="text-[9px] font-black px-3 py-1 bg-red-600 text-white rounded-full">{reg.registrations?.length || 0} ACTIVE QUESTS</span>
                     </div>
-                    <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-6">
                        {reg.registrations?.map((ev, i) => (
-                         <div key={i} className="p-4 bg-red-600/5 border border-red-600/10 rounded-2xl relative overflow-hidden group">
-                           <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
-                              <Flame size={40} className="text-red-600" />
+                         <div key={i} className="p-6 bg-white/[0.03] border border-white/10 rounded-3xl relative overflow-hidden group hover:border-red-600/30 transition-all shadow-2xl">
+                           <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 transition-all group-hover:scale-110">
+                              <Flame size={80} className="text-red-600" />
                            </div>
-                           <h5 className="text-sm font-black text-white mb-3 italic tracking-tight">{ev.eventName?.toUpperCase()}</h5>
+                           <h5 className="text-lg font-black text-white mb-6 italic tracking-tight leading-none group-hover:text-red-500 transition-colors">{ev.eventName?.toUpperCase()}</h5>
                            
-                           {ev.teammates?.length > 0 && (
-                             <div className="space-y-3 pt-3 border-t border-red-600/10">
-                                {ev.teammates.map((t, ti) => (
-                                  <div key={ti} className="flex flex-col p-2 bg-black/40 rounded-lg border border-white/5">
-                                    <p className="text-[10px] font-black text-white flex items-center gap-2">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
-                                      SQUAD {ti + 1}: {t.name}
-                                    </p>
-                                    <p className="text-[8px] font-bold text-white/30 ml-3.5 tracking-widest">
-                                      {t.phone || (t.email ? `${t.email}` : 'NO CONTACT')}
-                                    </p>
+                           <div className="space-y-4">
+                              <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Squad Composition</p>
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between p-3 bg-red-600/5 rounded-2xl border border-red-600/10">
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-2 h-2 rounded-full bg-red-600"></div>
+                                    <span className="text-xs font-black text-white/90">LEADER: {reg.name}</span>
+                                  </div>
+                                </div>
+                                {ev.teammates?.map((t, ti) => (
+                                  <div key={ti} className="flex flex-col p-4 bg-black/40 rounded-2xl border border-white/5 hover:border-white/10 transition-all">
+                                    <div className="flex justify-between items-center">
+                                      <p className="text-[11px] font-black text-white/70 flex items-center gap-2">
+                                        <span className="text-red-600/40 text-[9px]">SQUAD_0{ti + 1}:</span> {t.name?.toUpperCase()}
+                                      </p>
+                                      {t.phone && <Phone size={10} className="text-white/20" />}
+                                    </div>
+                                    <div className="flex gap-4 mt-2">
+                                      {t.phone && <p className="text-[8px] font-bold text-white/30 tracking-widest">{t.phone}</p>}
+                                      {t.usn && <p className="text-[8px] font-bold text-red-900/40 tracking-widest">{t.usn}</p>}
+                                    </div>
                                   </div>
                                 ))}
-                             </div>
-                           )}
+                              </div>
+                           </div>
                          </div>
                        ))}
                     </div>
                   </section>
 
-                  <section>
-                    <div className="p-5 bg-white/[0.03] border border-white/5 rounded-2xl space-y-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Ticket size={14} className="text-amber-500" />
-                        <h4 className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase">Registration Info</h4>
-                      </div>
-                      <div className="flex justify-between items-end">
+                  <section className="animate-in slide-in-from-right duration-500 delay-100">
+                    <div className="p-8 bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 rounded-3xl shadow-2xl flex flex-col md:flex-row justify-between items-center gap-8">
+                      <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-center">
+                           <CreditCard size={32} className="text-amber-500" />
+                        </div>
                         <div>
-                          <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-1">Payment Status</p>
-                          <p className={`text-sm font-black tracking-widest uppercase ${reg.paymentStatus === 'Paid' ? 'text-green-500' : 'text-amber-500'}`}>
-                            {reg.paymentStatus === 'Paid' ? 'Paid' : 'Pending'}
-                          </p>
+                          <p className="text-[10px] font-black text-white/20 tracking-[0.4em] uppercase mb-2">Clearance Status</p>
+                          <div className={`flex items-center gap-2 px-4 py-1 rounded-full border ${reg.paymentStatus === 'Paid' ? 'bg-green-500/10 border-green-500/30 text-green-500' : 'bg-amber-500/10 border-amber-500/30 text-amber-500'}`}>
+                            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${reg.paymentStatus === 'Paid' ? 'bg-green-500' : 'bg-amber-500'}`}></div>
+                            <span className="text-[10px] font-black tracking-widest uppercase">{reg.paymentStatus === 'Paid' ? 'AUTHORIZED' : 'PENDING_VERIFICATION'}</span>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-1">Total Amount</p>
-                          <p className="text-lg font-black text-emerald-400 tracking-widest">
-                            ₹{(reg.registrations?.length || 0) * 100}
-                          </p>
-                        </div>
+                      </div>
+                      <div className="text-center md:text-right">
+                        <p className="text-[10px] font-black text-white/20 tracking-[0.4em] uppercase mb-2">Total Allocation</p>
+                        <p className="text-5xl font-black text-emerald-400 tracking-tighter italic">
+                          ₹{calculateTotalFee(reg.registrations)}
+                        </p>
                       </div>
                     </div>
                   </section>
@@ -282,14 +346,17 @@ const Admin = () => {
             </div>
 
             {/* Modal Footer: Controls */}
-            <div className="p-8 bg-white/[0.02] border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-               <div className="flex items-center gap-4">
-                  <p className="text-[10px] font-black text-white/40 tracking-[0.2em] uppercase">Participant Controls:</p>
+            <div className="p-12 bg-white/[0.02] border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+               <div className="flex items-center gap-8">
+                  <div>
+                    <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-2">Registry Timestamp</p>
+                    <p className="text-xs font-black text-white/60 tracking-widest">{new Date(reg.registrationDate).toLocaleString()}</p>
+                  </div>
                </div>
                
-               <div className="text-right space-y-1">
-                  <p className="text-[9px] font-black text-white/20 tracking-widest">ENROLLED: {new Date(reg.registrationDate).toLocaleString()}</p>
-                  <p className="text-[8px] font-bold text-white/10 tracking-tighter">DATASET_ID: {reg._id}</p>
+               <div className="text-center md:text-right">
+                  <p className="text-[8px] font-bold text-white/10 tracking-[0.5em] mb-2 uppercase">Core Database Reference</p>
+                  <p className="text-[10px] font-black text-red-600/40 tracking-tighter italic">{reg._id}</p>
                </div>
             </div>
           </div>
@@ -443,9 +510,10 @@ const Admin = () => {
   }, [registrations, searchQuery, filterEvent, filterDate, restrictedEvent]);
 
   const stats = useMemo(() => {
-    const safeRegs = Array.isArray(registrations) ? registrations : [];
+    const safeRegs = Array.isArray(filteredData) ? filteredData : [];
     return {
       totalParticipants: safeRegs.length,
+      totalRevenue: safeRegs.filter(r => r.paymentStatus === 'Paid').reduce((acc, r) => acc + calculateTotalFee(r.registrations), 0),
       eventBreakdown: safeRegs.reduce((acc, r) => {
         if (r && r.registrations && Array.isArray(r.registrations)) {
           r.registrations.forEach(ev => {
@@ -675,6 +743,29 @@ const Admin = () => {
     }
   };
 
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`SECURITY OVERRIDE: Purge asset for ${name?.toUpperCase()} from the database permanently?`)) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/registrations/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'x-admin-key': accessCode
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setRegistrations(prev => prev.filter(r => r._id !== id));
+        alert("PROTOCOL COMPLETE: Asset purged.");
+      } else {
+        alert(`ERROR: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Delete Error:", error);
+      alert("CRITICAL ERROR: PURGE FAILED");
+    }
+  };
+
   const handleBulkDelete = async () => {
     if (selectedIds.length === 0) return;
     if (!window.confirm(`SECURITY OVERRIDE: Purge ${selectedIds.length} assets from the database permanently?`)) return;
@@ -867,6 +958,13 @@ const Admin = () => {
           </div>
           <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
             <div className="flex justify-between items-start">
+              <span className="text-[10px] font-black text-white/40 tracking-widest">GROSS REVENUE</span>
+              <CreditCard size={16} className="text-emerald-500" />
+            </div>
+            <p className="text-3xl font-black italic">₹{stats.totalRevenue}</p>
+          </div>
+          <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
+            <div className="flex justify-between items-start">
               <span className="text-[10px] font-black text-white/40 tracking-widest">EVENT DENSITY</span>
               <Activity size={16} className="text-blue-500" />
             </div>
@@ -945,24 +1043,23 @@ const Admin = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[1000px]">
               <thead>
-                <tr className="border-b border-white/5 bg-white/[0.02]">
-                  <th className="p-4 w-10">
+                <tr className="border-b border-white/5 bg-white/[0.03]">
+                  <th className="p-5 w-12">
                     <button
                       onClick={toggleSelectAll}
-                      className={`w-4 h-4 border rounded transition-colors flex items-center justify-center ${selectedIds.length === filteredData.length && filteredData.length > 0 ? 'bg-red-600 border-red-500' : 'border-white/20 hover:border-white/40'}`}
+                      className={`w-5 h-5 border rounded-lg transition-all flex items-center justify-center ${selectedIds.length === filteredData.length && filteredData.length > 0 ? 'bg-red-600 border-red-500 shadow-[0_0_10px_rgba(223,31,38,0.3)]' : 'border-white/10 hover:border-white/30 bg-white/5'}`}
                     >
-                      {selectedIds.length === filteredData.length && filteredData.length > 0 && <CheckCircle size={10} className="text-white" />}
+                      {selectedIds.length === filteredData.length && filteredData.length > 0 && <CheckCircle size={12} className="text-white" />}
                     </button>
                   </th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">PID</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">REPRESENTATIVE</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">CONTACT</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">GUILD / DEPT</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">QUESTS</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">AMOUNT</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30 text-center">STATUS</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30">DATE</th>
-                  <th className="p-4 text-[10px] font-black tracking-widest text-white/30 text-right">ACTION</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Identification</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Representative</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Contact Matrix</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Institutional Roots</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Mission Manifest</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Fee Status</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase text-center">Authorization</th>
+                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Timeline</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -981,52 +1078,75 @@ const Admin = () => {
                   </tr>
                 ) : (
                   filteredData.map((reg) => (
-                    <tr key={reg._id} className={`hover:bg-white/[0.02] transition-colors group ${selectedIds.includes(reg._id) ? 'bg-red-600/5' : ''}`}>
-                      <td className="p-4">
+                    <tr 
+                      key={reg._id} 
+                      onClick={() => setSelectedReg(reg)}
+                      className={`hover:bg-white/[0.03] border-b border-white/[0.02] transition-all group cursor-pointer ${selectedIds.includes(reg._id) ? 'bg-red-600/[0.03]' : ''}`}
+                    >
+                      <td className="p-5" onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => toggleSelect(reg._id)}
-                          className={`w-4 h-4 border rounded transition-colors flex items-center justify-center ${selectedIds.includes(reg._id) ? 'bg-red-600 border-red-500' : 'border-white/10 group-hover:border-white/30'}`}
+                          className={`w-5 h-5 border rounded-lg transition-all flex items-center justify-center ${selectedIds.includes(reg._id) ? 'bg-red-600 border-red-500 shadow-[0_0_10px_rgba(223,31,38,0.3)]' : 'border-white/10 group-hover:border-white/30 bg-white/5'}`}
                         >
-                          {selectedIds.includes(reg._id) && <CheckCircle size={10} className="text-white" />}
+                          {selectedIds.includes(reg._id) && <CheckCircle size={12} className="text-white" />}
                         </button>
                       </td>
-                      <td className="p-4">
+                      <td className="p-5">
                         <div className="inline-flex items-center">
-                          <p className="text-[11px] font-black text-amber-500 tracking-[0.2em] bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded-md">
+                          <p className="text-[10px] font-black text-amber-500 tracking-[0.2em] bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.1)]">
                             {reg.participantId || 'PENDING'}
                           </p>
                         </div>
                       </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <p className="text-xs font-black text-white">{reg.name || 'UNKNOWN'}</p>
-                          <p className="text-[10px] font-black tracking-widest bg-white/5 px-2 py-0.5 rounded-sm border border-white/5 inline-block">{reg.usn || 'N/A'}</p>
+                      <td className="p-5">
+                        <div className="space-y-1.5">
+                          <p className="text-xs font-black text-white italic tracking-tight group-hover:text-red-500 transition-colors">{reg.name?.toUpperCase() || 'UNKNOWN'}</p>
+                          <div className="flex items-center gap-2">
+                             <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
+                             <p className="text-[9px] font-black tracking-[0.2em] text-white/30">{reg.usn || 'NO USN'}</p>
+                          </div>
                         </div>
                       </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-black text-white/80 tracking-widest">{reg.phone || 'NO PHONE'}</p>
-                          <p className="text-[9px] font-bold text-white/30 normal-case">{reg.email || 'N/A'}</p>
+                      <td className="p-5">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-2 text-white/80 group/contact">
+                            <Phone size={10} className="text-red-600/40 group-hover/contact:text-red-600 transition-colors" />
+                            <p className="text-[10px] font-black tracking-widest">{reg.phone || 'NO PHONE'}</p>
+                          </div>
+                          <div className="flex items-center gap-2 text-white/30 group/contact">
+                            <Mail size={10} className="text-red-600/40 group-hover/contact:text-red-600 transition-colors" />
+                            <p className="text-[9px] font-bold normal-case truncate max-w-[120px]">{reg.email || 'N/A'}</p>
+                          </div>
                         </div>
                       </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-black text-white/60 truncate max-w-[150px]" title={reg.college}>{reg.college || 'EXTERNAL'}</p>
-                          <p className="text-[8px] font-bold text-red-900/40 uppercase tracking-tighter">Year {reg.year || '?'} // {reg.department || 'N/A'}</p>
+                      <td className="p-5">
+                        <div className="space-y-1.5">
+                          <p className="text-[10px] font-black text-white/50 truncate max-w-[150px] leading-tight" title={reg.college}>{reg.college || 'EXTERNAL ASSET'}</p>
+                          <p className="text-[8px] font-black text-red-600/40 uppercase tracking-[0.1em] bg-red-600/5 px-2 py-0.5 rounded border border-red-600/10 inline-block">
+                            YEAR {reg.year || '?'} // {reg.department || 'GENERAL'}
+                          </p>
                         </div>
                       </td>
-                      <td className="p-4">
-                        <div className="flex flex-col gap-2">
+                      <td className="p-5">
+                        <div className="flex flex-col gap-2 min-w-[220px] max-h-[140px] overflow-y-auto custom-scrollbar pr-2">
                           {reg.registrations?.map((ev, i) => (
-                            <div key={i} className="space-y-1">
-                              <span className="text-[8px] font-black px-2 py-0.5 bg-red-600/10 text-red-500 border border-red-600/20 rounded-full inline-block">
-                                {ev.eventName}
-                              </span>
+                            <div key={i} className="group/event bg-white/[0.02] border border-white/5 rounded-lg p-2 hover:border-red-600/30 transition-all">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-[9px] font-black text-white/90 italic">
+                                  {ev.eventName?.toUpperCase()}
+                                </span>
+                                {ev.teammates?.length > 0 && (
+                                  <span className="text-[7px] font-black bg-red-600/20 text-red-500 px-1.5 py-0.5 rounded-full border border-red-600/20">
+                                    +{ev.teammates.length}
+                                  </span>
+                                )}
+                              </div>
                               {ev.teammates?.length > 0 && (
-                                <div className="ml-2 pl-2 border-l border-red-900/30 flex flex-col gap-1">
+                                <div className="mt-2 pt-2 border-t border-white/[0.03] flex flex-wrap gap-x-2 gap-y-1">
                                   {ev.teammates.map((t, ti) => (
-                                    <p key={ti} className="text-[7px] font-bold text-white/40 tracking-wider">
-                                      <span className="text-red-500/60 mr-1">SQUAD {ti + 1}:</span> {t.name} [{t.phone || t.usn || '?'}]
+                                    <p key={ti} className="text-[7px] font-bold text-white/20 flex items-center gap-1">
+                                      <span className="w-1 h-1 rounded-full bg-red-600/40"></span>
+                                      {t.name}
                                     </p>
                                   ))}
                                 </div>
@@ -1035,56 +1155,36 @@ const Admin = () => {
                           ))}
                         </div>
                       </td>
-                      <td className="p-4">
-                        <div className="flex items-center">
-                          <p className="text-xs font-black text-emerald-400 tracking-widest">
-                            ₹{(reg.registrations?.length || 0) * FEE_PER_EVENT}
+                      <td className="p-5">
+                        <div className="flex flex-col">
+                          <p className="text-[10px] font-black text-emerald-400 tracking-widest bg-emerald-400/5 border border-emerald-400/10 px-2 py-1 rounded-md text-center">
+                            ₹{calculateTotalFee(reg.registrations)}
                           </p>
                         </div>
                       </td>
-                      <td className="p-4">
+                      <td className="p-5" onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleStatusUpdate(reg._id, reg.paymentStatus === 'Paid' ? 'Pending' : 'Paid')}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl w-fit transition-all ${
+                          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 ${
                             reg.paymentStatus === 'Paid'
-                              ? 'text-green-500 bg-green-500/10 border border-green-500/20 hover:bg-green-500/20'
-                              : 'text-amber-500 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20'
+                              ? 'text-green-500 bg-green-500/10 border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] hover:bg-green-500/20'
+                              : 'text-amber-500 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] hover:bg-amber-500/20'
                           }`}
                         >
-                          <CheckCircle size={14} />
-                          <span className="text-[10px] font-black tracking-widest uppercase">
-                            {reg.paymentStatus === 'Paid' ? 'Paid' : 'Pending'}
+                          <div className={`w-1.5 h-1.5 rounded-full ${reg.paymentStatus === 'Paid' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,1)]'}`}></div>
+                          <span className="text-[9px] font-black tracking-[0.2em] uppercase">
+                            {reg.paymentStatus === 'Paid' ? 'AUTHORIZED' : 'PENDING'}
                           </span>
                         </button>
                       </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-black text-white/60">
-                            {reg.registrationDate ? new Date(reg.registrationDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : 'N/A'}
+                      <td className="p-5">
+                        <div className="space-y-1 text-center md:text-left">
+                          <p className="text-[10px] font-black text-white/50 tracking-tighter">
+                            {reg.registrationDate ? new Date(reg.registrationDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : '?? ???'}
                           </p>
-                          <p className="text-[8px] font-bold text-white/20 tracking-tighter text-right">
+                          <p className="text-[8px] font-bold text-white/20 tracking-widest uppercase">
                             {reg.registrationDate ? new Date(reg.registrationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                           </p>
-                        </div>
-                      </td>
-                      <td className="p-4 text-right">
-                        <div className="flex justify-end gap-3">
-                          <button
-                            onClick={() => setSelectedReg(reg)}
-                            className="p-2.5 bg-white/5 border border-white/10 text-white/60 hover:text-red-500 hover:border-red-500/50 hover:bg-red-500/5 transition-all rounded-lg"
-                            title="VIEW ASSET INTEL"
-                          >
-                            <ExternalLink size={14} />
-                          </button>
-                          {clearanceLevel >= 2 && (
-                            <button
-                              onClick={() => handleDelete(reg._id, reg.name)}
-                              className="p-2.5 bg-white/5 border border-white/10 text-white/60 hover:text-red-600 hover:border-red-600/50 hover:bg-red-600/5 transition-all rounded-lg"
-                              title="PURGE ASSET (SUPER ADMIN ONLY)"
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          )}
                         </div>
                       </td>
                     </tr>

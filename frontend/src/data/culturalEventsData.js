@@ -1,7 +1,7 @@
 export const culturalEventsData = {
   9: {
     id: 9,
-    title: "Cretaceous Couture: Corporate Walk",
+    title: "Alpha Era: Corporate Walk",
     type: "cultural",
     category: "Cultural",
     date: "May 16, 2026",
@@ -100,8 +100,8 @@ export const culturalEventsData = {
     entryFee: "₹400",
     description: "Bring your energy, coordination, and creativity to the stage in the Group Dance event. Teams will perform together showcasing synchronization, expressions, choreography, and overall stage performance. Judging will be based on creativity, coordination, presentation, and audience impact.",
     rules: [
-      "The team should consist of a minimum of 10 and a maximum of 12 participants, including special appearances",
-      "Time limit: 5+1 minutes, including setting time",
+      "The team should consist of a minimum of 3 and a maximum of 8 participants, including special appearances",
+      "Time limit: 7+1 minutes, including setting time",
       "Any number of groups can participate from the same college",
       "Music tracks must be provided in a flash drive in MP3 format and submitted to the coordinator one hour prior to the event",
       "Hazardous materials and indecency are not allowed"
@@ -191,7 +191,7 @@ export const culturalEventsData = {
     ],
     coordinators: [
       {
-        name: "Sahana vidyadhar naika",
+        name: "Sahana vidyadhar naik",
         contact: "9011578429",
         photo: "/images/event-heads/mca/Sahana.webp"
       },
@@ -207,7 +207,7 @@ export const culturalEventsData = {
       //   contact: "TBD",
       // },
       {
-        name: "Ragesh",
+        name: "Mr Chandrakanth S",
         // contact: "TBD",
       }
     ],

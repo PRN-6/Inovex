@@ -156,7 +156,8 @@ export const managementEventsData = {
       "Reel duration: minimum 30 seconds, maximum 60 seconds",
       "Theme revealed on the spot; shoot must be done entirely inside campus",
       "Vulgar, violent, or political content is strictly prohibited",
-      "Judges' decision on creativity, editing, and theme relevance is final"
+      "Judges' decision on creativity, editing, and theme relevance is final",
+      "Use of only mobile phones are allowed no dslr cameras"
     ],
     coordinators: [
       {

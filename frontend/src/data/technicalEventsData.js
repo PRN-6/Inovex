@@ -47,7 +47,7 @@ export const technicalEventsData = {
     type: "technical",
     category: "Adventure",
     date: "May 15, 2026",
-    time: "10:00",
+    time: "10:30",
     // location: "College Campus",
     participants: "Team of 4",
     entryFee: "₹300",
@@ -132,7 +132,8 @@ export const technicalEventsData = {
       "Reel duration: minimum 30 seconds, maximum 60 seconds",
       "Theme revealed on the spot; shoot must be done entirely inside campus",
       "Vulgar, violent, or political content is strictly prohibited",
-      "Judges' decision on creativity, editing, and theme relevance is final"
+      "Judges' decision on creativity, editing, and theme relevance is final",
+      "Use of only mobile phones are allowed no dslr cameras"
     ],
     coordinators: [
       {
@@ -176,7 +177,7 @@ export const technicalEventsData = {
     rules: [
       "Teams of exactly 2 members. Must report 30 minutes before 11:00 AM",
       "Only raw HTML, CSS, and JavaScript are allowed (No frameworks)",
-      "Internet usage is allowed, but AI tools and copied code lead to instant disqualification",
+      "Internet usage is allowed if required and ai tools and copied code lead to instant disqualification",
       "Systems will be provided by the college (using VS Code)",
       "Evaluation is strictly based on design accuracy, creativity, code quality, and time management"
     ],
@@ -202,7 +203,7 @@ export const technicalEventsData = {
   },
   6: {
     id: 6,
-    title: "RexHack: CodeRex",
+    title: "CodeRex: Blind Coding",
     type: "technical",
     category: "Technical",
     date: "May 15, 2026",
