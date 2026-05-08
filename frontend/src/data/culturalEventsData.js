@@ -132,7 +132,7 @@ export const culturalEventsData = {
   },
   12: {
     id: 12,
-    title: "Best Fusion: Solo Dance",
+    title: "Beat Fusion: Solo Dance",
     type: "cultural",
     category: "Cultural",
     date: "May 16, 2026",
