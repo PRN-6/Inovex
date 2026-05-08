@@ -47,7 +47,7 @@ export const technicalEventsData = {
     type: "technical",
     category: "Adventure",
     date: "May 15, 2026",
-    time: "11:00",
+    time: "10:00",
     // location: "College Campus",
     participants: "Team of 4",
     entryFee: "₹300",
