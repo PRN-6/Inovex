@@ -23,7 +23,7 @@ export const technicalEventsData = {
     coordinators: [
       {
         name: "Swathi Naik",
-        contact: "9353174809",
+        contact: "6361965792",
         photo: "/images/event-heads/mca/swathi-naik.webp"
       },
       {
