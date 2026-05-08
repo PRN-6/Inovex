@@ -167,7 +167,7 @@ export const technicalEventsData = {
     title: "Dinox: Web Design",
     type: "technical",
     category: "Technical",
-    date: "May 16, 2026",
+    date: "May 15, 2026",
     time: "11:00 AM",
     location: "College Lab",
     participants: "Team of 2",
