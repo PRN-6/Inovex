@@ -210,7 +210,7 @@ export const technicalEventsData = {
     // location: "Room no: 426 (AJIET Lab)",
     participants: "Team of 2",
     entryFee: "₹300",
-    description: "Welcome to Code Rex, a Jurassic-themed department hackathon! In this intensive 6-hour event, teams collaborate to build innovative solutions to real-world problems. Evolve your code and survive the pressure!",
+    description: "CodeRex is an exciting coding event that blends logic, teamwork, creativity, and quick thinking in a fun competitive environment. Designed to challenge participants beyond regular coding, the event promises an energetic and unforgettable experience for all coding enthusiasts.",
     rules: [
       "The event consists of two stages and all coding must be done in Java language only",
       "Teams of exactly 2 members",
