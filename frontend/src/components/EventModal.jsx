@@ -304,6 +304,16 @@ const EventModal = ({ event, isOpen, onClose }) => {
                     </li>
                   ))}
                 </ul>
+                {event.rulePic && (
+                  <div className="mt-5 rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+                    <img
+                      src={event.rulePic}
+                      alt="Event Rules"
+                      className="w-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Student Coordinator */}

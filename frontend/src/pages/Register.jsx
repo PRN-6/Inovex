@@ -616,11 +616,11 @@ const Register = () => {
 
                         <div className="flex flex-col items-center gap-4 py-4">
                           <div className="p-4 bg-white rounded-2xl shadow-2xl">
-                            {/* Dynamic UPI QR Code */}
+                            {/* Static College UPI QR Code */}
                             <img
-                              src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=prinsonroyal11@okaxis&pn=AJ%20ASTRIX&am=${totalFee}&cu=INR`}
+                              src="/images/upi/college-upi.webp"
                               alt="Payment QR"
-                              className="w-48 h-48"
+                              className="w-48 h-48 object-contain"
                             />
                           </div>
                           <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] text-center max-w-[200px]">

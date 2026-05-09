@@ -44,7 +44,8 @@ export const culturalEventsData = {
         // contact: "TBD",
       }
     ],
-    image: "/images/cards/card9.webp"
+    image: "/images/cards/card9.webp",
+    rulePic: "/images/event-rule-pic/walk.jpeg"
   },
   10: {
     id: 10,

@@ -1,7 +1,7 @@
 export const managementEventsData = {
   13: {
     id: 13,
-    title: "DNA ARCHITECTS (BEST HR TEAM)",
+    title: "DNA ARCHITECTS (HR TEAM)",
     type: "management",
     category: "Management",
     date: "March 15, 2026",
@@ -36,7 +36,7 @@ export const managementEventsData = {
   },
   14: {
     id: 14,
-    title: "Best Marketing Team – Roar & Reach",
+    title: "Marketing Team – Roar & Reach",
     type: "management",
     category: "Management",
     date: "May 15, 2026",
@@ -44,7 +44,7 @@ export const managementEventsData = {
     // location: "Main Auditorium",
     participants: "Team of 2",
     entryFee: "₹300",
-    description: "“Best Marketing Team – Roar & Reach” is a dynamic competition designed to test creativity, strategic thinking, and teamwork in the ever-evolving world of marketing. Set in the thrilling Jurassic Park theme, this event challenges participants to survive the competitive market jungle by adapting to changing scenarios, innovating bold ideas, and delivering powerful marketing strategies. Just like the mightiest dinosaurs ruled their territory, teams must showcase their ability to think fast, communicate effectively, and make the world hear their brand roar.",
+    description: "“Marketing Team – Roar & Reach” is a dynamic competition designed to test creativity, strategic thinking, and teamwork in the ever-evolving world of marketing. Set in the thrilling Jurassic Park theme, this event challenges participants to survive the competitive market jungle by adapting to changing scenarios, innovating bold ideas, and delivering powerful marketing strategies. Just like the mightiest dinosaurs ruled their territory, teams must showcase their ability to think fast, communicate effectively, and make the world hear their brand roar.",
     rules: [
       "This is a team event, and each team must consist of 2 participants only.",
       "Participants must bring their own laptops for the event."
@@ -106,7 +106,7 @@ export const managementEventsData = {
   },
   16: {
     id: 16,
-    title: "GOLDEN FOSSILS (BEST FINANCE TEAM)",
+    title: "GOLDEN FOSSILS (FINANCE TEAM)",
     type: "management",
     category: "Finance",
     date: "May 15, 2026",
