@@ -28,15 +28,7 @@ const userSchema = new mongoose.Schema({
         enum: ['Technical', 'Management'],
         required: [true, 'Category (Technical/Management) is required']
     },
-    year: {
-        type: String,
-        required: false
-    },
-    department: {
-        type: String,
-        required: false,
-        trim: true
-    },
+
     registrations: [{
         eventName: String,
         teammates: [{

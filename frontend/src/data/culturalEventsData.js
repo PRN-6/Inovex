@@ -239,7 +239,7 @@ export const culturalEventsData = {
     coordinators: [
       {
         name: "Surya",
-        contact: "6362006510",
+        contact: "6366089392",
         photo: "/images/event-heads/mca/surya.webp"
       },
       {

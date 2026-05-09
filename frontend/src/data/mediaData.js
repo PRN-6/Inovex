@@ -4,7 +4,7 @@ export const mediaData = [
     type: 'Event Highlight',
     date: '2026-05-15',
     title: 'A J ASTRIX: The Grand Opening [Night at the Museum]',
-    image: '/images/cards/card1.webp',
+    image: '/images/logo.svg',
     videoUrl: '/videos/media1.webm',
   },
   {

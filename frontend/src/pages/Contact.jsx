@@ -11,27 +11,27 @@ const contactCards = [
   {
     icon: Mail,
     label: 'Comms Channel',
-    value: 'inovex@ajiet.edu.in',
+    value: 'NULL',
     sub: 'General Inquiries',
     color: 'text-red-500',
     bg: 'bg-red-600/10',
     border: 'hover:border-red-600/40',
-    href: 'mailto:inovex@ajiet.edu.in',
+    href: '#',
   },
   {
     icon: Phone,
     label: 'Direct Line',
-    value: '+91 00000 00000',
+    value: '+91 62357 11495 / +91 96067 99617',
     sub: 'Mon–Sat, 9 AM – 6 PM',
     color: 'text-jurassic-yellow',
     bg: 'bg-jurassic-yellow/10',
     border: 'hover:border-jurassic-yellow/40',
-    href: 'tel:+910000000000',
+    href: 'tel:+916235711495',
   },
   {
     icon: MapPin,
     label: 'Sector Origin',
-    value: 'AJ Institute of Engg & Tech',
+    value: 'AJ Institute of Engineering & Technology',
     sub: 'Mangalore, Karnataka – 575006',
     color: 'text-green-400',
     bg: 'bg-green-500/10',
@@ -41,8 +41,8 @@ const contactCards = [
 ];
 
 const socialLinks = [
-  { icon: AtSign,    label: 'Instagram', handle: '@inovex_ajiet',  href: 'https://instagram.com/', color: 'hover:text-pink-500' },
-  { icon: Link2,     label: 'LinkedIn',  handle: 'INOVEX AJIET',   href: 'https://linkedin.com/', color: 'hover:text-blue-400' },
+  { icon: AtSign,    label: 'Instagram', handle: '@astrix_.2026',  href: 'https://www.instagram.com/astrix_.2026/', color: 'hover:text-pink-500' },
+  // { icon: Link2,     label: 'LinkedIn',  handle: 'INOVEX AJIET',   href: 'https://linkedin.com/', color: 'hover:text-blue-400' },
   { icon: ExternalLink, label: 'Website', handle: 'ajiet.edu.in', href: 'https://ajiet.edu.in',  color: 'hover:text-jurassic-yellow' },
 ];
 
