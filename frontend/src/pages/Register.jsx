@@ -62,6 +62,24 @@ const Register = () => {
     return { technicalEvents: tech, managementEvents: mgmt, culturalEvents: cult };
   }, []);
 
+  const category = watch("category");
+
+  // Automatically clear cross-stream selections when category changes
+  useEffect(() => {
+    const currentEvents = watch("events") || [];
+    if (category === 'Technical') {
+      const filtered = currentEvents.filter(e => !managementEvents.includes(e));
+      if (filtered.length !== currentEvents.length) {
+        setValue("events", filtered);
+      }
+    } else if (category === 'Management') {
+      const filtered = currentEvents.filter(e => !technicalEvents.includes(e));
+      if (filtered.length !== currentEvents.length) {
+        setValue("events", filtered);
+      }
+    }
+  }, [category, technicalEvents, managementEvents, setValue, watch]);
+
   const containerRef = useRef(null);
   const embersRef = useRef([]);
   const squadRef = useRef(null);
@@ -541,42 +559,46 @@ const Register = () => {
 
                         <div className="space-y-6 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
                           {/* TECH */}
-                          <div className="space-y-3">
-                            <p className="text-[9px] font-black text-white/30 tracking-[0.3em] uppercase italic">// Technical</p>
-                            <div className="grid grid-cols-1 gap-2">
-                              {technicalEvents.map(e => (
-                                <label key={e} className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(e) ? 'bg-amber-500/10 border-amber-500/40 text-amber-500' : 'bg-white/5 border-white/5 text-white/30 hover:border-white/10'}`}>
-                                  <input type="checkbox" value={e} {...register("events")} className="hidden" />
-                                  <div className={`w-4 h-4 rounded border flex items-center justify-center ${selectedEvents.includes(e) ? 'bg-amber-500 border-amber-500' : 'border-white/20'}`}>
-                                    {selectedEvents.includes(e) && <CheckCircle size={12} className="text-black" />}
-                                  </div>
-                                  <span className="text-[10px] font-black uppercase tracking-wider truncate">{e}</span>
-                                  <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 text-[8px] font-black border border-white/5">
-                                    <Users size={10} /> {getTeamMetrics(e).max}
-                                  </div>
-                                </label>
-                              ))}
+                          {category === 'Technical' && (
+                            <div className="space-y-3 animate-in fade-in slide-in-from-left-4 duration-300">
+                              <p className="text-[9px] font-black text-white/30 tracking-[0.3em] uppercase italic">// Technical</p>
+                              <div className="grid grid-cols-1 gap-2">
+                                {technicalEvents.map(e => (
+                                  <label key={e} className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(e) ? 'bg-amber-500/10 border-amber-500/40 text-amber-500' : 'bg-white/5 border-white/5 text-white/30 hover:border-white/10'}`}>
+                                    <input type="checkbox" value={e} {...register("events")} className="hidden" />
+                                    <div className={`w-4 h-4 rounded border flex items-center justify-center ${selectedEvents.includes(e) ? 'bg-amber-500 border-amber-500' : 'border-white/20'}`}>
+                                      {selectedEvents.includes(e) && <CheckCircle size={12} className="text-black" />}
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase tracking-wider truncate">{e}</span>
+                                    <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 text-[8px] font-black border border-white/5">
+                                      <Users size={10} /> {getTeamMetrics(e).max}
+                                    </div>
+                                  </label>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
 
                           {/* MGMT */}
-                          <div className="space-y-3">
-                            <p className="text-[9px] font-black text-white/30 tracking-[0.3em] uppercase italic">// Management</p>
-                            <div className="grid grid-cols-1 gap-2">
-                              {managementEvents.map(e => (
-                                <label key={e} className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(e) ? 'bg-amber-500/10 border-amber-500/40 text-amber-500' : 'bg-white/5 border-white/5 text-white/30 hover:border-white/10'}`}>
-                                  <input type="checkbox" value={e} {...register("events")} className="hidden" />
-                                  <div className={`w-4 h-4 rounded border flex items-center justify-center ${selectedEvents.includes(e) ? 'bg-amber-500 border-amber-500' : 'border-white/20'}`}>
-                                    {selectedEvents.includes(e) && <CheckCircle size={12} className="text-black" />}
-                                  </div>
-                                  <span className="text-[10px] font-black uppercase tracking-wider truncate">{e}</span>
-                                  <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 text-[8px] font-black border border-white/5">
-                                    <Users size={10} /> {getTeamMetrics(e).max}
-                                  </div>
-                                </label>
-                              ))}
+                          {category === 'Management' && (
+                            <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
+                              <p className="text-[9px] font-black text-white/30 tracking-[0.3em] uppercase italic">// Management</p>
+                              <div className="grid grid-cols-1 gap-2">
+                                {managementEvents.map(e => (
+                                  <label key={e} className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${selectedEvents.includes(e) ? 'bg-amber-500/10 border-amber-500/40 text-amber-500' : 'bg-white/5 border-white/5 text-white/30 hover:border-white/10'}`}>
+                                    <input type="checkbox" value={e} {...register("events")} className="hidden" />
+                                    <div className={`w-4 h-4 rounded border flex items-center justify-center ${selectedEvents.includes(e) ? 'bg-amber-500 border-amber-500' : 'border-white/20'}`}>
+                                      {selectedEvents.includes(e) && <CheckCircle size={12} className="text-black" />}
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase tracking-wider truncate">{e}</span>
+                                    <div className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 text-[8px] font-black border border-white/5">
+                                      <Users size={10} /> {getTeamMetrics(e).max}
+                                    </div>
+                                  </label>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
 
                           {/* CULTURAL */}
                           <div className="space-y-3">

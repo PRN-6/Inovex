@@ -37,6 +37,7 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterEvent, setFilterEvent] = useState('all');
+  const [filterCategory, setFilterCategory] = useState('all');
   const [filterDate, setFilterDate] = useState('');
   const [clearanceLevel, setClearanceLevel] = useState(0); // 0: None, 0.5: Event Head, 1: Admin, 2: Super Admin
   const [restrictedEvent, setRestrictedEvent] = useState(null);
@@ -570,9 +571,11 @@ const Admin = () => {
 
       const matchesDate = !filterDate || (reg.registrationDate && new Date(reg.registrationDate).toDateString() === new Date(filterDate).toDateString());
 
-      return matchesSearch && matchesFilter && matchesRestricted && matchesDate;
+      const matchesCategory = filterCategory === 'all' || reg.category === filterCategory;
+
+      return matchesSearch && matchesFilter && matchesRestricted && matchesDate && matchesCategory;
     });
-  }, [registrations, searchQuery, filterEvent, filterDate, restrictedEvent]);
+  }, [registrations, searchQuery, filterEvent, filterDate, restrictedEvent, filterCategory]);
 
   const stats = useMemo(() => {
     const safeRegs = Array.isArray(filteredData) ? filteredData : [];
@@ -594,36 +597,75 @@ const Admin = () => {
   }, [registrations]);
 
   const exportCSV = () => {
-    const headers = ["PID", "Name", "Email", "Phone", "College", "Category", "Events"];
-    const csvData = filteredData.map(r => [
-      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, 
-      r.category || (r.year ? `${r.year}yr - ${r.department}` : 'GENERAL'),
+    const headers = [
+      "PID", "Name", "Email", "Phone", "College", "Category", 
+      "Events", "Squad Details", "Status", "Amount", "Date", "Screenshot"
+    ];
+    
+    const csvData = filteredData.map(r => {
+      const eventList = r.registrations.map(ev => ev.eventName).join(" | ");
+      const squadDetails = r.registrations.map(ev => {
+        if (!ev.teammates || ev.teammates.length === 0) return `${ev.eventName}: SOLO`;
+        const members = ev.teammates.map(t => `${t.name}(${t.phone || 'N/A'})`).join("; ");
+        return `${ev.eventName}: [${members}]`;
+      }).join(" || ");
 
-      r.registrations.map(ev => ev.eventName).join(" | ")
-    ]);
+      return [
+        r.participantId || 'PENDING', 
+        `"${r.name}"`, 
+        r.email, 
+        r.phone, 
+        `"${r.college}"`, 
+        r.category || (r.year ? `${r.year}yr - ${r.department}` : 'GENERAL'),
+        `"${eventList}"`,
+        `"${squadDetails}"`,
+        r.paymentStatus || 'Pending',
+        calculateTotalFee(r.registrations),
+        new Date(r.registrationDate).toLocaleString().replace(/,/g, ''),
+        r.screenshotUrl || 'N/A'
+      ];
+    });
 
     let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + csvData.map(e => e.join(",")).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    const fileName = filterEvent === 'all' ? 'all_registrations' : filterEvent.toLowerCase().replace(/\s+/g, '_');
-    link.setAttribute("download", `inovex_${fileName}_${new Date().toLocaleDateString()}.csv`);
+    const fileName = filterEvent === 'all' ? 'FULL_DATABASE' : filterEvent.toLowerCase().replace(/\s+/g, '_');
+    link.setAttribute("download", `INOVEX_INTEL_${fileName}_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
   };
 
   const exportToExcel = () => {
-    const tableHeader = ["PID", "NAME", "EMAIL", "PHONE", "COLLEGE", "CATEGORY", "EVENTS"];
-    const rows = filteredData.map(r => [
-      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, 
-      r.category || (r.year ? `${r.year}YR - ${r.department}` : 'GENERAL'),
+    const tableHeader = [
+      "PID", "NAME", "EMAIL", "PHONE", "COLLEGE", "CATEGORY", 
+      "EVENTS ENROLLED", "SQUAD INTEL", "PAYMENT STATUS", 
+      "TOTAL FEE", "REGISTRATION DATE", "PROOF OF PAYMENT"
+    ];
 
+    const rows = filteredData.map(r => [
+      r.participantId || 'PENDING', 
+      r.name?.toUpperCase(), 
+      r.email, 
+      r.phone, 
+      r.college?.toUpperCase(), 
+      r.category?.toUpperCase() || (r.year ? `${r.year}YR - ${r.department}` : 'GENERAL'),
+      
+      // Events
+      r.registrations?.map(ev => ev.eventName?.toUpperCase()).join("<br>"),
+      
+      // Squad Details
       r.registrations?.map(ev => {
         const teamInfo = ev.teammates?.length > 0
-          ? ` (Squad: ${ev.teammates.map(t => `${t.name} [${t.phone || `Email: ${t.email}`}]`).join(" | ")})`
-          : "";
-        return `${ev.eventName}${teamInfo}`;
-      }).join(" | ")
+          ? ` (Squad: ${ev.teammates.map(t => `${t.name} [${t.phone || 'N/A'}]`).join(" | ")})`
+          : " (Solo Participation)";
+        return `• ${ev.eventName?.toUpperCase()}${teamInfo}`;
+      }).join("<br>"),
+
+      r.paymentStatus?.toUpperCase() || 'PENDING',
+      `₹${calculateTotalFee(r.registrations)}`,
+      new Date(r.registrationDate).toLocaleString(),
+      r.screenshotUrl ? `<a href="${r.screenshotUrl}">VIEW PROOF</a>` : 'NO PROOF'
     ]);
 
     let html = `
@@ -631,12 +673,14 @@ const Admin = () => {
       <head>
         <meta charset="utf-8">
         <style>
-          table { border-collapse: collapse; }
-          th { background-color: #df1f26; color: white; font-weight: bold; border: 1px solid #000; }
-          td { border: 1px solid #ccc; padding: 5px; }
+          table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+          th { background-color: #df1f26; color: white; font-weight: bold; border: 1px solid #000; padding: 10px; font-size: 12px; }
+          td { border: 1px solid #ccc; padding: 10px; font-size: 11px; vertical-align: top; }
         </style>
       </head>
       <body>
+        <h2 style="color: #df1f26; text-align: center;">INOVEX 2026: OFFICIAL EXPEDITION MANIFEST</h2>
+        <p style="text-align: center; font-size: 10px;">Generated on: ${new Date().toLocaleString()}</p>
         <table>
           <thead>
             <tr>${tableHeader.map(h => `<th>${h}</th>`).join('')}</tr>
@@ -653,67 +697,95 @@ const Admin = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    const fileName = filterEvent === 'all' ? 'ASSET_DATABASE' : `${filterEvent.toUpperCase()}_MANIFEST`;
+    const fileName = filterEvent === 'all' ? 'MASTER_DATABASE' : `${filterEvent.toUpperCase()}_SECTOR_LOG`;
     link.download = `INOVEX_${fileName}_${new Date().toISOString().split('T')[0]}.xls`;
     link.click();
   };
 
+
   const exportToWord = () => {
     const now = new Date().toLocaleString();
-    let html = `
-      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    const html = `
+      <html>
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; }
-          .page-header { border-bottom: 2px solid #df1f26; margin-bottom: 20px; padding-bottom: 10px; position: relative; }
-          .title { color: #df1f26; font-size: 20pt; font-weight: bold; margin: 0; }
-          .subtitle { font-size: 9pt; color: #666; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-          th { background: #df1f26; color: white; border: 1px solid #df1f26; padding: 8px; text-align: left; font-size: 10pt; }
-          td { border: 1px solid #eee; padding: 6px; font-size: 9pt; vertical-align: top; }
-          .squad { font-size: 8pt; color: #777; margin-top: 4px; border-left: 2px solid #df1f26; padding-left: 5px; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; line-height: 1.6; }
+          .page-header { border-bottom: 3px solid #df1f26; margin-bottom: 30px; padding-bottom: 10px; }
+          .title { color: #df1f26; font-size: 26pt; font-weight: bold; margin: 0; text-align: center; }
+          .subtitle { font-size: 10pt; color: #666; margin: 0; text-transform: uppercase; letter-spacing: 3px; text-align: center; }
+          .meta { font-size: 8pt; color: #999; text-align: right; margin-top: 5px; }
+          
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th { background: #f4f4f4; color: #333; border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 10pt; text-transform: uppercase; }
+          td { border: 1px solid #eee; padding: 10px; font-size: 9pt; vertical-align: top; }
+          
+          .pid-badge { color: #df1f26; font-weight: bold; font-family: monospace; }
+          .category-tag { font-size: 8pt; background: #eee; padding: 2px 5px; border-radius: 3px; color: #555; }
+          .squad-list { margin-top: 5px; padding-left: 10px; border-left: 2px solid #df1f26; }
+          .squad-member { font-size: 8pt; color: #555; }
+          .status-paid { color: #10b981; font-weight: bold; }
+          .status-pending { color: #f59e0b; font-weight: bold; }
         </style>
       </head>
       <body>
         <div class="page-header">
           <p class="title">INOVEX 2026</p>
-          <p class="subtitle">${filterEvent === 'all' ? 'REGISTRATION MANIFESTO' : `MANIFEST: ${filterEvent.toUpperCase()}`}</p>
+          <p class="subtitle">OFFICIAL EXPEDITION MANIFESTO</p>
+          <p class="meta">GENERATED: ${now} | SECTOR: ${filterEvent.toUpperCase()}</p>
         </div>
 
         <table>
           <thead>
             <tr>
-              <th>PID</th>
-              <th>NAME</th>
-              <th>COLLEGE / DEPT</th>
-              <th>QUESTS & SQUADS</th>
-
+              <th width="15%">IDENTIFICATION</th>
+              <th width="25%">REPRESENTATIVE</th>
+              <th width="20%">INSTITUTIONAL INFO</th>
+              <th width="30%">QUESTS & SQUADS</th>
+              <th width="10%">FINANCIALS</th>
             </tr>
           </thead>
           <tbody>
             ${filteredData.map(r => `
               <tr>
-                <td><b>${r.participantId || 'PENDING'}</b></td>
-                <td><b>${r.name}</b><br>${r.email}</td>
-                <td>${r.college}<br>${r.department} (Year ${r.year})</td>
-
+                <td>
+                  <span class="pid-badge">${r.participantId || 'PENDING'}</span><br>
+                  <span class="status-${r.paymentStatus === 'Paid' ? 'paid' : 'pending'}">${r.paymentStatus?.toUpperCase() || 'PENDING'}</span>
+                </td>
+                <td>
+                  <b>${r.name?.toUpperCase()}</b><br>
+                  ${r.email}<br>
+                  ${r.phone}
+                </td>
+                <td>
+                  ${r.college?.toUpperCase()}<br>
+                  <span class="category-tag">${r.category?.toUpperCase() || (r.year ? `${r.year}YR - ${r.department}` : 'GENERAL')}</span>
+                </td>
                 <td>
                   ${r.registrations?.map(ev => `
-                    <div style="margin-bottom: 5px;">
-                      <b>${ev.eventName}</b>
-                      ${ev.teammates?.length > 0 ? `
-                        <div class="squad">
-                          ${ev.teammates.map(t => `${t.name} (${t.phone || t.email || ''})`).join(", ")}
-                        </div>
-                      ` : ''}
+                    <div style="margin-bottom: 8px;">
+                      <b>• ${ev.eventName?.toUpperCase()}</b>
+                      <div class="squad-list">
+                        ${ev.teammates?.length > 0 ? 
+                          ev.teammates.map(t => `<div class="squad-member">${t.name} (${t.phone || 'N/A'})</div>`).join('') :
+                          '<div class="squad-member italic">Solo Entry</div>'
+                        }
+                      </div>
                     </div>
                   `).join('')}
+                </td>
+                <td>
+                  <b>₹${calculateTotalFee(r.registrations)}</b><br>
+                  <a href="${r.screenshotUrl || '#'}" style="font-size: 7pt; color: #df1f26;">View Proof</a>
                 </td>
               </tr>
             `).join('')}
           </tbody>
         </table>
+        
+        <div style="margin-top: 50px; text-align: center; font-size: 8pt; color: #999; border-top: 1px solid #eee; padding-top: 20px;">
+          INOVEX CORE SYSTEM v2.4.0 // END OF TRANSMISSION
+        </div>
       </body>
       </html>
     `;
@@ -722,7 +794,7 @@ const Admin = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    const fileName = filterEvent === 'all' ? 'MANIFESTO' : `${filterEvent.toUpperCase()}_MANIFEST`;
+    const fileName = filterEvent === 'all' ? 'FULL_MANIFESTO' : `${filterEvent.toUpperCase()}_SECTOR_MANIFEST`;
     link.download = `INOVEX_${fileName}_${new Date().toISOString().split('T')[0]}.doc`;
     link.click();
   };
@@ -752,7 +824,9 @@ const Admin = () => {
       console.error("Status Update Error:", error);
       alert("CRITICAL ERROR: STATUS UPDATE FAILED");
     }
-  };  const resendEmail = async (id) => {
+  };
+
+  const resendEmail = async (id) => {
     if (!window.confirm("RESEND EMAIL: Are you sure you want to send the confirmation email to this user?")) return;
 
     try {
@@ -987,19 +1061,34 @@ const Admin = () => {
           <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
             {/* Event Filter - Only for Admins/Superadmins */}
             {clearanceLevel >= 1 && (
-              <div className="relative hidden lg:block">
-                <Filter size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
-                <select
-                  value={filterEvent}
-                  onChange={(e) => setFilterEvent(e.target.value)}
-                  className="bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-8 text-[10px] tracking-widest focus:outline-none focus:border-red-600/50 appearance-none cursor-pointer"
-                >
-                  <option value="all">ALL MISSIONS</option>
-                  {Object.values(ALL_EVENTS).map(ev => (
-                    <option key={ev.title} value={ev.title}>{ev.title?.toUpperCase()}</option>
-                  ))}
-                </select>
-              </div>
+              <>
+                <div className="relative hidden lg:block">
+                  <Filter size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
+                  <select
+                    value={filterEvent}
+                    onChange={(e) => setFilterEvent(e.target.value)}
+                    className="bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-8 text-[10px] tracking-widest focus:outline-none focus:border-red-600/50 appearance-none cursor-pointer"
+                  >
+                    <option value="all" className="text-black bg-white">ALL MISSIONS</option>
+                    {Object.values(ALL_EVENTS).map(ev => (
+                      <option key={ev.title} value={ev.title} className="text-black bg-white">{ev.title?.toUpperCase()}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="relative hidden xl:block">
+                  <Activity size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
+                  <select
+                    value={filterCategory}
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-8 text-[10px] tracking-widest focus:outline-none focus:border-red-600/50 appearance-none cursor-pointer"
+                  >
+                    <option value="all" className="text-black bg-white">ALL STREAMS</option>
+                    <option value="Technical" className="text-black bg-white">TECHNICAL</option>
+                    <option value="Management" className="text-black bg-white">MANAGEMENT</option>
+                  </select>
+                </div>
+              </>
             )}
 
             {/* Date Filter */}
