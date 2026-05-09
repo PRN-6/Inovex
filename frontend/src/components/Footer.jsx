@@ -250,7 +250,7 @@ const Footer = () => {
                 <span className="text-[9px] font-black text-white/30 tracking-widest block uppercase">Contact AJIET</span>
                 <a href="mailto:ajastrix2026@gmail.com" className="text-xs font-black tracking-widest text-white hover:text-red-500 transition-all flex items-center gap-2 lg:justify-end lowercase">
                   <Mail className="w-3 h-3 opacity-40" />
-                  ajastrix2026@gmail.com
+                  null
                 </a>
                 <div className="text-xs font-black tracking-widest text-white flex items-center gap-2 lg:justify-end">
                   <Phone className="w-3 h-3 opacity-40" />

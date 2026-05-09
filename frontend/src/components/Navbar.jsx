@@ -199,8 +199,8 @@ const Navbar = () => {
         ref={mobileMenuButtonRef}
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         className={`fixed top-4 right-4 z-50 md:hidden p-3 rounded-xl transition-all duration-300 shadow-lg border ${isMobileMenuOpen
-            ? 'bg-red-600 text-white border-red-400'
-            : 'bg-black/60 backdrop-blur-md text-red-500 border-red-900/50 hover:bg-red-900/20'
+          ? 'bg-red-600 text-white border-red-400'
+          : 'bg-black/60 backdrop-blur-md text-red-500 border-red-900/50 hover:bg-red-900/20'
           }`}
       >
         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -225,7 +225,7 @@ const Navbar = () => {
           }}
         >
           <h1 className="text-xl font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-0 group-hover:w-auto overflow-hidden text-white whitespace-nowrap">
-            A J ASTRIX
+            ASTRIX
           </h1>
         </div>
 
@@ -307,7 +307,7 @@ const Navbar = () => {
             }
           }}
         >
-          <h1 className="text-2xl font-black tracking-[0.2em] text-red-600">INOVEX</h1>
+          <h1 className="text-2xl font-black tracking-[0.2em] text-red-600">ASTRIX</h1>
           <div className="w-10 h-10" /> {/* Spacer for button */}
         </div>
 
@@ -358,12 +358,12 @@ const Navbar = () => {
             {/* Prominent Register Button */}
             {!isBackendDisabled && (
               <button
-              onClick={(e) => handleNavClick(e, mainNavItems.find(i => i.path === 'register'))}
-              className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl transition-all duration-300 bg-red-600 text-white font-black italic tracking-[0.2em] shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:bg-red-500 active:scale-95"
-            >
-              <UserPlus size={22} />
-              REGISTER NOW
-            </button>
+                onClick={(e) => handleNavClick(e, mainNavItems.find(i => i.path === 'register'))}
+                className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl transition-all duration-300 bg-red-600 text-white font-black italic tracking-[0.2em] shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:bg-red-500 active:scale-95"
+              >
+                <UserPlus size={22} />
+                REGISTER NOW
+              </button>
             )}
           </div>
         </div>
