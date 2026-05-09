@@ -244,7 +244,7 @@ export const culturalEventsData = {
       },
       {
         name: "Durgashree",
-        contact: "6363636363",
+        contact: "6362006510",
         photo: "/images/event-heads/mca/durgashree.webp"
       }
     ],
