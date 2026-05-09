@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare } from 'lucide-react';
+import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power } from 'lucide-react';
 import { technicalEventsData } from '../data/technicalEventsData';
 import { managementEventsData } from '../data/managementEventsData';
 import { culturalEventsData } from '../data/culturalEventsData';
@@ -596,6 +596,24 @@ const Admin = () => {
     };
   }, [registrations]);
 
+  const toggleMaintenance = async () => {
+    if (!window.confirm("WARNING: Are you sure you want to toggle the global maintenance mode? This will affect all users immediately.")) return;
+    try {
+      const res = await fetch(`${API_URL}/api/status/toggle`, {
+        method: 'POST',
+        headers: { 'x-admin-key': accessCode }
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(data.message);
+      } else {
+        alert("ERROR: " + data.message);
+      }
+    } catch (err) {
+      alert("CRITICAL ERROR: Could not toggle maintenance.");
+    }
+  };
+
   const exportCSV = () => {
     const headers = [
       "PID", "Name", "Email", "Phone", "College", "Category", 
@@ -1109,6 +1127,11 @@ const Admin = () => {
               />
             </div>
             <div className="flex items-center gap-2">
+              {clearanceLevel >= 2 && (
+                <button onClick={toggleMaintenance} className="p-2 border border-white/10 hover:border-amber-600/50 hover:text-amber-500 transition-all bg-white/5 rounded-full" title="TOGGLE SYSTEM MAINTENANCE">
+                  <Power size={18} />
+                </button>
+              )}
               <button onClick={exportToExcel} className="p-2 border border-white/10 hover:border-green-600/50 hover:text-green-500 transition-all bg-white/5 rounded-full" title="EXPORT EXCEL (.XLS)">
                 <FileSpreadsheet size={18} />
               </button>

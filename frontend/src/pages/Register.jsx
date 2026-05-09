@@ -321,79 +321,36 @@ const Register = () => {
 
     // 2. Header Section
     ctx.fillStyle = '#f59e0b';
-    ctx.font = 'italic 900 52px Arial';
-    ctx.fillText('A J ASTRIX 2026', 60, 100);
-
-    ctx.font = 'bold 16px Arial';
-    ctx.letterSpacing = '2px';
-    ctx.fillText('OFFICIAL EXPEDITION ACCESS MANIFEST', 60, 130);
-    ctx.letterSpacing = '0px';
+    ctx.font = 'italic 900 42px Arial';
+    ctx.fillText('A J ASTRIX 2026', 60, 95);
 
     // 3. Participant Info
     ctx.fillStyle = '#ffffff';
-    ctx.font = '900 42px Arial';
-    ctx.fillText(userName.toUpperCase(), 60, 200);
-
-    ctx.fillStyle = '#f59e0b';
-    ctx.font = 'bold 18px Arial';
-    ctx.fillText(userDetails.college.toUpperCase(), 60, 235);
-
-    ctx.fillStyle = '#888888';
-    ctx.font = 'bold 15px Arial';
-    ctx.fillText(`${userDetails.category?.toUpperCase() || 'GENERAL'} STREAM`, 60, 260);
+    ctx.font = '900 30px Arial';
+    ctx.fillText(userName.toUpperCase(), 60, 150);
 
     // Divider Line
     ctx.strokeStyle = 'rgba(245, 158, 11, 0.3)';
     ctx.lineWidth = 2;
     ctx.setLineDash([10, 5]);
     ctx.beginPath();
-    ctx.moveTo(60, 290);
-    ctx.lineTo(width - 60, 290);
+    ctx.moveTo(60, 180);
+    ctx.lineTo(width - 60, 180);
     ctx.stroke();
     ctx.setLineDash([]);
 
     // 4. Deployment Section
-    ctx.fillStyle = '#f59e0b';
-    ctx.font = '900 20px Arial';
-    ctx.fillText('DEPLOYMENT MANIFEST', 60, 335);
-
-    let yPos = 385;
+    let yPos = 230;
     registrations.forEach((reg, idx) => {
       // Event Badge Background
       ctx.fillStyle = 'rgba(245, 158, 11, 0.1)';
-      ctx.roundRect ? ctx.roundRect(60, yPos - 30, width - 120, 45, 8) : ctx.fillRect(60, yPos - 30, width - 120, 45);
+      ctx.roundRect ? ctx.roundRect(60, yPos - 25, width - 120, 35, 6) : ctx.fillRect(60, yPos - 25, width - 120, 35);
       ctx.fill();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '900 22px Arial';
-      ctx.fillText(`${idx + 1}. ${reg.eventName.toUpperCase()}`, 80, yPos);
-      yPos += 55;
-
-      if (reg.teammates && reg.teammates.length > 0) {
-        reg.teammates.forEach((t, tIdx) => {
-          ctx.font = 'bold 16px Arial';
-          ctx.fillStyle = '#f59e0b';
-          ctx.fillText('  ›', 85, yPos);
-
-          ctx.fillStyle = '#bbbbbb';
-          ctx.font = 'bold 16px Arial';
-          const tText = `SQUAD MEMBER ${tIdx + 2}: ${t.name.toUpperCase()}`;
-          ctx.fillText(tText, 115, yPos);
-
-          if (t.phone) {
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#666666';
-            ctx.fillText(` [PH: ${t.phone}]`, 115 + ctx.measureText(tText).width + 12, yPos);
-          }
-          yPos += 35;
-        });
-      } else {
-        ctx.font = 'italic bold 15px Arial';
-        ctx.fillStyle = '#555555';
-        ctx.fillText('  › SOLO OPERATION PROTOCOL ACTIVE', 90, yPos);
-        yPos += 35;
-      }
-      yPos += 25; // Gap between events
+      ctx.font = '900 16px Arial';
+      ctx.fillText(`${idx + 1}. ${reg.eventName.toUpperCase()}`, 75, yPos);
+      yPos += 50; // Gap between events
     });
 
     // 5. Footer Section (Pinned to bottom)
@@ -408,27 +365,24 @@ const Register = () => {
     // Left Side of Footer: Identifier
     ctx.textAlign = 'left';
     ctx.fillStyle = '#f59e0b';
-    ctx.font = '900 14px Arial';
+    ctx.font = '900 12px Arial';
     ctx.fillText('PARTICIPANT IDENTIFIER', 55, footerTop + 40);
 
-    ctx.font = 'italic 900 64px Arial';
-    ctx.fillText(pid, 55, footerTop + 105);
+    ctx.font = 'italic 900 48px Arial';
+    ctx.fillText(pid, 55, footerTop + 95);
 
     // Right Side of Footer: Institutional Info
     ctx.textAlign = 'right';
-    ctx.font = '900 12px Arial';
-    ctx.fillStyle = '#666666';
-    ctx.fillText('A J INSTITUTE OF ENGINEERING AND TECHNOLOGY', width - 55, footerTop + 35);
-    ctx.fillText('PRESENT AT BASE CAMP FOR INTEL VERIFICATION', width - 55, footerTop + 55);
-
-    ctx.fillStyle = 'rgba(245, 158, 11, 0.6)';
+    
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.8)';
     ctx.font = 'bold 12px Arial';
-    ctx.fillText('VALID FOR ASTRIX 2026 ONLY', width - 55, footerTop + 75);
+    ctx.fillText('WE NEED THIS CODE TO VERIFY', width - 55, footerTop + 35);
+    ctx.fillText('AT THE DAY OF THE EVENT', width - 55, footerTop + 55);
 
     // Add a small "Generated on" timestamp at the very bottom
     ctx.fillStyle = '#333333';
     ctx.font = '8px Arial';
-    ctx.fillText(`TRANS-LINK SECURED: ${new Date().toLocaleString()}`, width - 55, footerTop + 115);
+    ctx.fillText(`GENERATED: ${new Date().toLocaleString()}`, width - 55, footerTop + 115);
 
     // Reset alignment for safety
     ctx.textAlign = 'left';
