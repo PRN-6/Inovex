@@ -186,9 +186,26 @@ const Register = () => {
     // But I'll just let the native validation handle it for now or use trigger
   };
 
+  const onFormError = (errors) => {
+    let errorMessage = "Please check the form for mistakes.";
+    
+    if (errors.name) errorMessage = "Identity Manifest (Full Name) is missing.";
+    else if (errors.email) errorMessage = "Valid Comms (Email) is required.";
+    else if (errors.phone) errorMessage = "Valid 10-digit Terminal (Phone) is required.";
+    else if (errors.college) errorMessage = "Base of Operations (College) is required.";
+    else if (errors.category) errorMessage = "Stream Selection is required.";
+    else if (errors.teammates) errorMessage = "Please fill in all required teammate details.";
+
+    showNotify(`MISSION ABORTED: ${errorMessage}`, "error");
+  };
+
   // Re-define handleSubmit logic to support steps
   const onFormSubmit = (data) => {
     if (step === 0) {
+      if (!data.events || data.events.length === 0) {
+        showNotify("MISSION ABORTED: You must select at least one quest.", "error");
+        return;
+      }
       setStep(1);
       window.scrollTo(0, 0);
       return;
@@ -432,7 +449,7 @@ const Register = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+                <form onSubmit={handleSubmit(onFormSubmit, onFormError)} className="space-y-6">
                   {step === 0 ? (
                     <>
                       {/* Step 0: Information */}
