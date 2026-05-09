@@ -186,7 +186,10 @@ const Team = () => {
                 <div className="p-5 relative z-10">
                   <div className="mb-4">
                     <h3 className="text-lg font-black italic tracking-wide text-white group-hover:text-white transition-colors">{member.name}</h3>
-                    <span className="text-[10px] font-black tracking-widest text-red-500 uppercase block mt-1">{member.role}</span>
+                    <span className="text-[10px] font-black tracking-widest text-red-500 uppercase block mt-1">{member.role || 'COORDINATOR'}</span>
+                    {member.category === 'student' && member.contact && (
+                      <span className="text-[11px] font-bold tracking-widest text-white/50 block mt-1">{member.contact}</span>
+                    )}
                   </div>
 
                   {/* Social Feed Links */}

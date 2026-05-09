@@ -48,7 +48,7 @@ export const teamData = [
     category: "faculty",
     image: "/images/team/Ragesh-Raju.webp",
     socials: {
-      instagram: "https://www.instagram.com/rageshraju?igsh=dHhneWZjd2w5M21z",
+      // instagram: "https://www.instagram.com/rageshraju?igsh=dHhneWZjd2w5M21z",
     }
   },
   {
@@ -58,7 +58,7 @@ export const teamData = [
     category: "faculty",
     image: "/images/team/Sunith.webp",
     socials: {
-      instagram: "", // No Instagram
+      // instagram: "", // No Instagram
     }
   },
   {
@@ -96,19 +96,21 @@ export const teamData = [
   {
     id: 6,
     name: "Deeksha S Shetty",
-    // role: "Secretary",
+    role: "MCA Coordinator",
     category: "student",
+    contact: "+91 6235711495",
     image: "/images/event-heads/mca/deeksha.webp",
     socials: {
-      linkedin: "#",
-      instagram: "https://www.instagram.com/deeksha_shetty21?igsh=OHp0MnQ5cmR0aWVo",
+      // linkedin: "#",
+      // instagram: "https://www.instagram.com/deeksha_shetty21?igsh=OHp0MnQ5cmR0aWVo",
     }
   },
   {
     id: 7,
     name: "Prayag P Naik",
-    // role: "Joint Secretary",
+    role: "MCA Coordinator",
     category: "student",
+    contact: "+91 8660505376",
     image: "/images/team/prayag.webp",
     socials: {
       // linkedin: "https://www.linkedin.com/in/deeksha-shetty-24b30a39a/",
@@ -117,9 +119,10 @@ export const teamData = [
   },
   {
     id: 8,
-    name: "Shreyas ",
-    // role: "Treasurer",
+    name: "Shreyas K",
+    role: "MBA Coordinator",
     category: "student",
+    contact: "+91 9606799617",
     image: "/images/team/shreyas.webp",
     socials: {
       // linkedin: "#",
@@ -129,13 +132,14 @@ export const teamData = [
   {
     id: 9,
     name: "Vanishree",
-    // role: "Treasurer",
+    role: "MBA Coordinator",
     category: "student",
+    contact: "+91 7996811619",
     image: "/images/team/vanishree.webp",
-    socials: {
-      linkedin: "#",
-      instagram: "https://www.instagram.com/san_jana_salian?igsh=MXhzeWxvYjdycmZiMg==",
-    }
+    // socials: {
+    //   linkedin: "#",
+    //   instagram: "https://www.instagram.com/san_jana_salian?igsh=MXhzeWxvYjdycmZiMg==",
+    // }
   },
   // {
   //   id: 10,
