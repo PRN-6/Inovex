@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Feedback = require('../models/Feedback');
 const { sendConfirmationEmail } = require('../utils/emailService');
 
 // Define Staff keys for admin access
@@ -124,6 +125,24 @@ router.delete('/registrations/:id', async (req, res) => {
         res.json({ success: true, message: "Asset purged" });
     } catch (error) {
         res.status(500).json({ success: false, message: "Purge failed" });
+    }
+});
+
+// @route   GET /api/feedback
+router.get('/feedback', async (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'];
+        const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        if (adminKey !== superSecretKey && !STAFF_KEYS.includes(adminKey) && adminKey !== secretKey) {
+            return res.status(401).json({ success: false, message: "Invalid Clearance Key" });
+        }
+
+        const feedback = await Feedback.find().sort({ createdAt: -1 });
+        res.json({ success: true, count: feedback.length, data: feedback });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error fetching feedback" });
     }
 });
 

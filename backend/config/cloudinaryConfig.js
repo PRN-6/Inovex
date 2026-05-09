@@ -6,6 +6,15 @@ if (!process.env.CLOUDINARY_CLOUD_NAME) {
     console.error("CRITICAL: CLOUDINARY_CLOUD_NAME is missing from .env");
 }
 
+if (!process.env.CLOUDINARY_API_KEY) {
+    console.error("CRITICAL: CLOUDINARY_API_KEY is missing from .env");
+}
+
+console.log("☁️ CLOUDINARY CONFIGURATION INITIALIZED:", {
+    cloud: process.env.CLOUDINARY_CLOUD_NAME,
+    key: process.env.CLOUDINARY_API_KEY ? 'FOUND' : 'MISSING'
+});
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,

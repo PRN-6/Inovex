@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame } from 'lucide-react';
+import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare } from 'lucide-react';
 import { technicalEventsData } from '../data/technicalEventsData';
 import { managementEventsData } from '../data/managementEventsData';
 import { culturalEventsData } from '../data/culturalEventsData';
@@ -44,6 +44,9 @@ const Admin = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [isBulkLoading, setIsBulkLoading] = useState(false);
   const [isVerifyingSession, setIsVerifyingSession] = useState(true);
+  const [activeTab, setActiveTab] = useState('registrations');
+  const [feedback, setFeedback] = useState([]);
+  const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
 
   // Registration Fee configuration
   const FEE_PER_EVENT = 100; // Change this value to match your actual per-event fee
@@ -257,14 +260,10 @@ const Admin = () => {
                           <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Origin (College)</p>
                           <p className="text-lg font-black text-white italic tracking-tight leading-tight">{reg.college?.toUpperCase()}</p>
                        </div>
-                       <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
+                       <div className="pt-6 border-t border-white/5">
                           <div className="space-y-2">
-                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Sector</p>
-                             <p className="text-sm font-black text-red-600">{reg.department || 'GENERAL'}</p>
-                          </div>
-                          <div className="space-y-2 text-right">
-                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Generation</p>
-                             <p className="text-sm font-black text-white">YEAR {reg.year || '?'}</p>
+                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Intel Sector / Category</p>
+                             <p className="text-lg font-black text-red-600">{reg.category?.toUpperCase() || (reg.year ? `YEAR ${reg.year} // ${reg.department}` : 'GENERAL')}</p>
                           </div>
                        </div>
                     </div>
@@ -341,6 +340,48 @@ const Admin = () => {
                       </div>
                     </div>
                   </section>
+
+                  {/* Payment Evidence Section */}
+                  {reg.screenshotUrl && (
+                    <section className="animate-in slide-in-from-right duration-500 delay-200">
+                      <div className="flex items-center gap-3 mb-6">
+                         <div className="p-2 bg-emerald-600/10 rounded-lg"><Image size={16} className="text-emerald-600" /></div>
+                         <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Evidence Verification</h4>
+                      </div>
+                      <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl space-y-6 shadow-xl relative overflow-hidden group">
+                        <div className="relative aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5">
+                          <img 
+                            src={reg.screenshotUrl} 
+                            alt="Payment Evidence" 
+                            className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <a 
+                              href={reg.screenshotUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-black text-[10px] font-black tracking-widest rounded-xl hover:bg-emerald-400 transition-colors uppercase"
+                            >
+                              Open Full Intelligence <ExternalLink size={14} />
+                            </a>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <p className="text-[9px] font-black text-white/30 uppercase tracking-widest italic">
+                            // SECURE_LINK_ACTIVE: Payment Receipt Hash verified
+                          </p>
+                          {reg.paymentStatus !== 'Paid' && (
+                            <button 
+                              onClick={() => handleStatusUpdate(reg._id, 'Paid')}
+                              className="px-6 py-2 bg-green-600 hover:bg-green-500 text-white text-[10px] font-black tracking-widest rounded-xl transition-all uppercase"
+                            >
+                              Approve Payment
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </section>
+                  )}
                 </div>
               </div>
             </div>
@@ -447,6 +488,30 @@ const Admin = () => {
     }
   };
 
+  const fetchFeedback = async () => {
+    if (!accessCode) return;
+    setIsFeedbackLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/feedback`, {
+        headers: { 'x-admin-key': accessCode }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setFeedback(data.data);
+      }
+    } catch (error) {
+      console.error("Feedback Fetch Error:", error);
+    } finally {
+      setIsFeedbackLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'feedback') {
+      fetchFeedback();
+    }
+  }, [activeTab, isAuthenticated]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!accessCode) return;
@@ -529,9 +594,10 @@ const Admin = () => {
   }, [registrations]);
 
   const exportCSV = () => {
-    const headers = ["PID", "Name", "Email", "Phone", "College", "Year", "Dept", "Events"];
+    const headers = ["PID", "Name", "Email", "Phone", "College", "Category", "Events"];
     const csvData = filteredData.map(r => [
-      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, r.year, r.department,
+      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, 
+      r.category || (r.year ? `${r.year}yr - ${r.department}` : 'GENERAL'),
 
       r.registrations.map(ev => ev.eventName).join(" | ")
     ]);
@@ -547,9 +613,10 @@ const Admin = () => {
   };
 
   const exportToExcel = () => {
-    const tableHeader = ["PID", "NAME", "EMAIL", "PHONE", "COLLEGE", "YEAR", "DEPT", "EVENTS"];
+    const tableHeader = ["PID", "NAME", "EMAIL", "PHONE", "COLLEGE", "CATEGORY", "EVENTS"];
     const rows = filteredData.map(r => [
-      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, r.year, r.department,
+      r.participantId || 'PENDING', r.name, r.email, r.phone, r.college, 
+      r.category || (r.year ? `${r.year}YR - ${r.department}` : 'GENERAL'),
 
       r.registrations?.map(ev => {
         const teamInfo = ev.teammates?.length > 0
@@ -917,12 +984,36 @@ const Admin = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-4 w-full md:w-auto">
+          <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+            {/* Event Filter - Only for Admins/Superadmins */}
+            {clearanceLevel >= 1 && (
+              <div className="relative hidden lg:block">
+                <Filter size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
+                <select
+                  value={filterEvent}
+                  onChange={(e) => setFilterEvent(e.target.value)}
+                  className="bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-8 text-[10px] tracking-widest focus:outline-none focus:border-red-600/50 appearance-none cursor-pointer"
+                >
+                  <option value="all">ALL MISSIONS</option>
+                  {Object.values(ALL_EVENTS).map(ev => (
+                    <option key={ev.title} value={ev.title}>{ev.title?.toUpperCase()}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Date Filter */}
+            <CalendarPicker 
+              value={filterDate} 
+              onChange={setFilterDate} 
+              onClear={() => setFilterDate('')} 
+            />
+
             <div className="relative flex-1 md:w-64">
               <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
               <input
                 type="text"
-                placeholder="SEARCH ASSETS (NAME/USN)..."
+                placeholder="SEARCH ASSETS (NAME/ID)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 text-[10px] tracking-widest focus:outline-none focus:border-red-600/50 transition-all"
@@ -947,12 +1038,32 @@ const Admin = () => {
       </header>
 
       <main className="container mx-auto px-6 py-8 space-y-10">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
-            <div className="flex justify-between items-start">
-              <span className="text-[10px] font-black text-white/40 tracking-widest">ACTIVE ASSETS</span>
-              <Users size={16} className="text-red-500" />
+        {/* Sub-Navigation Tabs */}
+        <div className="flex items-center gap-3 p-1 bg-white/[0.03] border border-white/10 rounded-2xl w-fit">
+          <button 
+            onClick={() => setActiveTab('registrations')}
+            className={`flex items-center gap-3 px-6 py-3 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all ${activeTab === 'registrations' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'text-white/40 hover:text-white/70'}`}
+          >
+            <Users size={16} />
+            Mission Control
+          </button>
+          <button 
+            onClick={() => setActiveTab('feedback')}
+            className={`flex items-center gap-3 px-6 py-3 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all ${activeTab === 'feedback' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'text-white/40 hover:text-white/70'}`}
+          >
+            <MessageSquare size={16} />
+            Intelligence Feed
+          </button>
+        </div>
+
+        {activeTab === 'registrations' ? (
+          <>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-black text-white/40 tracking-widest">ACTIVE ASSETS</span>
+                  <Users size={16} className="text-red-500" />
             </div>
             <p className="text-3xl font-black italic">{stats.totalParticipants}</p>
           </div>
@@ -1123,7 +1234,7 @@ const Admin = () => {
                         <div className="space-y-1.5">
                           <p className="text-[10px] font-black text-white/50 truncate max-w-[150px] leading-tight" title={reg.college}>{reg.college || 'EXTERNAL ASSET'}</p>
                           <p className="text-[8px] font-black text-red-600/40 uppercase tracking-[0.1em] bg-red-600/5 px-2 py-0.5 rounded border border-red-600/10 inline-block">
-                            YEAR {reg.year || '?'} // {reg.department || 'GENERAL'}
+                            {reg.category?.toUpperCase() || (reg.year ? `YEAR ${reg.year} // ${reg.department}` : 'GENERAL')}
                           </p>
                         </div>
                       </td>
@@ -1192,9 +1303,66 @@ const Admin = () => {
                 )}
               </tbody>
             </table>
+            </div>
+          </div>
+        </>
+      ) : (
+        /* Intelligence Feed (Feedback) Sector */
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">Inbound Communications</h3>
+              <p className="text-[10px] font-black text-red-600 tracking-[0.3em] uppercase mt-1">Intelligence logged from frontend terminals</p>
+            </div>
+            <button 
+              onClick={fetchFeedback}
+              disabled={isFeedbackLoading}
+              className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all"
+            >
+              <Activity size={18} className={isFeedbackLoading ? 'animate-spin' : ''} />
+            </button>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {isFeedbackLoading ? (
+              <div className="col-span-full py-20 text-center">
+                <div className="inline-block w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-red-600 animate-pulse uppercase">Syncing Intel...</p>
+              </div>
+            ) : feedback.length === 0 ? (
+              <div className="col-span-full py-20 text-center border border-dashed border-white/10 rounded-3xl">
+                <p className="text-white/20 text-xs font-black tracking-widest uppercase italic">No transmissions detected in the sector.</p>
+              </div>
+            ) : (
+              feedback.map((item, i) => (
+                <div key={item._id} className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl hover:border-red-600/30 transition-all group relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 transition-all">
+                    <Terminal size={64} className="text-red-600" />
+                  </div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className={`px-2 py-1 text-[8px] font-black tracking-widest uppercase rounded ${
+                      item.type === 'bug' ? 'bg-red-600 text-white' : 
+                      item.type === 'idea' ? 'bg-amber-500 text-black' : 
+                      'bg-blue-600 text-white'
+                    }`}>
+                      {item.type}
+                    </span>
+                    <span className="text-[9px] font-bold text-white/20 tracking-widest uppercase">
+                      {new Date(item.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-black text-white mb-2 uppercase tracking-tight">{item.name}</h4>
+                  <p className="text-[10px] font-bold text-red-600/60 mb-6 tracking-wider italic">{item.email}</p>
+                  <div className="p-4 bg-black/40 rounded-2xl border border-white/5 min-h-[100px]">
+                    <p className="text-xs text-white/70 leading-relaxed italic">"{item.message}"</p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
-      </main>
+      )}
+    </main>
 
       <RegistrationDetailModal
         reg={selectedReg}

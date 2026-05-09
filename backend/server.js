@@ -38,10 +38,11 @@ app.use('/api', miscRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ 
+    console.error("🔥 GLOBAL ERROR:", err.stack);
+    res.status(err.status || 500).json({ 
         success: false, 
-        message: "INTERNAL SYSTEM ERROR: Expedition data corrupted." 
+        message: `SYSTEM ERROR: ${err.message || 'Internal Server Error'}`,
+        debug: process.env.NODE_ENV === 'development' ? err.stack : undefined
     });
 });
 

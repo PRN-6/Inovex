@@ -228,7 +228,7 @@ const Team = () => {
               {/* HOD Section */}
               <div className="mb-16">
                 <h2 className="text-2xl md:text-3xl font-black italic tracking-wide text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">
-                  Head of <span className="text-white/40">Department</span>
+                  Hod
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
                   {teamData.filter(m => m.category === 'hod').map(member =>
@@ -240,7 +240,7 @@ const Team = () => {
               {/* Faculty Coordinators Section */}
               <div className="mb-16">
                 <h2 className="text-2xl md:text-3xl font-black italic tracking-wide text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">
-                  Faculty <span className="text-white/40">Coordinators</span>
+                  Faculty <span className="text-white/40">co-ordinators</span>
                 </h2>
                 {/* Flex container to center few faculty members, or match grid if many */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-6">
@@ -250,10 +250,10 @@ const Team = () => {
                 </div>
               </div>
 
-              {/* Event & Student Heads Section */}
+              {/* Student Coordinators Section */}
               <div>
                 <h2 className="text-2xl md:text-3xl font-black italic tracking-wide text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">
-                  Core <span className="text-white/40">Committee</span>
+                  Student <span className="text-white/40">coordinators</span>
                 </h2>
                 {/* Standard grid for students */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">

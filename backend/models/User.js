@@ -23,13 +23,18 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
 
+    category: {
+        type: String,
+        enum: ['Technical', 'Management'],
+        required: [true, 'Category (Technical/Management) is required']
+    },
     year: {
         type: String,
-        required: [true, 'Year of study is required']
+        required: false
     },
     department: {
         type: String,
-        required: [true, 'Department is required'],
+        required: false,
         trim: true
     },
     registrations: [{
@@ -57,6 +62,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['Pending', 'Paid'],
         default: 'Pending'
+    },
+    screenshotUrl: {
+        type: String,
+        default: ''
     }
 });
 

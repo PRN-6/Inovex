@@ -30,7 +30,7 @@ const sendConfirmationEmail = async (userData) => {
             <p style="color: #10b981; font-weight: bold; font-size: 20px;">✓ REGISTRATION CONFIRMED</p>
             <div style="background-color: #0c0a09; padding: 20px; border-radius: 8px; border: 1px solid #292524; margin-top: 20px;">
                 <p><strong>PID: ${userData.participantId || 'PENDING'}</strong></p>
-                <p><strong>USN:</strong> ${userData.usn}</p>
+                <p><strong>STREAM:</strong> ${userData.category || 'GENERAL'}</p>
                 <p style="color: #10b981; font-size: 16px; font-weight: bold;">TOTAL AMOUNT DUE: ₹${totalAmount}</p>
                 <p style="color: #f59e0b; font-size: 12px; font-style: italic;">* Present this PID at the college entrance for payment.</p>
             </div>

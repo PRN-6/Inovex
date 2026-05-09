@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { sendFeedbackEmail } = require('../utils/emailService');
+const Feedback = require('../models/Feedback');
 
 // @route   GET /api/status
 router.get('/status', (req, res) => {
@@ -14,9 +14,22 @@ router.get('/status', (req, res) => {
 router.post('/feedback', async (req, res) => {
     try {
         const { name, email, type, message } = req.body;
+        
+        // Persist to Database
+        const feedback = new Feedback({
+            name,
+            email,
+            type,
+            message
+        });
+        await feedback.save();
+
+        // Dispatch Email
         await sendFeedbackEmail({ name, email, type, message });
-        res.status(200).json({ success: true, message: "Feedback transmitted." });
+        
+        res.status(200).json({ success: true, message: "Transmission logged and dispatched." });
     } catch (error) {
+        console.error("FEEDBACK ERROR:", error);
         res.status(500).json({ success: false, message: "Transmission failed." });
     }
 });

@@ -10,51 +10,83 @@ const { upload } = require('../config/cloudinaryConfig');
 
 // @route   POST /api/register
 // @desc    Register participant
-router.post('/register', registerLimiter, async (req, res) => {
-    console.log("!!! HITTING THE NEW REGISTRATION ROUTE - NO PAYMENT LOGIC !!!");
+router.post('/register', (req, res, next) => {
+    // Wrap multer to catch its errors specifically
+    upload.single('screenshot')(req, res, (err) => {
+        if (err) {
+            console.error("❌ PAYMENT UPLOAD ERROR:", err);
+            return res.status(400).json({ 
+                success: false, 
+                message: `UPLOAD FAILED: ${err.message || 'Check your internet or file type.'}` 
+            });
+        }
+        next();
+    });
+}, async (req, res) => {
+    console.log("🛠️ PROCESSING EXPEDITION REGISTRATION...");
+    
     if (process.env.MAINTENANCE_MODE === 'true') {
         return res.status(503).json({ 
             success: false, 
-            message: "EXPEDITION HALTED: The registration system is currently undergoing maintenance." 
+            message: "EXPEDITION HALTED: System maintenance in progress." 
         });
     }
 
     try {
-        let { 
-            name, email, phone, college, year, department, registrations,
-            hp_field 
-        } = req.body;
-
-        if (hp_field) {
-            return res.status(400).json({ success: false, message: "UNAUTHORIZED: Automated access detected." });
+        let data = req.body;
+        
+        // Handle parsing if sent as a single field
+        if (data.data && typeof data.data === 'string') {
+            try {
+                data = JSON.parse(data.data);
+            } catch (e) {
+                console.error("❌ JSON PARSE ERROR:", e);
+                return res.status(400).json({ success: false, message: "INVALID DATA FORMAT: Could not parse registration info." });
+            }
         }
 
-        // Create a new registration entry every time (Duplicates allowed as per request)
+        const { 
+            name, email, phone, college, year, department, registrations,
+            category, hp_field 
+        } = data;
+
+        if (hp_field) {
+            return res.status(400).json({ success: false, message: "SECURITY ALERT: Automated access detected." });
+        }
+
+        // Basic validation
+        if (!name || !email || !registrations) {
+            return res.status(400).json({ success: false, message: "INTEL INCOMPLETE: Missing required fields." });
+        }
+
+        const screenshotUrl = req.file ? req.file.path : '';
+
+        // Create a new registration entry
         const user = new User({
             name, email, phone, college, year, department, registrations,
+            category,
+            screenshotUrl,
             registrationDate: new Date()
         });
 
         await user.save();
-        console.log(`✅ New Registration: ${name}`);
-        sendConfirmationEmail(user).catch(err => console.error("Email Error:", err));
+        console.log(`✅ EXPEDITION JOINED: ${name} [ID: ${user.participantId}]`);
+        
+        // Async email dispatch
+        sendConfirmationEmail(user).catch(err => console.error("📧 EMAIL DISPATCH FAILED:", err.message));
 
         res.status(201).json({
             success: true,
-            message: "Registration successful! Welcome to the expedition.",
+            message: "REGISTRATION SECURED: Welcome to the expedition.",
             participantId: user.participantId
         });
 
     } catch (error) {
-        console.error('Registration Error:', error);
-        if (error.code === 11000) {
-            const field = Object.keys(error.keyPattern)[0];
-            return res.status(400).json({ 
-                success: false, 
-                message: `DUPLICATE ASSET: This ${field.toUpperCase()} is already in use.` 
-            });
-        }
-        res.status(500).json({ success: false, message: "Server Error. Please try again later." });
+        console.error('❌ REGISTRATION CRITICAL ERROR:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: "EXPEDITION ERROR: Database sync failed. Please try again." 
+        });
     }
 });
 

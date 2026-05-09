@@ -13,51 +13,37 @@ const faqs = [
       },
       {
         q: 'When and where does A J ASTRIX take place?',
-        a: 'A J ASTRIX is a 2-day event held on the main campus of AJ Institute of Engineering & Technology, Mangalore. Exact dates and venue specifics will be broadcast via official communication channels.',
+        a: 'A J ASTRIX 2026 is scheduled for May 15th and 16th at the main campus of AJ Institute of Engineering & Technology, Mangalore. Report to the Base Camp (Entrance) upon arrival.',
       },
       {
         q: 'Who can attend A J ASTRIX?',
-        a: 'A J ASTRIX is open to all students — UG and PG — from colleges across the region. Some events are restricted to specific student categories (UG or PG only); this will be clearly indicated on each event\'s detail panel.',
+        a: 'A J ASTRIX is open to all students — UG and PG — from colleges across the region. Bring your official college ID for entry verification.',
       },
     ],
   },
   {
-    category: 'REGISTRATION INTEL',
+    category: 'REGISTRATION & PAYMENT',
     icon: '🔐',
     items: [
       {
         q: 'How do I register for events?',
-        a: 'Navigate to the Registration portal and fill in your details. You can select multiple Technical and Cultural events in a single session. Upon completion, the system generates a unique Participant ID (PID) and an Access Pass which is automatically downloaded for you.',
-      },
-      {
-        q: 'What is the Participant ID (PID)?',
-        a: 'The PID is your unique digital identifier for A J ASTRIX 2026. It links your personal details, squad members, and selected events. You must present this PID at the College Entrance Desk for verification and physical payment.',
+        a: 'Navigate to the Registration portal, enter your details, and select your events. The system will calculate your total fee and provide a secure QR code for payment.',
       },
       {
         q: 'How does the payment process work?',
-        a: 'A J ASTRIX uses an "On-Arrival" payment protocol. After registering online and receiving your PID, head to the registration desk at AJIET campus. Show your PID, and you can complete the payment via the official QR codes provided at the counter.',
+        a: 'A J ASTRIX 2026 utilizes a Digital Verification Protocol. 1. Scan the QR code in the payment step. 2. Complete the transfer via any UPI app. 3. Upload a screenshot of the successful transaction. Our staff will verify the evidence and authorize your pass.',
+      },
+      {
+        q: 'What happens after I upload my screenshot?',
+        a: 'Your registration enters "PENDING VERIFICATION" status. An admin will review your payment evidence. Once confirmed, your Participant ID (PID) will be activated for entry.',
       },
       {
         q: 'Can I register for more events later?',
-        a: 'Yes. If you decide to join more events, simply return to the registration page and select the new events. The system will prevent you from double-registering for the same event but will allow you to expand your quest list.',
+        a: 'Yes. If you decide to join more events, simply return to the registration page and start a new mission. Each separate registration will generate its own verification manifest.',
       },
       {
         q: 'How does squad formation work?',
-        a: 'For team-based events (e.g., RexHack, Battle Nexus), selecting the event will unlock a "Squad Configuration" panel. You must provide the name, USN, and email for each teammate to sync your entire squad to your PID.',
-      },
-    ],
-  },
-  {
-    category: 'EVENT CLASSIFICATION',
-    icon: '📊',
-    items: [
-      {
-        q: 'What is the difference between Technical and Cultural events?',
-        a: 'Technical events focus on engineering, coding, and logical challenges (e.g., Techsaurus, RexHack). Cultural events showcase creative and performing arts (e.g., HR Team, Dance Showdown). You can filter these on the Events page to find your specific area of interest.',
-      },
-      {
-        q: 'Are there specific eligibility rules?',
-        a: 'Affirmative. Some events are exclusive to UG or PG students. Check the "Eligibility Ribbon" on each event card (Top-Right) or the event details for specific restrictions before registering.',
+        a: 'For team-based events, selecting the event will unlock the "Squad Configuration" panel. Provide the name and phone number for each teammate to sync your entire squad to your manifest.',
       },
     ],
   },
@@ -67,19 +53,19 @@ const faqs = [
     items: [
       {
         q: 'How do I know my registration is confirmed?',
-        a: 'Upon successful registration, a confirmation email with your Participant ID (PID) is dispatched. After you complete the payment at the physical desk, your status will be updated to "PAID" in our systems, and you will receive a final payment verification email.',
+        a: 'You will receive an automated confirmation email once you submit. However, your digital pass is only valid for entry after an admin approves your payment screenshot in the dashboard.',
       },
       {
         q: 'Can I participate in events without prior registration?',
-        a: 'Spot registrations may be available for select events at the discretion of coordinators. However, pre-registration guarantees your slot and is strongly recommended to avoid capacity issues.',
+        a: 'Due to strict security protocols and capacity limits, online registration with verified payment is mandatory for all primary events.',
       },
       {
         q: 'What should I bring on event day?',
-        a: 'Carry a valid college ID, your registration confirmation email/screenshot, and any event-specific materials mentioned in the event briefing. Report to the designated venue at least 15 minutes before your event start time.',
+        a: 'Carry your original college ID and the Digital Access Pass (PNG) downloaded during registration. Show the pass at the entrance for scanning.',
       },
       {
         q: 'Are there prizes?',
-        a: 'Absolutely. Top performers across all events receive trophies, certificates, and prize money. Specific prize details are listed in each event\'s detail panel. Winners also earn eternal bragging rights.',
+        a: 'Absolutely. Over ₹1,00,000 in total prize pools are allocated across all technical, cultural, and management categories. Certificates of excellence are provided to all finalists.',
       },
     ],
   },
@@ -88,12 +74,12 @@ const faqs = [
     icon: '🛠️',
     items: [
       {
-        q: 'I\'m facing issues with the registration portal. Who do I contact?',
-        a: 'Use the Feedback terminal (accessible via the navigation sidebar) to report technical issues. Alternatively, contact the event coordinators listed on each event\'s detail page directly.',
+        q: 'My screenshot failed to upload. What should I do?',
+        a: 'Ensure your file is a JPEG or PNG and is under 5MB. If issues persist, refresh the page and try again. For critical errors, use the Feedback Terminal in the sidebar.',
       },
       {
-        q: 'The website is not loading properly. What should I do?',
-        a: 'Try clearing your browser cache and reloading. A J ASTRIX is optimized for modern browsers (Chrome, Firefox, Edge). If issues persist, try disabling browser extensions or switching to a different device/network.',
+        q: 'The payment QR is not loading. How can I pay?',
+        a: 'The QR is dynamic and requires a stable connection. If it fails, you can use the manual UPI ID listed below the QR area or contact our technical helpdesk.',
       },
     ],
   },
