@@ -28,7 +28,7 @@ export const technicalEventsData = {
       },
       {
         name: "Abhiram",
-        contact: "7249214079",
+        contact: "7676382262",
         photo: "/images/event-heads/mca/abhiram.webp"
       }
     ],
