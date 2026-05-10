@@ -1,15 +1,16 @@
 const nodemailer = require('nodemailer');
 
-// Gmail SMTP Configuration
+// Gmail SMTP Configuration (port 587 = STARTTLS, works on IPv4 networks)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,      // false = STARTTLS (upgrades after connect)
+    requireTLS: true,   // force TLS upgrade
     auth: {
         user: process.env.EMAIL_USER,  // prinsonroyal11@gmail.com
         pass: process.env.EMAIL_PASS   // Gmail App Password (16-char)
     },
-    connectionTimeout: 10000,
+    connectionTimeout: 15000,
 });
 
 const sendConfirmationEmail = async (userData) => {
