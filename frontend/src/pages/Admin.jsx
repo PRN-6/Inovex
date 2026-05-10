@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power } from 'lucide-react';
+import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power, Send } from 'lucide-react';
 import { technicalEventsData } from '../data/technicalEventsData';
 import { managementEventsData } from '../data/managementEventsData';
 import { culturalEventsData } from '../data/culturalEventsData';
@@ -48,6 +48,8 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('registrations');
   const [feedback, setFeedback] = useState([]);
   const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
+  const [toast, setToast] = useState(null); // { type: 'success'|'error'|'info', message: string }
+  const [confirmingIds, setConfirmingIds] = useState(new Set()); // track in-progress confirm requests
 
   // Registration Fee configuration
   const FEE_PER_EVENT = 100; // Change this value to match your actual per-event fee
@@ -865,6 +867,49 @@ const Admin = () => {
       alert("CRITICAL ERROR: EMAIL SEND FAILED");
     }
   };
+  const showToast = (type, message) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const confirmPaymentAndEmail = async (e, id) => {
+    e.stopPropagation();
+    if (confirmingIds.has(id)) return;
+
+    setConfirmingIds(prev => new Set([...prev, id]));
+    try {
+      const response = await fetch(`${API_URL}/api/registrations/${id}/confirm-payment`, {
+        method: 'POST',
+        headers: { 'x-admin-key': accessCode }
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        // Update local state so the badge flips to AUTHORIZED immediately
+        setRegistrations(prev => prev.map(r => r._id === id ? { ...r, paymentStatus: 'Paid' } : r));
+        if (selectedReg && selectedReg._id === id) {
+          setSelectedReg(prev => ({ ...prev, paymentStatus: 'Paid' }));
+        }
+        if (data.emailSent === false) {
+          showToast('info', `Payment confirmed, but email failed: ${data.message}`);
+        } else {
+          showToast('success', 'Payment confirmed ✓ and confirmation email sent!');
+        }
+      } else {
+        showToast('error', `Error: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Confirm Payment Error:', error);
+      showToast('error', 'Network error — could not confirm payment.');
+    } finally {
+      setConfirmingIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  };
+
   const handleBulkStatusUpdate = async (newStatus) => {
     if (selectedIds.length === 0) return;
     if (!window.confirm(`BULK PROTOCOL: Verify ${selectedIds.length} assets as ${newStatus.toUpperCase()}?`)) return;
@@ -1386,19 +1431,39 @@ const Admin = () => {
                         </div>
                       </td>
                       <td className="p-5" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          onClick={() => handleStatusUpdate(reg._id, reg.paymentStatus === 'Paid' ? 'Pending' : 'Paid')}
-                          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 ${
-                            reg.paymentStatus === 'Paid'
-                              ? 'text-green-500 bg-green-500/10 border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] hover:bg-green-500/20'
-                              : 'text-amber-500 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] hover:bg-amber-500/20'
-                          }`}
-                        >
-                          <div className={`w-1.5 h-1.5 rounded-full ${reg.paymentStatus === 'Paid' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,1)]'}`}></div>
-                          <span className="text-[9px] font-black tracking-[0.2em] uppercase">
-                            {reg.paymentStatus === 'Paid' ? 'AUTHORIZED' : 'PENDING'}
-                          </span>
-                        </button>
+                        <div className="flex flex-col gap-2">
+                          {/* Toggle Status button */}
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleStatusUpdate(reg._id, reg.paymentStatus === 'Paid' ? 'Pending' : 'Paid'); }}
+                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 ${
+                              reg.paymentStatus === 'Paid'
+                                ? 'text-green-500 bg-green-500/10 border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] hover:bg-green-500/20'
+                                : 'text-amber-500 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] hover:bg-amber-500/20'
+                            }`}
+                          >
+                            <div className={`w-1.5 h-1.5 rounded-full ${reg.paymentStatus === 'Paid' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,1)]'}`}></div>
+                            <span className="text-[9px] font-black tracking-[0.2em] uppercase">
+                              {reg.paymentStatus === 'Paid' ? 'AUTHORIZED' : 'PENDING'}
+                            </span>
+                          </button>
+
+                          {/* Confirm + Email button — only show if not yet paid */}
+                          {reg.paymentStatus !== 'Paid' && (
+                            <button
+                              onClick={(e) => confirmPaymentAndEmail(e, reg._id)}
+                              disabled={confirmingIds.has(reg._id)}
+                              title="Confirm payment & send email to user"
+                              className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                              {confirmingIds.has(reg._id)
+                                ? <Activity size={12} className="animate-spin" />
+                                : <Send size={12} />}
+                              <span className="text-[9px] font-black tracking-[0.2em] uppercase">
+                                {confirmingIds.has(reg._id) ? 'SENDING...' : 'CONFIRM & EMAIL'}
+                              </span>
+                            </button>
+                          )}
+                        </div>
                       </td>
                       <td className="p-5">
                         <div className="space-y-1 text-center md:text-left">
@@ -1480,6 +1545,23 @@ const Admin = () => {
         reg={selectedReg}
         onClose={() => setSelectedReg(null)}
       />
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl animate-in slide-in-from-bottom-4 duration-300 ${
+          toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' :
+          toast.type === 'error'   ? 'bg-red-950/90 border-red-500/40 text-red-300' :
+                                     'bg-blue-950/90 border-blue-500/40 text-blue-300'
+        }`}>
+          {toast.type === 'success' && <CheckCircle size={18} className="shrink-0" />}
+          {toast.type === 'error'   && <X size={18} className="shrink-0" />}
+          {toast.type === 'info'    && <Info size={18} className="shrink-0" />}
+          <p className="text-[11px] font-black tracking-wide max-w-xs">{toast.message}</p>
+          <button onClick={() => setToast(null)} className="ml-2 opacity-50 hover:opacity-100 transition-opacity">
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
       {/* Footer Meta */}
       <footer className="p-8 border-t border-white/5 text-center">

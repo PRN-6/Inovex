@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Feedback = require('../models/Feedback');
-const { sendConfirmationEmail } = require('../utils/emailService');
+const { sendConfirmationEmail, sendPaymentConfirmationEmail } = require('../utils/emailService');
 
 // Define Staff keys for admin access
 const STAFF_KEYS = [
@@ -108,6 +108,45 @@ router.post('/registrations/:id/resend-email', async (req, res) => {
     } catch (error) {
         console.error("RESEND EMAIL ERROR:", error);
         res.status(500).json({ success: false, message: "Server error during resend", error: error.message });
+    }
+});
+
+// @route   POST /api/registrations/:id/confirm-payment
+// Marks payment as Paid AND emails the user a confirmation
+router.post('/registrations/:id/confirm-payment', async (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'];
+        const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        if (adminKey !== superSecretKey && !STAFF_KEYS.includes(adminKey) && adminKey !== secretKey) {
+            return res.status(403).json({ success: false, message: "ADMIN clearance required" });
+        }
+
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+        // Mark as paid
+        user.paymentStatus = 'Paid';
+        await user.save();
+
+        // Send confirmation email
+        const emailResult = await sendPaymentConfirmationEmail(user);
+
+        if (emailResult.success) {
+            res.json({ success: true, message: "Payment confirmed and email sent successfully", data: user });
+        } else {
+            // Payment was confirmed but email failed — still report partial success
+            res.json({
+                success: true,
+                emailSent: false,
+                message: `Payment confirmed, but email failed: ${emailResult.error}`,
+                data: user
+            });
+        }
+    } catch (error) {
+        console.error("CONFIRM PAYMENT ERROR:", error);
+        res.status(500).json({ success: false, message: "Server error during payment confirmation", error: error.message });
     }
 });
 
