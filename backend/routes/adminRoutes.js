@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Feedback = require('../models/Feedback');
+const AdminLog = require('../models/AdminLog');
 const { sendConfirmationEmail, sendPaymentConfirmationEmail } = require('../utils/emailService');
 
 // Define Staff keys for admin access
@@ -29,6 +30,18 @@ router.get('/registrations', async (req, res) => {
             roleInfo.clearance = 1;
         } else {
             return res.status(401).json({ success: false, message: "Invalid Clearance Key" });
+        }
+
+        // Log the access
+        try {
+            await AdminLog.create({
+                accessCode: adminKey,
+                ipAddress: req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+                userAgent: req.headers['user-agent'],
+                action: 'ACCESS_REGISTRATIONS'
+            });
+        } catch (logErr) {
+            console.error("LOGGING ERROR:", logErr);
         }
 
         const registrations = await User.find(query).sort({ registrationDate: -1 });
@@ -182,6 +195,23 @@ router.get('/feedback', async (req, res) => {
         res.json({ success: true, count: feedback.length, data: feedback });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error fetching feedback" });
+    }
+});
+
+// @route   GET /api/admin/logs
+router.get('/admin/logs', async (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'];
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        if (adminKey !== superSecretKey) {
+            return res.status(403).json({ success: false, message: "SUPER ADMIN clearance required" });
+        }
+
+        const logs = await AdminLog.find().sort({ timestamp: -1 }).limit(100);
+        res.json({ success: true, data: logs });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error fetching logs" });
     }
 });
 

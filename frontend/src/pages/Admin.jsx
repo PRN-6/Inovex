@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power, Send, RotateCcw } from 'lucide-react';
+import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power, Send, RotateCcw, ShieldAlert } from 'lucide-react';
 import { technicalEventsData } from '../data/technicalEventsData';
 import { managementEventsData } from '../data/managementEventsData';
 import { culturalEventsData } from '../data/culturalEventsData';
@@ -50,6 +50,8 @@ const Admin = () => {
   const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
   const [toast, setToast] = useState(null); // { type: 'success'|'error'|'info', message: string }
   const [confirmingIds, setConfirmingIds] = useState(new Set()); // track in-progress confirm requests
+  const [securityLogs, setSecurityLogs] = useState([]);
+  const [isLogsLoading, setIsLogsLoading] = useState(false);
 
   // Registration Fee configuration
   const FEE_PER_EVENT = 100; // Change this value to match your actual per-event fee
@@ -872,6 +874,29 @@ const Admin = () => {
     setTimeout(() => setToast(null), 4000);
   };
 
+  const fetchSecurityLogs = async () => {
+    setIsLogsLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/admin/logs`, {
+        headers: { 'x-admin-key': accessCode }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setSecurityLogs(data.data);
+      }
+    } catch (error) {
+      console.error("Fetch Logs Error:", error);
+    } finally {
+      setIsLogsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'security' && clearanceLevel >= 2) {
+      fetchSecurityLogs();
+    }
+  }, [activeTab]);
+
   const confirmPaymentAndEmail = async (e, id) => {
     e.stopPropagation();
     console.log("📡 [FRONTEND DEBUG] Clicking Confirm/Resend for ID:", id, "Target URL:", `${API_URL}/api/registrations/${id}/confirm-payment`);
@@ -1212,6 +1237,15 @@ const Admin = () => {
             <MessageSquare size={16} />
             Intelligence Feed
           </button>
+          {clearanceLevel >= 2 && (
+            <button
+              onClick={() => setActiveTab('security')}
+              className={`flex items-center gap-3 px-6 py-3 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all ${activeTab === 'security' ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/20' : 'text-white/40 hover:text-white/70'}`}
+            >
+              <ShieldAlert size={16} />
+              Security Logs
+            </button>
+          )}
         </div>
 
         {activeTab === 'registrations' ? (
@@ -1497,7 +1531,7 @@ const Admin = () => {
               </div>
             </div>
           </>
-        ) : (
+        ) : activeTab === 'feedback' ? (
           /* Intelligence Feed (Feedback) Sector */
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="flex items-center justify-between mb-8">
@@ -1532,8 +1566,8 @@ const Admin = () => {
                     </div>
                     <div className="flex items-center gap-3 mb-6">
                       <span className={`px-2 py-1 text-[8px] font-black tracking-widest uppercase rounded ${item.type === 'bug' ? 'bg-red-600 text-white' :
-                          item.type === 'idea' ? 'bg-amber-500 text-black' :
-                            'bg-blue-600 text-white'
+                        item.type === 'idea' ? 'bg-amber-500 text-black' :
+                          'bg-blue-600 text-white'
                         }`}>
                         {item.type}
                       </span>
@@ -1549,6 +1583,78 @@ const Admin = () => {
                   </div>
                 ))
               )}
+            </div>
+          </div>
+        ) : (
+          /* Security Logs Sector */
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="p-6 border border-amber-600/20 bg-amber-600/5 rounded-2xl flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-amber-600/20 rounded-full">
+                  <ShieldAlert className="text-amber-500" size={20} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black tracking-widest text-amber-500 uppercase italic">Administrative Access Audit</h3>
+                  <p className="text-[10px] text-white/40 tracking-widest font-black uppercase">Tracking all active terminals and access codes.</p>
+                </div>
+              </div>
+              <button onClick={fetchSecurityLogs} className="px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white text-[9px] font-black tracking-widest uppercase rounded-lg transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+                Refresh Matrix
+              </button>
+            </div>
+
+            <div className="border border-white/5 bg-white/[0.01] overflow-hidden">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-white/5 bg-white/[0.03]">
+                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Access Code</th>
+                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Operational Action</th>
+                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Terminal IP</th>
+                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Timeline</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {isLogsLoading ? (
+                    <tr>
+                      <td colSpan="4" className="p-20 text-center">
+                        <div className="inline-block w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                        <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-amber-500 animate-pulse uppercase">Syncing Security Feed...</p>
+                      </td>
+                    </tr>
+                  ) : securityLogs.length === 0 ? (
+                    <tr>
+                      <td colSpan="4" className="p-20 text-center text-white/20 italic tracking-widest text-xs uppercase font-black">
+                        No access logs found in the security database.
+                      </td>
+                    </tr>
+                  ) : (
+                    securityLogs.map((log, idx) => (
+                      <tr key={idx} className="hover:bg-white/[0.02] transition-colors group">
+                        <td className="p-5">
+                          <code className="text-[10px] font-black text-amber-500 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded">
+                            {log.accessCode?.substring(0, 4)}****{log.accessCode?.slice(-2)}
+                          </code>
+                        </td>
+                        <td className="p-5">
+                          <span className="text-[10px] font-black tracking-widest text-white/60 group-hover:text-white transition-colors uppercase">
+                            {log.action?.replace(/_/g, ' ')}
+                          </span>
+                        </td>
+                        <td className="p-5">
+                          <span className="text-[10px] font-mono text-white/40 group-hover:text-amber-500/40 transition-colors">
+                            {log.ipAddress || 'UNKNOWN'}
+                          </span>
+                        </td>
+                        <td className="p-5">
+                          <span className="text-[10px] font-black text-white/20 tracking-tighter uppercase">
+                            {new Date(log.timestamp).toLocaleString()}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
