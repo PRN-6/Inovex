@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power, Send, RotateCcw, ShieldAlert } from 'lucide-react';
+import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power, Send, RotateCcw, ShieldAlert, UserX, Unlock } from 'lucide-react';
 import { technicalEventsData } from '../data/technicalEventsData';
 import { managementEventsData } from '../data/managementEventsData';
 import { culturalEventsData } from '../data/culturalEventsData';
@@ -897,6 +897,49 @@ const Admin = () => {
     }
   }, [activeTab]);
 
+  const handleBlockKey = async (code) => {
+    if (!window.confirm("SECURITY OVERRIDE: Revoke all access for this code immediately?")) return;
+    try {
+      const res = await fetch(`${API_URL}/api/admin/block`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': accessCode
+        },
+        body: JSON.stringify({ codeToBlock: code })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('success', 'ACCESS REVOKED: Terminal timed out.');
+        fetchSecurityLogs();
+      } else {
+        showToast('error', data.message);
+      }
+    } catch (err) {
+      showToast('error', 'Critical Error during revocation.');
+    }
+  };
+
+  const handleUnblockKey = async (code) => {
+    try {
+      const res = await fetch(`${API_URL}/api/admin/unblock`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': accessCode
+        },
+        body: JSON.stringify({ codeToUnblock: code })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('success', 'ACCESS RESTORED: Terminal re-authorized.');
+        fetchSecurityLogs();
+      }
+    } catch (err) {
+      showToast('error', 'Critical Error during recovery.');
+    }
+  };
+
   const confirmPaymentAndEmail = async (e, id) => {
     e.stopPropagation();
     console.log("📡 [FRONTEND DEBUG] Clicking Confirm/Resend for ID:", id, "Target URL:", `${API_URL}/api/registrations/${id}/confirm-payment`);
@@ -1610,26 +1653,27 @@ const Admin = () => {
                     <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Access Code</th>
                     <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Operational Action</th>
                     <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Terminal IP</th>
+                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase text-center">Protocol Action</th>
                     <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Timeline</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {isLogsLoading ? (
                     <tr>
-                      <td colSpan="4" className="p-20 text-center">
+                      <td colSpan="5" className="p-20 text-center">
                         <div className="inline-block w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                         <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-amber-500 animate-pulse uppercase">Syncing Security Feed...</p>
                       </td>
                     </tr>
                   ) : securityLogs.length === 0 ? (
                     <tr>
-                      <td colSpan="4" className="p-20 text-center text-white/20 italic tracking-widest text-xs uppercase font-black">
+                      <td colSpan="5" className="p-20 text-center text-white/20 italic tracking-widest text-xs uppercase font-black">
                         No access logs found in the security database.
                       </td>
                     </tr>
                   ) : (
                     securityLogs.map((log, idx) => (
-                      <tr key={idx} className="hover:bg-white/[0.02] transition-colors group">
+                      <tr key={idx} className="hover:bg-white/[0.02] transition-colors group border-b border-white/[0.02]">
                         <td className="p-5">
                           <code className="text-[10px] font-black text-amber-500 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded">
                             {log.accessCode?.substring(0, 4)}****{log.accessCode?.slice(-2)}
@@ -1644,6 +1688,15 @@ const Admin = () => {
                           <span className="text-[10px] font-mono text-white/40 group-hover:text-amber-500/40 transition-colors">
                             {log.ipAddress || 'UNKNOWN'}
                           </span>
+                        </td>
+                        <td className="p-5 text-center">
+                          <button
+                            onClick={() => handleBlockKey(log.accessCode)}
+                            className="px-4 py-2 border border-red-600/30 text-red-600 text-[8px] font-black tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all rounded-lg flex items-center gap-2 mx-auto"
+                          >
+                            <UserX size={10} />
+                            TIMEOUT
+                          </button>
                         </td>
                         <td className="p-5">
                           <span className="text-[10px] font-black text-white/20 tracking-tighter uppercase">

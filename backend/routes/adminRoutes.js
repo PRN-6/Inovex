@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const Feedback = require('../models/Feedback');
 const AdminLog = require('../models/AdminLog');
+const BlockedKey = require('../models/BlockedKey');
 const { sendConfirmationEmail, sendPaymentConfirmationEmail } = require('../utils/emailService');
 
 // Define Staff keys for admin access
@@ -30,6 +31,12 @@ router.get('/registrations', async (req, res) => {
             roleInfo.clearance = 1;
         } else {
             return res.status(401).json({ success: false, message: "Invalid Clearance Key" });
+        }
+
+        // Check for revocation
+        const isBlocked = await BlockedKey.findOne({ accessCode: adminKey });
+        if (isBlocked) {
+            return res.status(403).json({ success: false, message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
         }
 
         // Log the access
@@ -212,6 +219,55 @@ router.get('/admin/logs', async (req, res) => {
         res.json({ success: true, data: logs });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error fetching logs" });
+    }
+});
+
+// @route   POST /api/admin/block
+router.post('/admin/block', async (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'];
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        if (adminKey !== superSecretKey) {
+            return res.status(403).json({ success: false, message: "SUPER ADMIN clearance required" });
+        }
+
+        const { codeToBlock } = req.body;
+        if (!codeToBlock) return res.status(400).json({ success: false, message: "Target code required" });
+
+        // Don't let them block the Super Admin key!
+        if (codeToBlock === superSecretKey) {
+            return res.status(400).json({ success: false, message: "CRITICAL ERROR: Cannot revoke Super Admin clearance." });
+        }
+
+        await BlockedKey.findOneAndUpdate(
+            { accessCode: codeToBlock },
+            { accessCode: codeToBlock },
+            { upsert: true }
+        );
+
+        res.json({ success: true, message: "PROTOCOL INITIATED: Access revoked for target code." });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error blocking key" });
+    }
+});
+
+// @route   POST /api/admin/unblock
+router.post('/admin/unblock', async (req, res) => {
+    try {
+        const adminKey = req.headers['x-admin-key'];
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
+        if (adminKey !== superSecretKey) {
+            return res.status(403).json({ success: false, message: "SUPER ADMIN clearance required" });
+        }
+
+        const { codeToUnblock } = req.body;
+        await BlockedKey.findOneAndDelete({ accessCode: codeToUnblock });
+
+        res.json({ success: true, message: "PROTOCOL RECOVERY: Access restored." });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error unblocking key" });
     }
 });
 
