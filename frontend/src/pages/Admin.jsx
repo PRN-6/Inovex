@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power, Send } from 'lucide-react';
+import { Database, ShieldCheck, Download, Trash2, Search, ExternalLink, Filter, TrendingUp, Users, CreditCard, Terminal, Lock, ChevronRight, Activity, FileSpreadsheet, FileText, Calendar, X, CheckCircle, Info, User, Mail, Phone, GraduationCap, Building2, Ticket, Copy, Printer, Flame, Image, MessageSquare, Power, Send, RotateCcw } from 'lucide-react';
 import { technicalEventsData } from '../data/technicalEventsData';
 import { managementEventsData } from '../data/managementEventsData';
 import { culturalEventsData } from '../data/culturalEventsData';
@@ -1447,7 +1447,7 @@ const Admin = () => {
                               </button>
 
                               {/* Confirm + Email button — only show if not yet paid */}
-                              {reg.paymentStatus !== 'Paid' && (
+                              {reg.paymentStatus !== 'Paid' ? (
                                 <button
                                   onClick={(e) => confirmPaymentAndEmail(e, reg._id)}
                                   disabled={confirmingIds.has(reg._id)}
@@ -1459,6 +1459,20 @@ const Admin = () => {
                                     : <Send size={12} />}
                                   <span className="text-[9px] font-black tracking-[0.2em] uppercase">
                                     {confirmingIds.has(reg._id) ? 'SENDING...' : 'CONFIRM & EMAIL'}
+                                  </span>
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={(e) => confirmPaymentAndEmail(e, reg._id)}
+                                  disabled={confirmingIds.has(reg._id)}
+                                  title="Resend confirmation email to user"
+                                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 text-blue-400 bg-blue-500/10 border border-blue-500/30 hover:bg-blue-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                  {confirmingIds.has(reg._id)
+                                    ? <Activity size={12} className="animate-spin" />
+                                    : <RotateCcw size={12} />}
+                                  <span className="text-[9px] font-black tracking-[0.2em] uppercase">
+                                    {confirmingIds.has(reg._id) ? 'SENDING...' : 'RESEND EMAIL'}
                                   </span>
                                 </button>
                               )}
