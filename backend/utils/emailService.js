@@ -1,6 +1,6 @@
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
-// Accurate Fee Mapping for INOVEX 2026
+// Accurate Fee Mapping for ASTRIX 2026
 const EVENT_FEES = {
     "TECHSAURUS: IT MANAGER": 150,
     "HIDDEN HORIZON - TREASURE HUNT": 300,
@@ -36,7 +36,7 @@ const sendConfirmationEmail = async (userData) => {
     
     const htmlContent = `
         <div style="background-color: #000; color: #fff; padding: 40px; font-family: sans-serif; border: 2px solid #f59e0b; border-radius: 15px; max-width: 600px; margin: auto;">
-            <h1 style="color: #f59e0b; text-align: center;">INOVEX 2026</h1>
+            <h1 style="color: #f59e0b; text-align: center;">ASTRIX 2026</h1>
             <p style="font-size: 18px;">Greetings, <strong>${userData.name}</strong>!</p>
             <p style="color: #10b981; font-weight: bold; font-size: 20px;">✓ REGISTRATION CONFIRMED</p>
             <div style="background-color: #0c0a09; padding: 20px; border-radius: 8px; border: 1px solid #292524; margin-top: 20px;">
@@ -57,9 +57,9 @@ const sendConfirmationEmail = async (userData) => {
                 'content-type': 'application/json'
             },
             body: JSON.stringify({
-                sender: { name: "INOVEX 2026 Confirmation", email: "prinsonroyal11@gmail.com" },
+                sender: { name: "ASTRIX 2026 Confirmation", email: "prinsonroyal11@gmail.com" },
                 to: [{ email: userData.email, name: userData.name }],
-                subject: `[INOVEX 2026] Registration Confirmation - ${userData.name}`,
+                subject: `[ASTRIX 2026] Registration Confirmation - ${userData.name}`,
                 htmlContent: htmlContent
             })
         });
@@ -88,7 +88,7 @@ const sendFeedbackEmail = async (feedbackData) => {
                 'content-type': 'application/json'
             },
             body: JSON.stringify({
-                sender: { name: "INOVEX Feedback", email: "prinsonroyal11@gmail.com" },
+                sender: { name: "ASTRIX Feedback", email: "prinsonroyal11@gmail.com" },
                 to: [{ email: "prinsonroyal11@gmail.com" }],
                 subject: `NEW FEEDBACK from ${feedbackData.name}`,
                 htmlContent: `<p><strong>Name:</strong> ${feedbackData.name}</p><p><strong>Message:</strong> ${feedbackData.message}</p>`
@@ -117,7 +117,7 @@ const sendPaymentConfirmationEmail = async (userData) => {
             <div style="max-width: 600px; margin: 0 auto; background: #0a0a0a; border: 1px solid #10b981; border-radius: 16px; overflow: hidden;">
                 <div style="background: linear-gradient(135deg, #052e16 0%, #064e3b 100%); padding: 40px 30px; text-align: center; border-bottom: 2px solid #10b981;">
                     <p style="font-size: 11px; letter-spacing: 6px; color: #6ee7b7; margin: 0 0 10px 0; text-transform: uppercase;">A.J. ASTRIX PRESENTS</p>
-                    <h1 style="font-size: 36px; color: #ffffff; margin: 0 0 6px 0; font-weight: 900; letter-spacing: -1px;">INOVEX 2026</h1>
+                    <h1 style="font-size: 36px; color: #ffffff; margin: 0 0 6px 0; font-weight: 900; letter-spacing: -1px;">ASTRIX 2026</h1>
                     <p style="font-size: 11px; letter-spacing: 5px; color: #34d399; margin: 0; text-transform: uppercase;">PAYMENT AUTHORIZED</p>
                 </div>
                 <div style="padding: 30px;">
@@ -152,9 +152,9 @@ const sendPaymentConfirmationEmail = async (userData) => {
                 'content-type': 'application/json'
             },
             body: JSON.stringify({
-                sender: { name: "INOVEX 2026 Admin", email: "prinsonroyal11@gmail.com" },
+                sender: { name: "ASTRIX 2026 Admin", email: "prinsonroyal11@gmail.com" },
                 to: [{ email: userData.email, name: userData.name }],
-                subject: `[INOVEX 2026] Payment Verified - PID: ${userData.participantId}`,
+                subject: `[ASTRIX 2026] Payment Verified - PID: ${userData.participantId}`,
                 htmlContent: htmlContent
             })
         });
