@@ -874,6 +874,7 @@ const Admin = () => {
 
   const confirmPaymentAndEmail = async (e, id) => {
     e.stopPropagation();
+    console.log("📡 [FRONTEND DEBUG] Clicking Confirm/Resend for ID:", id, "Target URL:", `${API_URL}/api/registrations/${id}/confirm-payment`);
     if (confirmingIds.has(id)) return;
 
     setConfirmingIds(prev => new Set([...prev, id]));
