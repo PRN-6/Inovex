@@ -1,14 +1,4 @@
-const nodemailer = require('nodemailer');
-
-// Gmail SMTP Configuration
-// Port 587 is the most compatible for cloud servers like Render
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER, // Your Gmail
-        pass: process.env.EMAIL_PASS  // Your 16-character App Password
-    }
-});
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
 // Accurate Fee Mapping for INOVEX 2026
 const EVENT_FEES = {
