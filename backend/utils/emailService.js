@@ -1,9 +1,4 @@
-require('dotenv').config();
-const nodemailer = require('nodemailer');
-
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.error('⚠️ WARNING: EMAIL_USER or EMAIL_PASS not found in environment!');
-}
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
 // Accurate Fee Mapping for INOVEX 2026
 const EVENT_FEES = {
@@ -23,30 +18,6 @@ const EVENT_FEES = {
     "CLASH OF AURAS: FACE OFF": 150,
     "BATTLE NEXUS: GAMING - FREE FIRE": 400
 };
-
-// Create Gmail Transporter using SSL (Port 465)
-// This is the most reliable way to land in Primary Inbox and work on Render.
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false // Helps with some cloud hosting certificate issues
-    }
-});
-
-// Verify connection configuration on startup
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('❌ GMAIL SMTP ERROR:', error.message);
-    } else {
-        console.log('🚀 EMAIL SERVICE: Connected to Gmail (Primary Inbox mode)');
-    }
-});
 
 const calculateTotal = (registrations) => {
     if (!Array.isArray(registrations)) return 0;
@@ -78,31 +49,53 @@ const sendConfirmationEmail = async (userData) => {
     `;
 
     try {
-        await transporter.sendMail({
-            from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
-            to: userData.email,
-            subject: `[INOVEX 2026] Registration Confirmation - ${userData.name}`,
-            html: htmlContent
+        const response = await fetch(BREVO_API_URL, {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': process.env.BREVO_API_KEY,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: { name: "INOVEX 2026 Confirmation", email: "prinsonroyal11@gmail.com" },
+                to: [{ email: userData.email, name: userData.name }],
+                subject: `[INOVEX 2026] Registration Confirmation - ${userData.name}`,
+                htmlContent: htmlContent
+            })
         });
-        console.log(`📧 Success: Primary email sent to: ${userData.email}`);
-        return { success: true };
+
+        if (response.ok) {
+            console.log(`📧 Success: Confirmation email sent via Brevo to: ${userData.email}`);
+            return { success: true };
+        } else {
+            const errorData = await response.json();
+            console.error('❌ Brevo API Error:', errorData.message);
+            return { success: false, error: errorData.message };
+        }
     } catch (error) {
-        console.error('❌ Gmail Send Error:', error.message);
+        console.error('❌ Email Network Error:', error.message);
         return { success: false, error: error.message };
     }
 };
 
 const sendFeedbackEmail = async (feedbackData) => {
     try {
-        await transporter.sendMail({
-            from: `"INOVEX Feedback" <${process.env.EMAIL_USER}>`,
-            to: process.env.EMAIL_USER,
-            subject: `NEW FEEDBACK from ${feedbackData.name}`,
-            html: `<p><strong>Name:</strong> ${feedbackData.name}</p><p><strong>Message:</strong> ${feedbackData.message}</p>`
+        const response = await fetch(BREVO_API_URL, {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': process.env.BREVO_API_KEY,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: { name: "INOVEX Feedback", email: "prinsonroyal11@gmail.com" },
+                to: [{ email: "prinsonroyal11@gmail.com" }],
+                subject: `NEW FEEDBACK from ${feedbackData.name}`,
+                htmlContent: `<p><strong>Name:</strong> ${feedbackData.name}</p><p><strong>Message:</strong> ${feedbackData.message}</p>`
+            })
         });
-        return { success: true };
+        return { success: response.ok };
     } catch (error) {
-        console.error('❌ Feedback Email Error:', error.message);
         return { success: false, error: error.message };
     }
 };
@@ -151,16 +144,29 @@ const sendPaymentConfirmationEmail = async (userData) => {
     `;
 
     try {
-        await transporter.sendMail({
-            from: `"INOVEX 2026" <${process.env.EMAIL_USER}>`,
-            to: userData.email,
-            subject: `[INOVEX 2026] Payment Verified - PID: ${userData.participantId}`,
-            html: htmlContent
+        const response = await fetch(BREVO_API_URL, {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': process.env.BREVO_API_KEY,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: { name: "INOVEX 2026 Admin", email: "prinsonroyal11@gmail.com" },
+                to: [{ email: userData.email, name: userData.name }],
+                subject: `[INOVEX 2026] Payment Verified - PID: ${userData.participantId}`,
+                htmlContent: htmlContent
+            })
         });
-        console.log(`📧 Success: Primary payment email sent to: ${userData.email}`);
-        return { success: true };
+
+        if (response.ok) {
+            console.log(`📧 Success: Payment email sent via Brevo to: ${userData.email}`);
+            return { success: true };
+        } else {
+            const errorData = await response.json();
+            return { success: false, error: errorData.message };
+        }
     } catch (error) {
-        console.error('❌ Gmail Send Error:', error.message);
         return { success: false, error: error.message };
     }
 };
