@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Auto-generate Participant ID before saving
-userSchema.pre('save', async function() {
+userSchema.pre('save', async function () {
     if (!this.participantId) {
         try {
             const { generateParticipantId } = require('../utils/idGenerator');

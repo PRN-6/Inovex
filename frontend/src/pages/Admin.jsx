@@ -176,18 +176,18 @@ const Admin = () => {
           <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-[0_0_20px_rgba(223,31,38,0.5)]"></div>
         </div>
-        
+
         <div className="relative z-10 min-h-screen flex flex-col">
           {/* Immersive Background Texture */}
           <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full"></div>
-          
+
           <div className="relative z-10 flex flex-col flex-1">
             {/* Modal Header */}
             {/* Top Navigation Bar */}
             <div className="p-6 md:px-12 border-b border-white/5 flex justify-between items-center sticky top-0 bg-black/80 backdrop-blur-xl z-20">
               <div className="flex items-center gap-6">
-                <button 
+                <button
                   onClick={onClose}
                   className="group flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-red-600/10 border border-white/10 hover:border-red-600/30 rounded-xl transition-all"
                 >
@@ -218,57 +218,57 @@ const Admin = () => {
                 <div className="lg:col-span-4 space-y-10">
                   <section className="animate-in slide-in-from-left duration-500">
                     <div className="flex items-center gap-3 mb-6">
-                       <div className="p-2 bg-red-600/10 rounded-lg"><User size={16} className="text-red-600" /></div>
-                       <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Representative Intel</h4>
+                      <div className="p-2 bg-red-600/10 rounded-lg"><User size={16} className="text-red-600" /></div>
+                      <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Representative Intel</h4>
                     </div>
                     <div className="space-y-4">
-                       <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl group hover:border-red-600/30 transition-all shadow-xl">
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-2">Internal USN / ID</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-lg font-black text-red-600 tracking-widest">{reg.usn || 'NOT_PROVIDED'}</span>
-                            <button onClick={() => copyToClipboard(reg.usn)} className="p-2 hover:bg-white/5 rounded-lg transition-all opacity-40 hover:opacity-100"><Copy size={14} className="text-white" /></button>
-                          </div>
-                       </div>
-                       <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl space-y-6 shadow-xl">
-                          <div>
-                            <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-3">Communication Matrix</p>
-                            <div className="space-y-4">
-                               <div className="flex items-center justify-between p-3 bg-black/40 rounded-2xl border border-white/5 group hover:border-red-600/20 transition-all">
-                                  <div className="flex items-center gap-3">
-                                    <Mail size={14} className="text-red-600/40" />
-                                    <span className="text-sm font-bold text-white/90">{reg.email}</span>
-                                  </div>
-                                  <button onClick={() => copyToClipboard(reg.email)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-white/40" /></button>
-                               </div>
-                               <div className="flex items-center justify-between p-3 bg-black/40 rounded-2xl border border-white/5 group hover:border-amber-600/20 transition-all">
-                                  <div className="flex items-center gap-3">
-                                    <Phone size={14} className="text-amber-500/40" />
-                                    <span className="text-sm font-bold text-amber-500">{reg.phone}</span>
-                                  </div>
-                                  <button onClick={() => copyToClipboard(reg.phone)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-white/40" /></button>
-                               </div>
+                      <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl group hover:border-red-600/30 transition-all shadow-xl">
+                        <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-2">Internal USN / ID</p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg font-black text-red-600 tracking-widest">{reg.usn || 'NOT_PROVIDED'}</span>
+                          <button onClick={() => copyToClipboard(reg.usn)} className="p-2 hover:bg-white/5 rounded-lg transition-all opacity-40 hover:opacity-100"><Copy size={14} className="text-white" /></button>
+                        </div>
+                      </div>
+                      <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl space-y-6 shadow-xl">
+                        <div>
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest mb-3">Communication Matrix</p>
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between p-3 bg-black/40 rounded-2xl border border-white/5 group hover:border-red-600/20 transition-all">
+                              <div className="flex items-center gap-3">
+                                <Mail size={14} className="text-red-600/40" />
+                                <span className="text-sm font-bold text-white/90">{reg.email}</span>
+                              </div>
+                              <button onClick={() => copyToClipboard(reg.email)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-white/40" /></button>
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-black/40 rounded-2xl border border-white/5 group hover:border-amber-600/20 transition-all">
+                              <div className="flex items-center gap-3">
+                                <Phone size={14} className="text-amber-500/40" />
+                                <span className="text-sm font-bold text-amber-500">{reg.phone}</span>
+                              </div>
+                              <button onClick={() => copyToClipboard(reg.phone)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Copy size={12} className="text-white/40" /></button>
                             </div>
                           </div>
-                       </div>
+                        </div>
+                      </div>
                     </div>
                   </section>
 
                   <section className="animate-in slide-in-from-left duration-500 delay-100">
                     <div className="flex items-center gap-3 mb-6">
-                       <div className="p-2 bg-red-600/10 rounded-lg"><Building2 size={16} className="text-red-600" /></div>
-                       <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Institutional Roots</h4>
+                      <div className="p-2 bg-red-600/10 rounded-lg"><Building2 size={16} className="text-red-600" /></div>
+                      <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Institutional Roots</h4>
                     </div>
                     <div className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl space-y-8 shadow-xl">
-                       <div className="space-y-2">
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Origin (College)</p>
-                          <p className="text-lg font-black text-white italic tracking-tight leading-tight">{reg.college?.toUpperCase()}</p>
-                       </div>
-                       <div className="pt-6 border-t border-white/5">
-                          <div className="space-y-2">
-                             <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Intel Sector / Category</p>
-                             <p className="text-lg font-black text-red-600">{reg.category?.toUpperCase() || (reg.year ? `YEAR ${reg.year} // ${reg.department}` : 'GENERAL')}</p>
-                          </div>
-                       </div>
+                      <div className="space-y-2">
+                        <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Origin (College)</p>
+                        <p className="text-lg font-black text-white italic tracking-tight leading-tight">{reg.college?.toUpperCase()}</p>
+                      </div>
+                      <div className="pt-6 border-t border-white/5">
+                        <div className="space-y-2">
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Intel Sector / Category</p>
+                          <p className="text-lg font-black text-red-600">{reg.category?.toUpperCase() || (reg.year ? `YEAR ${reg.year} // ${reg.department}` : 'GENERAL')}</p>
+                        </div>
+                      </div>
                     </div>
                   </section>
                 </div>
@@ -278,46 +278,46 @@ const Admin = () => {
                   <section className="animate-in slide-in-from-right duration-500">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
-                         <div className="p-2 bg-red-600/10 rounded-lg"><Ticket size={16} className="text-red-600" /></div>
-                         <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Mission Manifest</h4>
+                        <div className="p-2 bg-red-600/10 rounded-lg"><Ticket size={16} className="text-red-600" /></div>
+                        <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Mission Manifest</h4>
                       </div>
                       <span className="text-[9px] font-black px-3 py-1 bg-red-600 text-white rounded-full">{reg.registrations?.length || 0} ACTIVE QUESTS</span>
                     </div>
                     <div className="grid md:grid-cols-2 gap-6">
-                       {reg.registrations?.map((ev, i) => (
-                         <div key={i} className="p-6 bg-white/[0.03] border border-white/10 rounded-3xl relative overflow-hidden group hover:border-red-600/30 transition-all shadow-2xl">
-                           <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 transition-all group-hover:scale-110">
-                              <Flame size={80} className="text-red-600" />
-                           </div>
-                           <h5 className="text-lg font-black text-white mb-6 italic tracking-tight leading-none group-hover:text-red-500 transition-colors">{ev.eventName?.toUpperCase()}</h5>
-                           
-                           <div className="space-y-4">
-                              <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Squad Composition</p>
-                              <div className="space-y-2">
-                                <div className="flex items-center justify-between p-3 bg-red-600/5 rounded-2xl border border-red-600/10">
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 rounded-full bg-red-600"></div>
-                                    <span className="text-xs font-black text-white/90">LEADER: {reg.name}</span>
+                      {reg.registrations?.map((ev, i) => (
+                        <div key={i} className="p-6 bg-white/[0.03] border border-white/10 rounded-3xl relative overflow-hidden group hover:border-red-600/30 transition-all shadow-2xl">
+                          <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 transition-all group-hover:scale-110">
+                            <Flame size={80} className="text-red-600" />
+                          </div>
+                          <h5 className="text-lg font-black text-white mb-6 italic tracking-tight leading-none group-hover:text-red-500 transition-colors">{ev.eventName?.toUpperCase()}</h5>
+
+                          <div className="space-y-4">
+                            <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Squad Composition</p>
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between p-3 bg-red-600/5 rounded-2xl border border-red-600/10">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-2 h-2 rounded-full bg-red-600"></div>
+                                  <span className="text-xs font-black text-white/90">LEADER: {reg.name}</span>
+                                </div>
+                              </div>
+                              {ev.teammates?.map((t, ti) => (
+                                <div key={ti} className="flex flex-col p-4 bg-black/40 rounded-2xl border border-white/5 hover:border-white/10 transition-all">
+                                  <div className="flex justify-between items-center">
+                                    <p className="text-[11px] font-black text-white/70 flex items-center gap-2">
+                                      <span className="text-red-600/40 text-[9px]">SQUAD_0{ti + 1}:</span> {t.name?.toUpperCase()}
+                                    </p>
+                                    {t.phone && <Phone size={10} className="text-white/20" />}
+                                  </div>
+                                  <div className="flex gap-4 mt-2">
+                                    {t.phone && <p className="text-[8px] font-bold text-white/30 tracking-widest">{t.phone}</p>}
+                                    {t.usn && <p className="text-[8px] font-bold text-red-900/40 tracking-widest">{t.usn}</p>}
                                   </div>
                                 </div>
-                                {ev.teammates?.map((t, ti) => (
-                                  <div key={ti} className="flex flex-col p-4 bg-black/40 rounded-2xl border border-white/5 hover:border-white/10 transition-all">
-                                    <div className="flex justify-between items-center">
-                                      <p className="text-[11px] font-black text-white/70 flex items-center gap-2">
-                                        <span className="text-red-600/40 text-[9px]">SQUAD_0{ti + 1}:</span> {t.name?.toUpperCase()}
-                                      </p>
-                                      {t.phone && <Phone size={10} className="text-white/20" />}
-                                    </div>
-                                    <div className="flex gap-4 mt-2">
-                                      {t.phone && <p className="text-[8px] font-bold text-white/30 tracking-widest">{t.phone}</p>}
-                                      {t.usn && <p className="text-[8px] font-bold text-red-900/40 tracking-widest">{t.usn}</p>}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                           </div>
-                         </div>
-                       ))}
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </section>
 
@@ -325,7 +325,7 @@ const Admin = () => {
                     <div className="p-8 bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 rounded-3xl shadow-2xl flex flex-col md:flex-row justify-between items-center gap-8">
                       <div className="flex items-center gap-6">
                         <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-center">
-                           <CreditCard size={32} className="text-amber-500" />
+                          <CreditCard size={32} className="text-amber-500" />
                         </div>
                         <div>
                           <p className="text-[10px] font-black text-white/20 tracking-[0.4em] uppercase mb-2">Clearance Status</p>
@@ -348,20 +348,20 @@ const Admin = () => {
                   {reg.screenshotUrl && (
                     <section className="animate-in slide-in-from-right duration-500 delay-200">
                       <div className="flex items-center gap-3 mb-6">
-                         <div className="p-2 bg-emerald-600/10 rounded-lg"><Image size={16} className="text-emerald-600" /></div>
-                         <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Evidence Verification</h4>
+                        <div className="p-2 bg-emerald-600/10 rounded-lg"><Image size={16} className="text-emerald-600" /></div>
+                        <h4 className="text-[10px] font-black tracking-[0.4em] text-white/40 uppercase">Evidence Verification</h4>
                       </div>
                       <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl space-y-6 shadow-xl relative overflow-hidden group">
                         <div className="relative aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/5">
-                          <img 
-                            src={reg.screenshotUrl} 
-                            alt="Payment Evidence" 
+                          <img
+                            src={reg.screenshotUrl}
+                            alt="Payment Evidence"
                             className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                            <a 
-                              href={reg.screenshotUrl} 
-                              target="_blank" 
+                            <a
+                              href={reg.screenshotUrl}
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-black text-[10px] font-black tracking-widest rounded-xl hover:bg-emerald-400 transition-colors uppercase"
                             >
@@ -374,7 +374,7 @@ const Admin = () => {
                             // SECURE_LINK_ACTIVE: Payment Receipt Hash verified
                           </p>
                           {reg.paymentStatus !== 'Paid' && (
-                            <button 
+                            <button
                               onClick={() => handleStatusUpdate(reg._id, 'Paid')}
                               className="px-6 py-2 bg-green-600 hover:bg-green-500 text-white text-[10px] font-black tracking-widest rounded-xl transition-all uppercase"
                             >
@@ -391,17 +391,17 @@ const Admin = () => {
 
             {/* Modal Footer: Controls */}
             <div className="p-12 bg-white/[0.02] border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-               <div className="flex items-center gap-8">
-                  <div>
-                    <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-2">Registry Timestamp</p>
-                    <p className="text-xs font-black text-white/60 tracking-widest">{new Date(reg.registrationDate).toLocaleString()}</p>
-                  </div>
-               </div>
-               
-               <div className="text-center md:text-right">
-                  <p className="text-[8px] font-bold text-white/10 tracking-[0.5em] mb-2 uppercase">Core Database Reference</p>
-                  <p className="text-[10px] font-black text-red-600/40 tracking-tighter italic">{reg._id}</p>
-               </div>
+              <div className="flex items-center gap-8">
+                <div>
+                  <p className="text-[8px] font-black text-white/20 tracking-widest uppercase mb-2">Registry Timestamp</p>
+                  <p className="text-xs font-black text-white/60 tracking-widest">{new Date(reg.registrationDate).toLocaleString()}</p>
+                </div>
+              </div>
+
+              <div className="text-center md:text-right">
+                <p className="text-[8px] font-bold text-white/10 tracking-[0.5em] mb-2 uppercase">Core Database Reference</p>
+                <p className="text-[10px] font-black text-red-600/40 tracking-tighter italic">{reg._id}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -425,7 +425,7 @@ const Admin = () => {
       setIsVerifyingSession(false);
       return;
     }
-    
+
     setIsLoading(true);
     try {
       // Direct call with key to bypass state delay
@@ -618,10 +618,10 @@ const Admin = () => {
 
   const exportCSV = () => {
     const headers = [
-      "PID", "Name", "Email", "Phone", "College", "Category", 
+      "PID", "Name", "Email", "Phone", "College", "Category",
       "Events", "Squad Details", "Status", "Amount", "Date", "Screenshot"
     ];
-    
+
     const csvData = filteredData.map(r => {
       const eventList = r.registrations.map(ev => ev.eventName).join(" | ");
       const squadDetails = r.registrations.map(ev => {
@@ -631,11 +631,11 @@ const Admin = () => {
       }).join(" || ");
 
       return [
-        r.participantId || 'PENDING', 
-        `"${r.name}"`, 
-        r.email, 
-        r.phone, 
-        `"${r.college}"`, 
+        r.participantId || 'PENDING',
+        `"${r.name}"`,
+        r.email,
+        r.phone,
+        `"${r.college}"`,
         r.category || (r.year ? `${r.year}yr - ${r.department}` : 'GENERAL'),
         `"${eventList}"`,
         `"${squadDetails}"`,
@@ -658,22 +658,22 @@ const Admin = () => {
 
   const exportToExcel = () => {
     const tableHeader = [
-      "PID", "NAME", "EMAIL", "PHONE", "COLLEGE", "CATEGORY", 
-      "EVENTS ENROLLED", "SQUAD INTEL", "PAYMENT STATUS", 
+      "PID", "NAME", "EMAIL", "PHONE", "COLLEGE", "CATEGORY",
+      "EVENTS ENROLLED", "SQUAD INTEL", "PAYMENT STATUS",
       "TOTAL FEE", "REGISTRATION DATE", "PROOF OF PAYMENT"
     ];
 
     const rows = filteredData.map(r => [
-      r.participantId || 'PENDING', 
-      r.name?.toUpperCase(), 
-      r.email, 
-      r.phone, 
-      r.college?.toUpperCase(), 
+      r.participantId || 'PENDING',
+      r.name?.toUpperCase(),
+      r.email,
+      r.phone,
+      r.college?.toUpperCase(),
       r.category?.toUpperCase() || (r.year ? `${r.year}YR - ${r.department}` : 'GENERAL'),
-      
+
       // Events
       r.registrations?.map(ev => ev.eventName?.toUpperCase()).join("<br>"),
-      
+
       // Squad Details
       r.registrations?.map(ev => {
         const teamInfo = ev.teammates?.length > 0
@@ -786,10 +786,10 @@ const Admin = () => {
                     <div style="margin-bottom: 8px;">
                       <b>• ${ev.eventName?.toUpperCase()}</b>
                       <div class="squad-list">
-                        ${ev.teammates?.length > 0 ? 
-                          ev.teammates.map(t => `<div class="squad-member">${t.name} (${t.phone || 'N/A'})</div>`).join('') :
-                          '<div class="squad-member italic">Solo Entry</div>'
-                        }
+                        ${ev.teammates?.length > 0 ?
+        ev.teammates.map(t => `<div class="squad-member">${t.name} (${t.phone || 'N/A'})</div>`).join('') :
+        '<div class="squad-member italic">Solo Entry</div>'
+      }
                       </div>
                     </div>
                   `).join('')}
@@ -916,7 +916,7 @@ const Admin = () => {
 
     setIsBulkLoading(true);
     try {
-      const updatePromises = selectedIds.map(id => 
+      const updatePromises = selectedIds.map(id =>
         fetch(`${API_URL}/api/registrations/${id}/status`, {
           method: 'PATCH',
           headers: {
@@ -976,7 +976,7 @@ const Admin = () => {
 
     setIsBulkLoading(true);
     try {
-      const deletePromises = selectedIds.map(id => 
+      const deletePromises = selectedIds.map(id =>
         fetch(`${API_URL}/api/registrations/${id}`, {
           method: 'DELETE',
           headers: {
@@ -1113,8 +1113,8 @@ const Admin = () => {
               <div className="flex items-center gap-2">
                 <p className="text-[8px] font-black tracking-widest text-red-600/60">SYSTEM STATUS: 100% OPERATIONAL</p>
                 <span className={`text-[7px] px-1.5 py-0.5 rounded-full font-black border ${clearanceLevel >= 2 ? 'bg-red-600 text-white border-red-400' :
-                    clearanceLevel >= 1 ? 'bg-white/10 text-white/80 border-white/20' :
-                      'bg-blue-600/20 text-blue-400 border-blue-500/30'
+                  clearanceLevel >= 1 ? 'bg-white/10 text-white/80 border-white/20' :
+                    'bg-blue-600/20 text-blue-400 border-blue-500/30'
                   }`}>
                   {clearanceLevel >= 2 ? 'SUPER ADMIN' : clearanceLevel >= 1 ? 'LEVEL 1 ACCESS' : `EVENT LEAD: ${restrictedEvent?.toUpperCase()}`}
                 </span>
@@ -1155,10 +1155,10 @@ const Admin = () => {
             )}
 
             {/* Date Filter */}
-            <CalendarPicker 
-              value={filterDate} 
-              onChange={setFilterDate} 
-              onClear={() => setFilterDate('')} 
+            <CalendarPicker
+              value={filterDate}
+              onChange={setFilterDate}
+              onClear={() => setFilterDate('')}
             />
 
             <div className="relative flex-1 md:w-64">
@@ -1197,14 +1197,14 @@ const Admin = () => {
       <main className="container mx-auto px-6 py-8 space-y-10">
         {/* Sub-Navigation Tabs */}
         <div className="flex items-center gap-3 p-1 bg-white/[0.03] border border-white/10 rounded-2xl w-fit">
-          <button 
+          <button
             onClick={() => setActiveTab('registrations')}
             className={`flex items-center gap-3 px-6 py-3 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all ${activeTab === 'registrations' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'text-white/40 hover:text-white/70'}`}
           >
             <Users size={16} />
             Mission Control
           </button>
-          <button 
+          <button
             onClick={() => setActiveTab('feedback')}
             className={`flex items-center gap-3 px-6 py-3 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all ${activeTab === 'feedback' ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'text-white/40 hover:text-white/70'}`}
           >
@@ -1221,325 +1221,323 @@ const Admin = () => {
                 <div className="flex justify-between items-start">
                   <span className="text-[10px] font-black text-white/40 tracking-widest">ACTIVE ASSETS</span>
                   <Users size={16} className="text-red-500" />
-            </div>
-            <p className="text-3xl font-black italic">{stats.totalParticipants}</p>
-          </div>
-          <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
-            <div className="flex justify-between items-start">
-              <span className="text-[10px] font-black text-white/40 tracking-widest">GROSS REVENUE</span>
-              <CreditCard size={16} className="text-emerald-500" />
-            </div>
-            <p className="text-3xl font-black italic">₹{stats.totalRevenue}</p>
-          </div>
-          <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
-            <div className="flex justify-between items-start">
-              <span className="text-[10px] font-black text-white/40 tracking-widest">EVENT DENSITY</span>
-              <Activity size={16} className="text-blue-500" />
-            </div>
-            <p className="text-3xl font-black italic">{Object.keys(stats.eventBreakdown).length}</p>
-          </div>
-        </div>
-
-        {/* Analytics Section */}
-        <div className="grid grid-cols-1 gap-6">
-          <ChartWidget title="QUEST DISTRIBUTION" data={stats.eventBreakdown} />
-        </div>
-
-        {/* Bulk Action Bar - Sticky */}
-        {selectedIds.length > 0 && (
-          <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[60] bg-zinc-900 border border-red-600/50 p-4 rounded-2xl shadow-[0_20px_50px_rgba(223,31,38,0.3)] flex items-center gap-6 animate-in slide-in-from-bottom-10 duration-300">
-            <div className="flex items-center gap-3 pr-6 border-r border-white/10">
-              <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-black text-xs">
-                {selectedIds.length}
+                </div>
+                <p className="text-3xl font-black italic">{stats.totalParticipants}</p>
               </div>
-              <p className="text-[10px] font-black tracking-widest text-white">ASSETS SELECTED</p>
-            </div>
-            <div className="flex gap-2">
-              {clearanceLevel >= 2 && (
-                <button 
-                  onClick={handleBulkDelete}
-                  disabled={isBulkLoading}
-                  className="px-6 py-2 bg-red-800 hover:bg-red-700 text-white text-[10px] font-black tracking-widest uppercase rounded-lg transition-all flex items-center gap-2"
-                >
-                  {isBulkLoading ? <Activity size={12} className="animate-spin" /> : <Database size={14} />}
-                  PURGE SELECTED ASSETS
-                </button>
-              )}
-            </div>
-            <button 
-              onClick={() => setSelectedIds([])}
-              className="ml-2 p-2 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-all"
-            >
-              <X size={16} />
-            </button>
-          </div>
-        )}
-
-        {/* Data Table */}
-        <div className="border border-white/5 bg-white/[0.01]">
-          <div className="p-4 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
-            <h3 className="text-xs font-black tracking-[0.3em] flex items-center gap-3">
-              <Database size={14} className="text-red-600" />
-              ASSET DATABASE
-            </h3>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Filter size={12} className="text-white/30" />
-                <select
-                  className={`bg-black text-[10px] font-black border border-white/10 px-2 py-1 outline-none transition-opacity ${restrictedEvent ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  value={filterEvent}
-                  onChange={(e) => !restrictedEvent && setFilterEvent(e.target.value)}
-                  disabled={!!restrictedEvent}
-                >
-                  <option value="all">ALL QUESTS</option>
-                  {Object.keys(stats.eventBreakdown).map(ev => (
-                    <option key={ev} value={ev}>{ev.toUpperCase()}</option>
-                  ))}
-                </select>
-                {restrictedEvent && (
-                  <span className="text-[8px] font-black text-blue-400/50 ml-1 tracking-widest">LOCKED</span>
-                )}
+              <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-black text-white/40 tracking-widest">GROSS REVENUE</span>
+                  <CreditCard size={16} className="text-emerald-500" />
+                </div>
+                <p className="text-3xl font-black italic">₹{stats.totalRevenue}</p>
               </div>
-              <CalendarPicker
-                value={filterDate}
-                onChange={setFilterDate}
-                onClear={() => setFilterDate('')}
-              />
+              <div className="p-6 border border-white/5 bg-white/[0.02] space-y-3">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-black text-white/40 tracking-widest">EVENT DENSITY</span>
+                  <Activity size={16} className="text-blue-500" />
+                </div>
+                <p className="text-3xl font-black italic">{Object.keys(stats.eventBreakdown).length}</p>
+              </div>
             </div>
-          </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[1000px]">
-              <thead>
-                <tr className="border-b border-white/5 bg-white/[0.03]">
-                  <th className="p-5 w-12">
+            {/* Analytics Section */}
+            <div className="grid grid-cols-1 gap-6">
+              <ChartWidget title="QUEST DISTRIBUTION" data={stats.eventBreakdown} />
+            </div>
+
+            {/* Bulk Action Bar - Sticky */}
+            {selectedIds.length > 0 && (
+              <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[60] bg-zinc-900 border border-red-600/50 p-4 rounded-2xl shadow-[0_20px_50px_rgba(223,31,38,0.3)] flex items-center gap-6 animate-in slide-in-from-bottom-10 duration-300">
+                <div className="flex items-center gap-3 pr-6 border-r border-white/10">
+                  <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-black text-xs">
+                    {selectedIds.length}
+                  </div>
+                  <p className="text-[10px] font-black tracking-widest text-white">ASSETS SELECTED</p>
+                </div>
+                <div className="flex gap-2">
+                  {clearanceLevel >= 2 && (
                     <button
-                      onClick={toggleSelectAll}
-                      className={`w-5 h-5 border rounded-lg transition-all flex items-center justify-center ${selectedIds.length === filteredData.length && filteredData.length > 0 ? 'bg-red-600 border-red-500 shadow-[0_0_10px_rgba(223,31,38,0.3)]' : 'border-white/10 hover:border-white/30 bg-white/5'}`}
+                      onClick={handleBulkDelete}
+                      disabled={isBulkLoading}
+                      className="px-6 py-2 bg-red-800 hover:bg-red-700 text-white text-[10px] font-black tracking-widest uppercase rounded-lg transition-all flex items-center gap-2"
                     >
-                      {selectedIds.length === filteredData.length && filteredData.length > 0 && <CheckCircle size={12} className="text-white" />}
+                      {isBulkLoading ? <Activity size={12} className="animate-spin" /> : <Database size={14} />}
+                      PURGE SELECTED ASSETS
                     </button>
-                  </th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Identification</th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Representative</th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Contact Matrix</th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Institutional Roots</th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Mission Manifest</th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Fee Status</th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase text-center">Authorization</th>
-                  <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Timeline</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {isLoading ? (
-                  <tr>
-                    <td colSpan="10" className="p-20 text-center">
-                      <div className="inline-block w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                      <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-red-600 animate-pulse">SYNCHRONIZING...</p>
-                    </td>
-                  </tr>
-                ) : filteredData.length === 0 ? (
-                  <tr>
-                    <td colSpan="10" className="p-20 text-center text-white/20 italic tracking-widest text-xs">
-                      NO ASSETS FOUND IN THE CURRENT SECTOR.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredData.map((reg) => (
-                    <tr 
-                      key={reg._id} 
-                      onClick={() => setSelectedReg(reg)}
-                      className={`hover:bg-white/[0.03] border-b border-white/[0.02] transition-all group cursor-pointer ${selectedIds.includes(reg._id) ? 'bg-red-600/[0.03]' : ''}`}
+                  )}
+                </div>
+                <button
+                  onClick={() => setSelectedIds([])}
+                  className="ml-2 p-2 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-all"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
+
+            {/* Data Table */}
+            <div className="border border-white/5 bg-white/[0.01]">
+              <div className="p-4 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                <h3 className="text-xs font-black tracking-[0.3em] flex items-center gap-3">
+                  <Database size={14} className="text-red-600" />
+                  ASSET DATABASE
+                </h3>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Filter size={12} className="text-white/30" />
+                    <select
+                      className={`bg-black text-[10px] font-black border border-white/10 px-2 py-1 outline-none transition-opacity ${restrictedEvent ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      value={filterEvent}
+                      onChange={(e) => !restrictedEvent && setFilterEvent(e.target.value)}
+                      disabled={!!restrictedEvent}
                     >
-                      <td className="p-5" onClick={(e) => e.stopPropagation()}>
+                      <option value="all">ALL QUESTS</option>
+                      {Object.keys(stats.eventBreakdown).map(ev => (
+                        <option key={ev} value={ev}>{ev.toUpperCase()}</option>
+                      ))}
+                    </select>
+                    {restrictedEvent && (
+                      <span className="text-[8px] font-black text-blue-400/50 ml-1 tracking-widest">LOCKED</span>
+                    )}
+                  </div>
+                  <CalendarPicker
+                    value={filterDate}
+                    onChange={setFilterDate}
+                    onClear={() => setFilterDate('')}
+                  />
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[1000px]">
+                  <thead>
+                    <tr className="border-b border-white/5 bg-white/[0.03]">
+                      <th className="p-5 w-12">
                         <button
-                          onClick={() => toggleSelect(reg._id)}
-                          className={`w-5 h-5 border rounded-lg transition-all flex items-center justify-center ${selectedIds.includes(reg._id) ? 'bg-red-600 border-red-500 shadow-[0_0_10px_rgba(223,31,38,0.3)]' : 'border-white/10 group-hover:border-white/30 bg-white/5'}`}
+                          onClick={toggleSelectAll}
+                          className={`w-5 h-5 border rounded-lg transition-all flex items-center justify-center ${selectedIds.length === filteredData.length && filteredData.length > 0 ? 'bg-red-600 border-red-500 shadow-[0_0_10px_rgba(223,31,38,0.3)]' : 'border-white/10 hover:border-white/30 bg-white/5'}`}
                         >
-                          {selectedIds.includes(reg._id) && <CheckCircle size={12} className="text-white" />}
+                          {selectedIds.length === filteredData.length && filteredData.length > 0 && <CheckCircle size={12} className="text-white" />}
                         </button>
-                      </td>
-                      <td className="p-5">
-                        <div className="inline-flex items-center">
-                          <p className="text-[10px] font-black text-amber-500 tracking-[0.2em] bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.1)]">
-                            {reg.participantId || 'PENDING'}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="p-5">
-                        <div className="space-y-1.5">
-                          <p className="text-xs font-black text-white italic tracking-tight group-hover:text-red-500 transition-colors">{reg.name?.toUpperCase() || 'UNKNOWN'}</p>
-                          <div className="flex items-center gap-2">
-                             <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
-                             <p className="text-[9px] font-black tracking-[0.2em] text-white/30">{reg.usn || 'NO USN'}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-5">
-                        <div className="space-y-1.5">
-                          <div className="flex items-center gap-2 text-white/80 group/contact">
-                            <Phone size={10} className="text-red-600/40 group-hover/contact:text-red-600 transition-colors" />
-                            <p className="text-[10px] font-black tracking-widest">{reg.phone || 'NO PHONE'}</p>
-                          </div>
-                          <div className="flex items-center gap-2 text-white/30 group/contact">
-                            <Mail size={10} className="text-red-600/40 group-hover/contact:text-red-600 transition-colors" />
-                            <p className="text-[9px] font-bold normal-case truncate max-w-[120px]">{reg.email || 'N/A'}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-5">
-                        <div className="space-y-1.5">
-                          <p className="text-[10px] font-black text-white/50 truncate max-w-[150px] leading-tight" title={reg.college}>{reg.college || 'EXTERNAL ASSET'}</p>
-                          <p className="text-[8px] font-black text-red-600/40 uppercase tracking-[0.1em] bg-red-600/5 px-2 py-0.5 rounded border border-red-600/10 inline-block">
-                            {reg.category?.toUpperCase() || (reg.year ? `YEAR ${reg.year} // ${reg.department}` : 'GENERAL')}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="p-5">
-                        <div className="flex flex-col gap-2 min-w-[220px] max-h-[140px] overflow-y-auto custom-scrollbar pr-2">
-                          {reg.registrations?.map((ev, i) => (
-                            <div key={i} className="group/event bg-white/[0.02] border border-white/5 rounded-lg p-2 hover:border-red-600/30 transition-all">
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="text-[9px] font-black text-white/90 italic">
-                                  {ev.eventName?.toUpperCase()}
-                                </span>
-                                {ev.teammates?.length > 0 && (
-                                  <span className="text-[7px] font-black bg-red-600/20 text-red-500 px-1.5 py-0.5 rounded-full border border-red-600/20">
-                                    +{ev.teammates.length}
-                                  </span>
-                                )}
+                      </th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Identification</th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Representative</th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Contact Matrix</th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Institutional Roots</th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Mission Manifest</th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Fee Status</th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase text-center">Authorization</th>
+                      <th className="p-5 text-[9px] font-black tracking-[0.2em] text-white/30 uppercase">Timeline</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan="10" className="p-20 text-center">
+                          <div className="inline-block w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                          <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-red-600 animate-pulse">SYNCHRONIZING...</p>
+                        </td>
+                      </tr>
+                    ) : filteredData.length === 0 ? (
+                      <tr>
+                        <td colSpan="10" className="p-20 text-center text-white/20 italic tracking-widest text-xs">
+                          NO ASSETS FOUND IN THE CURRENT SECTOR.
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredData.map((reg) => (
+                        <tr
+                          key={reg._id}
+                          onClick={() => setSelectedReg(reg)}
+                          className={`hover:bg-white/[0.03] border-b border-white/[0.02] transition-all group cursor-pointer ${selectedIds.includes(reg._id) ? 'bg-red-600/[0.03]' : ''}`}
+                        >
+                          <td className="p-5" onClick={(e) => e.stopPropagation()}>
+                            <button
+                              onClick={() => toggleSelect(reg._id)}
+                              className={`w-5 h-5 border rounded-lg transition-all flex items-center justify-center ${selectedIds.includes(reg._id) ? 'bg-red-600 border-red-500 shadow-[0_0_10px_rgba(223,31,38,0.3)]' : 'border-white/10 group-hover:border-white/30 bg-white/5'}`}
+                            >
+                              {selectedIds.includes(reg._id) && <CheckCircle size={12} className="text-white" />}
+                            </button>
+                          </td>
+                          <td className="p-5">
+                            <div className="inline-flex items-center">
+                              <p className="text-[10px] font-black text-amber-500 tracking-[0.2em] bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                                {reg.participantId || 'PENDING'}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-5">
+                            <div className="space-y-1.5">
+                              <p className="text-xs font-black text-white italic tracking-tight group-hover:text-red-500 transition-colors">{reg.name?.toUpperCase() || 'UNKNOWN'}</p>
+                              <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
+                                <p className="text-[9px] font-black tracking-[0.2em] text-white/30">{reg.usn || 'NO USN'}</p>
                               </div>
-                              {ev.teammates?.length > 0 && (
-                                <div className="mt-2 pt-2 border-t border-white/[0.03] flex flex-wrap gap-x-2 gap-y-1">
-                                  {ev.teammates.map((t, ti) => (
-                                    <p key={ti} className="text-[7px] font-bold text-white/20 flex items-center gap-1">
-                                      <span className="w-1 h-1 rounded-full bg-red-600/40"></span>
-                                      {t.name}
-                                    </p>
-                                  ))}
+                            </div>
+                          </td>
+                          <td className="p-5">
+                            <div className="space-y-1.5">
+                              <div className="flex items-center gap-2 text-white/80 group/contact">
+                                <Phone size={10} className="text-red-600/40 group-hover/contact:text-red-600 transition-colors" />
+                                <p className="text-[10px] font-black tracking-widest">{reg.phone || 'NO PHONE'}</p>
+                              </div>
+                              <div className="flex items-center gap-2 text-white/30 group/contact">
+                                <Mail size={10} className="text-red-600/40 group-hover/contact:text-red-600 transition-colors" />
+                                <p className="text-[9px] font-bold normal-case truncate max-w-[120px]">{reg.email || 'N/A'}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-5">
+                            <div className="space-y-1.5">
+                              <p className="text-[10px] font-black text-white/50 truncate max-w-[150px] leading-tight" title={reg.college}>{reg.college || 'EXTERNAL ASSET'}</p>
+                              <p className="text-[8px] font-black text-red-600/40 uppercase tracking-[0.1em] bg-red-600/5 px-2 py-0.5 rounded border border-red-600/10 inline-block">
+                                {reg.category?.toUpperCase() || (reg.year ? `YEAR ${reg.year} // ${reg.department}` : 'GENERAL')}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-5">
+                            <div className="flex flex-col gap-2 min-w-[220px] max-h-[140px] overflow-y-auto custom-scrollbar pr-2">
+                              {reg.registrations?.map((ev, i) => (
+                                <div key={i} className="group/event bg-white/[0.02] border border-white/5 rounded-lg p-2 hover:border-red-600/30 transition-all">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="text-[9px] font-black text-white/90 italic">
+                                      {ev.eventName?.toUpperCase()}
+                                    </span>
+                                    {ev.teammates?.length > 0 && (
+                                      <span className="text-[7px] font-black bg-red-600/20 text-red-500 px-1.5 py-0.5 rounded-full border border-red-600/20">
+                                        +{ev.teammates.length}
+                                      </span>
+                                    )}
+                                  </div>
+                                  {ev.teammates?.length > 0 && (
+                                    <div className="mt-2 pt-2 border-t border-white/[0.03] flex flex-wrap gap-x-2 gap-y-1">
+                                      {ev.teammates.map((t, ti) => (
+                                        <p key={ti} className="text-[7px] font-bold text-white/20 flex items-center gap-1">
+                                          <span className="w-1 h-1 rounded-full bg-red-600/40"></span>
+                                          {t.name}
+                                        </p>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="p-5">
+                            <div className="flex flex-col">
+                              <p className="text-[10px] font-black text-emerald-400 tracking-widest bg-emerald-400/5 border border-emerald-400/10 px-2 py-1 rounded-md text-center">
+                                ₹{calculateTotalFee(reg.registrations)}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-5" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex flex-col gap-2">
+                              {/* Toggle Status button */}
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleStatusUpdate(reg._id, reg.paymentStatus === 'Paid' ? 'Pending' : 'Paid'); }}
+                                className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 ${reg.paymentStatus === 'Paid'
+                                    ? 'text-green-500 bg-green-500/10 border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] hover:bg-green-500/20'
+                                    : 'text-amber-500 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] hover:bg-amber-500/20'
+                                  }`}
+                              >
+                                <div className={`w-1.5 h-1.5 rounded-full ${reg.paymentStatus === 'Paid' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,1)]'}`}></div>
+                                <span className="text-[9px] font-black tracking-[0.2em] uppercase">
+                                  {reg.paymentStatus === 'Paid' ? 'AUTHORIZED' : 'PENDING'}
+                                </span>
+                              </button>
+
+                              {/* Confirm + Email button — only show if not yet paid */}
+                              {reg.paymentStatus !== 'Paid' && (
+                                <button
+                                  onClick={(e) => confirmPaymentAndEmail(e, reg._id)}
+                                  disabled={confirmingIds.has(reg._id)}
+                                  title="Confirm payment & send email to user"
+                                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                  {confirmingIds.has(reg._id)
+                                    ? <Activity size={12} className="animate-spin" />
+                                    : <Send size={12} />}
+                                  <span className="text-[9px] font-black tracking-[0.2em] uppercase">
+                                    {confirmingIds.has(reg._id) ? 'SENDING...' : 'CONFIRM & EMAIL'}
+                                  </span>
+                                </button>
                               )}
                             </div>
-                          ))}
-                        </div>
-                      </td>
-                      <td className="p-5">
-                        <div className="flex flex-col">
-                          <p className="text-[10px] font-black text-emerald-400 tracking-widest bg-emerald-400/5 border border-emerald-400/10 px-2 py-1 rounded-md text-center">
-                            ₹{calculateTotalFee(reg.registrations)}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="p-5" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex flex-col gap-2">
-                          {/* Toggle Status button */}
-                          <button
-                            onClick={(e) => { e.stopPropagation(); handleStatusUpdate(reg._id, reg.paymentStatus === 'Paid' ? 'Pending' : 'Paid'); }}
-                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 ${
-                              reg.paymentStatus === 'Paid'
-                                ? 'text-green-500 bg-green-500/10 border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] hover:bg-green-500/20'
-                                : 'text-amber-500 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] hover:bg-amber-500/20'
-                            }`}
-                          >
-                            <div className={`w-1.5 h-1.5 rounded-full ${reg.paymentStatus === 'Paid' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,1)]'}`}></div>
-                            <span className="text-[9px] font-black tracking-[0.2em] uppercase">
-                              {reg.paymentStatus === 'Paid' ? 'AUTHORIZED' : 'PENDING'}
-                            </span>
-                          </button>
-
-                          {/* Confirm + Email button — only show if not yet paid */}
-                          {reg.paymentStatus !== 'Paid' && (
-                            <button
-                              onClick={(e) => confirmPaymentAndEmail(e, reg._id)}
-                              disabled={confirmingIds.has(reg._id)}
-                              title="Confirm payment & send email to user"
-                              className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
-                            >
-                              {confirmingIds.has(reg._id)
-                                ? <Activity size={12} className="animate-spin" />
-                                : <Send size={12} />}
-                              <span className="text-[9px] font-black tracking-[0.2em] uppercase">
-                                {confirmingIds.has(reg._id) ? 'SENDING...' : 'CONFIRM & EMAIL'}
-                              </span>
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                      <td className="p-5">
-                        <div className="space-y-1 text-center md:text-left">
-                          <p className="text-[10px] font-black text-white/50 tracking-tighter">
-                            {reg.registrationDate ? new Date(reg.registrationDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : '?? ???'}
-                          </p>
-                          <p className="text-[8px] font-bold text-white/20 tracking-widest uppercase">
-                            {reg.registrationDate ? new Date(reg.registrationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </>
-      ) : (
-        /* Intelligence Feed (Feedback) Sector */
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">Inbound Communications</h3>
-              <p className="text-[10px] font-black text-red-600 tracking-[0.3em] uppercase mt-1">Intelligence logged from frontend terminals</p>
-            </div>
-            <button 
-              onClick={fetchFeedback}
-              disabled={isFeedbackLoading}
-              className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all"
-            >
-              <Activity size={18} className={isFeedbackLoading ? 'animate-spin' : ''} />
-            </button>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {isFeedbackLoading ? (
-              <div className="col-span-full py-20 text-center">
-                <div className="inline-block w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-red-600 animate-pulse uppercase">Syncing Intel...</p>
+                          </td>
+                          <td className="p-5">
+                            <div className="space-y-1 text-center md:text-left">
+                              <p className="text-[10px] font-black text-white/50 tracking-tighter">
+                                {reg.registrationDate ? new Date(reg.registrationDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : '?? ???'}
+                              </p>
+                              <p className="text-[8px] font-bold text-white/20 tracking-widest uppercase">
+                                {reg.registrationDate ? new Date(reg.registrationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
-            ) : feedback.length === 0 ? (
-              <div className="col-span-full py-20 text-center border border-dashed border-white/10 rounded-3xl">
-                <p className="text-white/20 text-xs font-black tracking-widest uppercase italic">No transmissions detected in the sector.</p>
+            </div>
+          </>
+        ) : (
+          /* Intelligence Feed (Feedback) Sector */
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">Inbound Communications</h3>
+                <p className="text-[10px] font-black text-red-600 tracking-[0.3em] uppercase mt-1">Intelligence logged from frontend terminals</p>
               </div>
-            ) : (
-              feedback.map((item, i) => (
-                <div key={item._id} className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl hover:border-red-600/30 transition-all group relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 transition-all">
-                    <Terminal size={64} className="text-red-600" />
-                  </div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className={`px-2 py-1 text-[8px] font-black tracking-widest uppercase rounded ${
-                      item.type === 'bug' ? 'bg-red-600 text-white' : 
-                      item.type === 'idea' ? 'bg-amber-500 text-black' : 
-                      'bg-blue-600 text-white'
-                    }`}>
-                      {item.type}
-                    </span>
-                    <span className="text-[9px] font-bold text-white/20 tracking-widest uppercase">
-                      {new Date(item.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <h4 className="text-sm font-black text-white mb-2 uppercase tracking-tight">{item.name}</h4>
-                  <p className="text-[10px] font-bold text-red-600/60 mb-6 tracking-wider italic">{item.email}</p>
-                  <div className="p-4 bg-black/40 rounded-2xl border border-white/5 min-h-[100px]">
-                    <p className="text-xs text-white/70 leading-relaxed italic">"{item.message}"</p>
-                  </div>
+              <button
+                onClick={fetchFeedback}
+                disabled={isFeedbackLoading}
+                className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all"
+              >
+                <Activity size={18} className={isFeedbackLoading ? 'animate-spin' : ''} />
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {isFeedbackLoading ? (
+                <div className="col-span-full py-20 text-center">
+                  <div className="inline-block w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                  <p className="mt-4 text-[10px] font-black tracking-[0.5em] text-red-600 animate-pulse uppercase">Syncing Intel...</p>
                 </div>
-              ))
-            )}
+              ) : feedback.length === 0 ? (
+                <div className="col-span-full py-20 text-center border border-dashed border-white/10 rounded-3xl">
+                  <p className="text-white/20 text-xs font-black tracking-widest uppercase italic">No transmissions detected in the sector.</p>
+                </div>
+              ) : (
+                feedback.map((item, i) => (
+                  <div key={item._id} className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl hover:border-red-600/30 transition-all group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 transition-all">
+                      <Terminal size={64} className="text-red-600" />
+                    </div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <span className={`px-2 py-1 text-[8px] font-black tracking-widest uppercase rounded ${item.type === 'bug' ? 'bg-red-600 text-white' :
+                          item.type === 'idea' ? 'bg-amber-500 text-black' :
+                            'bg-blue-600 text-white'
+                        }`}>
+                        {item.type}
+                      </span>
+                      <span className="text-[9px] font-bold text-white/20 tracking-widest uppercase">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <h4 className="text-sm font-black text-white mb-2 uppercase tracking-tight">{item.name}</h4>
+                    <p className="text-[10px] font-bold text-red-600/60 mb-6 tracking-wider italic">{item.email}</p>
+                    <div className="p-4 bg-black/40 rounded-2xl border border-white/5 min-h-[100px]">
+                      <p className="text-xs text-white/70 leading-relaxed italic">"{item.message}"</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </main>
+        )}
+      </main>
 
       <RegistrationDetailModal
         reg={selectedReg}
@@ -1548,14 +1546,13 @@ const Admin = () => {
 
       {/* Toast Notification */}
       {toast && (
-        <div className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl animate-in slide-in-from-bottom-4 duration-300 ${
-          toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' :
-          toast.type === 'error'   ? 'bg-red-950/90 border-red-500/40 text-red-300' :
-                                     'bg-blue-950/90 border-blue-500/40 text-blue-300'
-        }`}>
+        <div className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl animate-in slide-in-from-bottom-4 duration-300 ${toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' :
+            toast.type === 'error' ? 'bg-red-950/90 border-red-500/40 text-red-300' :
+              'bg-blue-950/90 border-blue-500/40 text-blue-300'
+          }`}>
           {toast.type === 'success' && <CheckCircle size={18} className="shrink-0" />}
-          {toast.type === 'error'   && <X size={18} className="shrink-0" />}
-          {toast.type === 'info'    && <Info size={18} className="shrink-0" />}
+          {toast.type === 'error' && <X size={18} className="shrink-0" />}
+          {toast.type === 'info' && <Info size={18} className="shrink-0" />}
           <p className="text-[11px] font-black tracking-wide max-w-xs">{toast.message}</p>
           <button onClick={() => setToast(null)} className="ml-2 opacity-50 hover:opacity-100 transition-opacity">
             <X size={14} />

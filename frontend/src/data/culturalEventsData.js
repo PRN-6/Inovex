@@ -144,7 +144,7 @@ export const culturalEventsData = {
     time: "9:30 AM",
     location: "seminar hall 3",
     participants: "Individual",
-    entryFee: "₹100",
+    entryFee: "₹150",
     description: "Showcase your talent, energy, and passion through the Solo Dance event. Participants will perform individually and will be judged based on expression, creativity, coordination, stage presence, and overall performance.",
     rules: [
       "Dance should be based on Classical/Semi-Classical.",
@@ -187,7 +187,7 @@ export const culturalEventsData = {
     time: "2:00 PM",
     location: "Main Entrance",
     participants: "Individual",
-    entryFee: "₹100",
+    entryFee: "₹150",
     description: "Get ready for an exciting battle of talent, confidence, and creativity in the Face Off event. Participants will compete head-to-head showcasing their skills, presence of mind, and performance abilities. Judging will be based on confidence, creativity, presentation, and overall impact.",
     rules: [
       "Dancers will be challenged to dance to unpredictable and varied DJ beats.",
@@ -260,6 +260,14 @@ export const culturalEventsData = {
     facultyCoordinators: [
       {
         name: "Mrs. Jayashree J",
+        // contact: "TBD",
+      },
+      {
+        name: "Mr. Sunith Kumar T",
+        // contact: "TBD",
+      },
+      {
+        name: "Dr. Keerthan Dixit A",
         // contact: "TBD",
       }
     ],

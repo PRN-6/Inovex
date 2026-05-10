@@ -18,12 +18,12 @@ const sendConfirmationEmail = async (userData) => {
         return { success: true, message: "K6 Test suppressed" };
     }
 
-    const eventList = Array.isArray(userData.registrations) 
-        ? [...new Set(userData.registrations.map(r => r.eventName))].join(', ').toUpperCase() 
+    const eventList = Array.isArray(userData.registrations)
+        ? [...new Set(userData.registrations.map(r => r.eventName))].join(', ').toUpperCase()
         : 'YOUR QUESTS';
-    
+
     const totalAmount = (userData.registrations?.length || 0) * 100;
-    
+
     const htmlContent = `
         <div style="background-color: #000; color: #fff; padding: 40px; font-family: sans-serif; border: 2px solid #f59e0b; border-radius: 15px; max-width: 600px; margin: auto;">
             <h1 style="color: #f59e0b; text-align: center;">INOVEX 2026</h1>

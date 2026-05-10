@@ -188,7 +188,7 @@ const Register = () => {
 
   const onFormError = (errors) => {
     let errorMessage = "Please check the form for mistakes.";
-    
+
     if (errors.name) errorMessage = "Identity Manifest (Full Name) is missing.";
     else if (errors.email) errorMessage = "Valid Comms (Email) is required.";
     else if (errors.phone) errorMessage = "Valid 10-digit Terminal (Phone) is required.";
@@ -390,7 +390,7 @@ const Register = () => {
 
     // Right Side of Footer: Institutional Info
     ctx.textAlign = 'right';
-    
+
     ctx.fillStyle = 'rgba(245, 158, 11, 0.8)';
     ctx.font = 'bold 12px Arial';
     ctx.fillText('WE NEED THIS CODE TO VERIFY', width - 55, footerTop + 35);
