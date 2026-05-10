@@ -1531,8 +1531,8 @@ const Admin = () => {
                               <button
                                 onClick={(e) => { e.stopPropagation(); handleStatusUpdate(reg._id, reg.paymentStatus === 'Paid' ? 'Pending' : 'Paid'); }}
                                 className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl w-full transition-all duration-300 ${reg.paymentStatus === 'Paid'
-                                    ? 'text-green-500 bg-green-500/10 border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] hover:bg-green-500/20'
-                                    : 'text-amber-500 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] hover:bg-amber-500/20'
+                                  ? 'text-green-500 bg-green-500/10 border border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)] hover:bg-green-500/20'
+                                  : 'text-amber-500 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] hover:bg-amber-500/20'
                                   }`}
                               >
                                 <div className={`w-1.5 h-1.5 rounded-full ${reg.paymentStatus === 'Paid' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,1)]'}`}></div>
@@ -1755,8 +1755,8 @@ const Admin = () => {
       {/* Toast Notification */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl animate-in slide-in-from-bottom-4 duration-300 ${toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' :
-            toast.type === 'error' ? 'bg-red-950/90 border-red-500/40 text-red-300' :
-              'bg-blue-950/90 border-blue-500/40 text-blue-300'
+          toast.type === 'error' ? 'bg-red-950/90 border-red-500/40 text-red-300' :
+            'bg-blue-950/90 border-blue-500/40 text-blue-300'
           }`}>
           {toast.type === 'success' && <CheckCircle size={18} className="shrink-0" />}
           {toast.type === 'error' && <X size={18} className="shrink-0" />}

@@ -6,9 +6,9 @@ let isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
 
 // @route   GET /api/status
 router.get('/status', (req, res) => {
-    res.json({ 
-        maintenance: isMaintenanceMode, 
-        maintenanceUntil: process.env.MAINTENANCE_UNTIL 
+    res.json({
+        maintenance: isMaintenanceMode,
+        maintenanceUntil: process.env.MAINTENANCE_UNTIL
     });
 });
 
@@ -20,7 +20,7 @@ router.post('/status/toggle', (req, res) => {
     if (adminKey !== superSecretKey) {
         return res.status(403).json({ success: false, message: 'Super Admin clearance required.' });
     }
-    
+
     isMaintenanceMode = !isMaintenanceMode;
     res.json({ success: true, maintenance: isMaintenanceMode, message: `Maintenance mode ${isMaintenanceMode ? 'ENABLED' : 'DISABLED'}.` });
 });
@@ -29,7 +29,7 @@ router.post('/status/toggle', (req, res) => {
 router.post('/feedback', async (req, res) => {
     try {
         const { name, email, type, message } = req.body;
-        
+
         // Persist to Database
         const feedback = new Feedback({
             name,
@@ -41,7 +41,7 @@ router.post('/feedback', async (req, res) => {
 
         // Dispatch Email
         await sendFeedbackEmail({ name, email, type, message });
-        
+
         res.status(200).json({ success: true, message: "Transmission logged and dispatched." });
     } catch (error) {
         console.error("FEEDBACK ERROR:", error);
