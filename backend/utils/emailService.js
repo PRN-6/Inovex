@@ -1,4 +1,4 @@
-const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
+const RESEND_API_URL = 'https://api.resend.com/emails';
 
 // Accurate Fee Mapping for INOVEX 2026
 const EVENT_FEES = {
@@ -23,21 +23,17 @@ const calculateTotal = (registrations) => {
     if (!Array.isArray(registrations)) return 0;
     return registrations.reduce((sum, reg) => {
         const name = reg.eventName?.toUpperCase() || "";
-        return sum + (EVENT_FEES[name] || 100); // Default to 100 if event not in list
+        return sum + (EVENT_FEES[name] || 100);
     }, 0);
 };
 
 const sendConfirmationEmail = async (userData) => {
-    if (userData.transactionId && userData.transactionId.startsWith('K6_TEST')) {
-        return { success: true, message: "K6 Test suppressed" };
-    }
-
     const eventList = Array.isArray(userData.registrations)
         ? [...new Set(userData.registrations.map(r => r.eventName))].join(', ').toUpperCase()
         : 'YOUR QUESTS';
-
+    
     const totalAmount = calculateTotal(userData.registrations);
-
+    
     const htmlContent = `
         <div style="background-color: #000; color: #fff; padding: 40px; font-family: sans-serif; border: 2px solid #f59e0b; border-radius: 15px; max-width: 600px; margin: auto;">
             <h1 style="color: #f59e0b; text-align: center;">INOVEX 2026</h1>
@@ -53,49 +49,47 @@ const sendConfirmationEmail = async (userData) => {
     `;
 
     try {
-        const response = await fetch(BREVO_API_URL, {
+        const response = await fetch(RESEND_API_URL, {
             method: 'POST',
             headers: {
-                'accept': 'application/json',
-                'api-key': process.env.BREVO_API_KEY,
-                'content-type': 'application/json'
+                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sender: { name: "INOVEX 2026", email: "prinsonroyal11@gmail.com" },
-                to: [{ email: userData.email, name: userData.name }],
+                from: 'onboarding@resend.dev', // CHANGE THIS after verifying your domain in Resend
+                to: userData.email,
                 subject: `QUESTS CONFIRMED: ${eventList}`,
-                htmlContent: htmlContent
+                html: htmlContent
             })
         });
 
         if (response.ok) {
-            console.log(`📧 Success: Confirmation email sent to: ${userData.email}`);
+            console.log(`📧 Success: Confirmation email sent via Resend to: ${userData.email}`);
             return { success: true };
         } else {
             const error = await response.json();
-            console.error('❌ Brevo API Error:', error);
+            console.error('❌ Resend API Error:', error);
             return { success: false, error: error.message };
         }
     } catch (error) {
-        console.error('❌ Email Fetch Error:', error.message);
+        console.error('❌ Resend Fetch Error:', error.message);
         return { success: false, error: error.message };
     }
 };
 
 const sendFeedbackEmail = async (feedbackData) => {
     try {
-        const response = await fetch(BREVO_API_URL, {
+        const response = await fetch(RESEND_API_URL, {
             method: 'POST',
             headers: {
-                'accept': 'application/json',
-                'api-key': process.env.BREVO_API_KEY,
-                'content-type': 'application/json'
+                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sender: { name: "INOVEX FEEDBACK", email: "prinsonroyal11@gmail.com" },
-                to: [{ email: "prinsonroyal11@gmail.com" }],
+                from: 'onboarding@resend.dev',
+                to: 'prinsonroyal11@gmail.com',
                 subject: `NEW FEEDBACK from ${feedbackData.name}`,
-                htmlContent: `<p><strong>Name:</strong> ${feedbackData.name}</p><p><strong>Message:</strong> ${feedbackData.message}</p>`
+                html: `<p><strong>Name:</strong> ${feedbackData.name}</p><p><strong>Message:</strong> ${feedbackData.message}</p>`
             })
         });
         return { success: response.ok };
@@ -107,7 +101,6 @@ const sendFeedbackEmail = async (feedbackData) => {
 
 const sendPaymentConfirmationEmail = async (userData) => {
     const totalAmount = calculateTotal(userData.registrations);
-
     const eventRows = Array.isArray(userData.registrations)
         ? userData.registrations.map(r => `
             <tr>
@@ -150,31 +143,30 @@ const sendPaymentConfirmationEmail = async (userData) => {
     `;
 
     try {
-        const response = await fetch(BREVO_API_URL, {
+        const response = await fetch(RESEND_API_URL, {
             method: 'POST',
             headers: {
-                'accept': 'application/json',
-                'api-key': process.env.BREVO_API_KEY,
-                'content-type': 'application/json'
+                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sender: { name: "INOVEX 2026", email: "prinsonroyal11@gmail.com" },
-                to: [{ email: userData.email, name: userData.name }],
+                from: 'onboarding@resend.dev',
+                to: userData.email,
                 subject: `PAYMENT VERIFIED: INOVEX 2026`,
-                htmlContent: htmlContent
+                html: htmlContent
             })
         });
 
         if (response.ok) {
-            console.log(`📧 Success: Payment verified email sent to: ${userData.email}`);
+            console.log(`📧 Success: Payment verified email sent via Resend to: ${userData.email}`);
             return { success: true };
         } else {
             const error = await response.json();
-            console.error('❌ Brevo API Error:', error);
+            console.error('❌ Resend API Error:', error);
             return { success: false, error: error.message };
         }
     } catch (error) {
-        console.error('❌ Email Fetch Error:', error.message);
+        console.error('❌ Resend Fetch Error:', error.message);
         return { success: false, error: error.message };
     }
 };
