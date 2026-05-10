@@ -36,14 +36,15 @@ router.get('/registrations', async (req, res) => {
         // Check for revocation
         const isBlocked = await BlockedKey.findOne({ accessCode: adminKey });
         if (isBlocked) {
-            return res.status(403).json({ success: false, message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
+            return res.status(403).json({ success: false, code: 'REVOKED_IDENTITY', message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
         }
 
         // Log the access
         try {
+            const clientIP = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || req.ip;
             await AdminLog.create({
                 accessCode: adminKey,
-                ipAddress: req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+                ipAddress: clientIP,
                 userAgent: req.headers['user-agent'],
                 action: 'ACCESS_REGISTRATIONS'
             });
@@ -65,8 +66,16 @@ router.patch('/registrations/:id/status', async (req, res) => {
         const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
         const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
 
+        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
+
         if (adminKey !== superSecretKey && !STAFF_KEYS.includes(adminKey) && adminKey !== secretKey) {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
+        }
+
+        // Check for revocation
+        const isBlocked = await BlockedKey.findOne({ accessCode: adminKey });
+        if (isBlocked) {
+            return res.status(403).json({ success: false, code: 'REVOKED_IDENTITY', message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
         }
 
         const { status } = req.body;
@@ -215,7 +224,18 @@ router.get('/admin/logs', async (req, res) => {
             return res.status(403).json({ success: false, message: "SUPER ADMIN clearance required" });
         }
 
-        const logs = await AdminLog.find().sort({ timestamp: -1 }).limit(100);
+        const logs = await AdminLog.aggregate([
+            { $sort: { timestamp: -1 } },
+            {
+                $group: {
+                    _id: { code: "$accessCode", ip: "$ipAddress" },
+                    totalActions: { $sum: 1 },
+                    lastActive: { $first: "$timestamp" },
+                    userAgent: { $first: "$userAgent" }
+                }
+            },
+            { $sort: { lastActive: -1 } }
+        ]);
         res.json({ success: true, data: logs });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error fetching logs" });

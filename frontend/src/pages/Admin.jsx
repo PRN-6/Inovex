@@ -463,6 +463,12 @@ const Admin = () => {
         }
       });
       const data = await response.json();
+
+      if (data.code === 'REVOKED_IDENTITY') {
+        handleLogout();
+        return false;
+      }
+
       if (data && data.success && Array.isArray(data.data)) {
         setRegistrations(data.data);
 
@@ -501,6 +507,12 @@ const Admin = () => {
         headers: { 'x-admin-key': accessCode }
       });
       const data = await response.json();
+
+      if (data.code === 'REVOKED_IDENTITY') {
+        handleLogout();
+        return;
+      }
+
       if (data.success) {
         setFeedback(data.data);
       }
@@ -952,6 +964,11 @@ const Admin = () => {
         headers: { 'x-admin-key': accessCode }
       });
       const data = await response.json();
+
+      if (data.code === 'REVOKED_IDENTITY') {
+        handleLogout();
+        return;
+      }
 
       if (data.success) {
         // Update local state so the badge flips to AUTHORIZED immediately
@@ -1651,10 +1668,10 @@ const Admin = () => {
                 <thead>
                   <tr className="border-b border-white/5 bg-white/[0.03]">
                     <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Access Code</th>
-                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Operational Action</th>
+                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Actions</th>
                     <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Terminal IP</th>
                     <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase text-center">Protocol Action</th>
-                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Timeline</th>
+                    <th className="p-5 text-[9px] font-black tracking-widest text-white/30 uppercase">Last Active</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -1675,33 +1692,50 @@ const Admin = () => {
                     securityLogs.map((log, idx) => (
                       <tr key={idx} className="hover:bg-white/[0.02] transition-colors group border-b border-white/[0.02]">
                         <td className="p-5">
-                          <code className="text-[10px] font-black text-amber-500 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded">
-                            {log.accessCode?.substring(0, 4)}****{log.accessCode?.slice(-2)}
-                          </code>
+                          <div className="flex flex-col gap-1">
+                            <code className="text-[10px] font-black text-amber-500 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded w-fit">
+                              {log._id.code}
+                            </code>
+                            <p className="text-[7px] font-bold text-white/20 tracking-widest uppercase">Admin Terminal Key</p>
+                          </div>
                         </td>
                         <td className="p-5">
-                          <span className="text-[10px] font-black tracking-widest text-white/60 group-hover:text-white transition-colors uppercase">
-                            {log.action?.replace(/_/g, ' ')}
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-[10px] font-black tracking-widest text-white group-hover:text-amber-500 transition-colors uppercase">
+                              {log.totalActions} INTERACTIONS
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
+                              <p className="text-[7px] font-bold text-white/20 uppercase">Active Session</p>
+                            </div>
+                          </div>
                         </td>
                         <td className="p-5">
-                          <span className="text-[10px] font-mono text-white/40 group-hover:text-amber-500/40 transition-colors">
-                            {log.ipAddress || 'UNKNOWN'}
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-[10px] font-mono text-white/40 group-hover:text-white/60 transition-colors">
+                              {log._id.ip || 'UNKNOWN'}
+                            </span>
+                            <p className="text-[7px] font-bold text-white/20 uppercase tracking-widest">Client IP Address</p>
+                          </div>
                         </td>
                         <td className="p-5 text-center">
                           <button
-                            onClick={() => handleBlockKey(log.accessCode)}
-                            className="px-4 py-2 border border-red-600/30 text-red-600 text-[8px] font-black tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all rounded-lg flex items-center gap-2 mx-auto"
+                            onClick={() => handleBlockKey(log._id.code)}
+                            className="px-6 py-2 border border-red-600/30 text-red-600 text-[8px] font-black tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all rounded-lg flex items-center gap-2 mx-auto shadow-lg shadow-red-900/10"
                           >
                             <UserX size={10} />
-                            TIMEOUT
+                            FORCE LOGOUT
                           </button>
                         </td>
                         <td className="p-5">
-                          <span className="text-[10px] font-black text-white/20 tracking-tighter uppercase">
-                            {new Date(log.timestamp).toLocaleString()}
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-[10px] font-black text-white/40 tracking-tighter uppercase">
+                              {new Date(log.lastActive).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            <span className="text-[8px] font-bold text-white/10 uppercase">
+                              {new Date(log.lastActive).toLocaleDateString()}
+                            </span>
+                          </div>
                         </td>
                       </tr>
                     ))
