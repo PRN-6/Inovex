@@ -67,12 +67,12 @@ const sendConfirmationEmail = async (userData) => {
             console.log(`📧 Success: Confirmation email sent via Resend to: ${userData.email}`);
             return { success: true };
         } else {
-            const error = await response.json();
-            console.error('❌ Resend API Error:', error);
-            return { success: false, error: error.message };
+            const errorData = await response.json();
+            console.error('❌ Resend API Error Details:', JSON.stringify(errorData, null, 2));
+            return { success: false, error: errorData.message || 'Unknown Resend Error' };
         }
     } catch (error) {
-        console.error('❌ Resend Fetch Error:', error.message);
+        console.error('❌ Email Network Error:', error.message);
         return { success: false, error: error.message };
     }
 };
@@ -161,12 +161,12 @@ const sendPaymentConfirmationEmail = async (userData) => {
             console.log(`📧 Success: Payment verified email sent via Resend to: ${userData.email}`);
             return { success: true };
         } else {
-            const error = await response.json();
-            console.error('❌ Resend API Error:', error);
-            return { success: false, error: error.message };
+            const errorData = await response.json();
+            console.error('❌ Resend API Error Details:', JSON.stringify(errorData, null, 2));
+            return { success: false, error: errorData.message || 'Unknown Resend Error' };
         }
     } catch (error) {
-        console.error('❌ Resend Fetch Error:', error.message);
+        console.error('❌ Email Network Error:', error.message);
         return { success: false, error: error.message };
     }
 };
