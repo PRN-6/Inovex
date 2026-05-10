@@ -221,19 +221,6 @@ const Register = () => {
 
     setIsLoading(true);
     try {
-      // Check if user is already registered for selected events
-      const checkRes = await fetch(`${API_URL}/api/check-registration/${formData.email}`);
-      const checkData = await checkRes.json();
-
-      if (checkData.success && checkData.registeredEvents.length > 0) {
-        const alreadyRegistered = selectedEvents.filter(e => checkData.registeredEvents.includes(e));
-        if (alreadyRegistered.length > 0) {
-          showNotify(`MISSION ABORTED: You are already registered for: ${alreadyRegistered.join(", ")}.`, 'error');
-          setIsLoading(false);
-          return;
-        }
-      }
-
       // Prepare registrations data
       const registrations = selectedEvents.map(eventName => {
         const { max } = getTeamMetrics(eventName);
