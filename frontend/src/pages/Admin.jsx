@@ -588,7 +588,7 @@ const Admin = () => {
         if (r && r.registrations && Array.isArray(r.registrations)) {
           r.registrations.forEach(ev => {
             if (ev && ev.eventName) {
-              const name = String(ev.eventName);
+              const name = String(ev.eventName).trim().toUpperCase();
               acc[name] = (acc[name] || 0) + 1;
             }
           });
