@@ -1,16 +1,50 @@
 const nodemailer = require('nodemailer');
 
-// Gmail SMTP Configuration (port 587 = STARTTLS, works on IPv4 networks)
+// Gmail SMTP Configuration
+// Port 587 is the most compatible for cloud servers like Render
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,      // false = STARTTLS (upgrades after connect)
-    requireTLS: true,   // force TLS upgrade
+    service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,  // prinsonroyal11@gmail.com
-        pass: process.env.EMAIL_PASS   // Gmail App Password (16-char)
-    },
-    connectionTimeout: 15000,
+        user: process.env.EMAIL_USER, // Your Gmail
+        pass: process.env.EMAIL_PASS  // Your 16-character App Password
+    }
+});
+
+// Accurate Fee Mapping for INOVEX 2026
+const EVENT_FEES = {
+    "TECHSAURUS: IT MANAGER": 150,
+    "HIDDEN HORIZON - TREASURE HUNT": 300,
+    "CINESAUR: REEL MAKING": 300,
+    "DINOX: WEB DESIGN": 300,
+    "CODEREX: BLIND CODING": 300,
+    "DNA ARCHITECTS (HR TEAM)": 300,
+    "MARKETING TEAM – ROAR & REACH": 300,
+    "T-REX COMMAND (BEST MANAGER)": 150,
+    "GOLDEN FOSSILS (FINANCE TEAM)": 300,
+    "ALPHA ERA: CORPORATE WALK": 500,
+    "JURASSIC JAMS: GROUP SONG": 400,
+    "REXORA: GROUP DANCE": 400,
+    "BEAT FUSION: SOLO DANCE": 150,
+    "CLASH OF AURAS: FACE OFF": 150,
+    "BATTLE NEXUS: GAMING - FREE FIRE": 400
+};
+
+const calculateTotal = (registrations) => {
+    if (!Array.isArray(registrations)) return 0;
+    return registrations.reduce((sum, reg) => {
+        const name = reg.eventName?.toUpperCase() || "";
+        return sum + (EVENT_FEES[name] || 100); // Default to 100 if event not in list
+    }, 0);
+};
+
+// Verify connection configuration on startup
+transporter.verify(function (error, success) {
+    if (error) {
+        console.log("❌ EMAIL SERVICE ERROR: Connection failed. Check your EMAIL_USER/EMAIL_PASS.");
+        console.error(error);
+    } else {
+        console.log("🚀 EMAIL SERVICE: Ready to dispatch comms.");
+    }
 });
 
 const sendConfirmationEmail = async (userData) => {
@@ -22,7 +56,7 @@ const sendConfirmationEmail = async (userData) => {
         ? [...new Set(userData.registrations.map(r => r.eventName))].join(', ').toUpperCase()
         : 'YOUR QUESTS';
 
-    const totalAmount = (userData.registrations?.length || 0) * 100;
+    const totalAmount = calculateTotal(userData.registrations);
 
     const htmlContent = `
         <div style="background-color: #000; color: #fff; padding: 40px; font-family: sans-serif; border: 2px solid #f59e0b; border-radius: 15px; max-width: 600px; margin: auto;">
@@ -47,7 +81,7 @@ const sendConfirmationEmail = async (userData) => {
             subject: `QUESTS CONFIRMED: ${eventList}`,
             html: htmlContent
         });
-        console.log(`📧 Success: Email sent via Brevo SMTP to: ${userData.email}`);
+        console.log(`📧 Success: Confirmation email sent to: ${userData.email}`);
         return { success: true };
     } catch (error) {
         console.error('❌ Brevo SMTP Error:', error.message);
@@ -75,9 +109,7 @@ const sendPaymentConfirmationEmail = async (userData) => {
         ? [...new Set(userData.registrations.map(r => r.eventName))].join(', ').toUpperCase()
         : 'YOUR EVENTS';
 
-    const totalAmount = Array.isArray(userData.registrations)
-        ? userData.registrations.length * 100
-        : 0;
+    const totalAmount = calculateTotal(userData.registrations);
 
     const eventRows = Array.isArray(userData.registrations)
         ? userData.registrations.map(r => `
@@ -169,6 +201,7 @@ const sendPaymentConfirmationEmail = async (userData) => {
             subject: `PAYMENT VERIFIED: INOVEX 2026`,
             html: htmlContent
         });
+        console.log(`📧 Success: Payment verified email sent to: ${userData.email}`);
         return { success: true };
     } catch (error) {
         console.error('❌ Payment Email Error:', error.message);
