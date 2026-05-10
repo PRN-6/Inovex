@@ -66,8 +66,6 @@ router.patch('/registrations/:id/status', async (req, res) => {
         const secretKey = process.env.ADMIN_SECRET_KEY || 'INOVEX2026_ADMIN';
         const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
 
-        const superSecretKey = process.env.SUPER_ADMIN_SECRET_KEY || 'INOVEX2026_SUPER';
-
         if (adminKey !== superSecretKey && !STAFF_KEYS.includes(adminKey) && adminKey !== secretKey) {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
         }
@@ -111,6 +109,12 @@ router.post('/registrations/:id/resend-email', async (req, res) => {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
         }
 
+        // Check for revocation
+        const isBlocked = await BlockedKey.findOne({ accessCode: adminKey });
+        if (isBlocked) {
+            return res.status(403).json({ success: false, code: 'REVOKED_IDENTITY', message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
+        }
+
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ success: false, message: "Asset not found" });
 
@@ -152,6 +156,12 @@ router.post('/registrations/:id/confirm-payment', async (req, res) => {
             return res.status(403).json({ success: false, message: "ADMIN clearance required" });
         }
 
+        // Check for revocation
+        const isBlocked = await BlockedKey.findOne({ accessCode: adminKey });
+        if (isBlocked) {
+            return res.status(403).json({ success: false, code: 'REVOKED_IDENTITY', message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
+        }
+
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
@@ -189,6 +199,12 @@ router.delete('/registrations/:id', async (req, res) => {
             return res.status(403).json({ success: false, message: "SUPER ADMIN clearance required" });
         }
 
+        // Check for revocation
+        const isBlocked = await BlockedKey.findOne({ accessCode: adminKey });
+        if (isBlocked) {
+            return res.status(403).json({ success: false, code: 'REVOKED_IDENTITY', message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
+        }
+
         await User.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: "Asset purged" });
     } catch (error) {
@@ -205,6 +221,12 @@ router.get('/feedback', async (req, res) => {
 
         if (adminKey !== superSecretKey && !STAFF_KEYS.includes(adminKey) && adminKey !== secretKey) {
             return res.status(401).json({ success: false, message: "Invalid Clearance Key" });
+        }
+
+        // Check for revocation
+        const isBlocked = await BlockedKey.findOne({ accessCode: adminKey });
+        if (isBlocked) {
+            return res.status(403).json({ success: false, code: 'REVOKED_IDENTITY', message: "ACCESS REVOKED: This terminal has been timed out by the Super Admin." });
         }
 
         const feedback = await Feedback.find().sort({ createdAt: -1 });
