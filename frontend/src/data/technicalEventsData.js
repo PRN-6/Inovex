@@ -128,12 +128,12 @@ export const technicalEventsData = {
     entryFee: "₹300",
     description: "Cinesaur is a jurassic-themed reel making competition! Shoot an original 30-60 seconds reel based on a surprise theme given on the spot. Entire shoot must happen inside the campus - classroom scenes are mandatory.",
     rules: [
-      "Teams of exactly 2 members; open to all students",
-      "Reel duration: minimum 30 seconds, maximum 60 seconds",
-      "Theme revealed on the spot; shoot must be done entirely inside campus",
-      "Vulgar, violent, or political content is strictly prohibited",
-      "Judges' decision on creativity, editing, and theme relevance is final",
-      "Use of only mobile phones are allowed no dslr cameras"
+      "Teams of exactly 2 members",
+      "Reel duration: minimum 30 seconds, maximum 60 seconds.",
+      "Content Theme revealed on the spot; shoot must be done entirely inside campus.",
+      "Vulgarity, violenCE, OR controversial content is strictly prohibited.",
+      "Judges' decision is final.",
+      "reel making has to be done only through mobile phone"
     ],
     coordinators: [
       {
@@ -179,7 +179,8 @@ export const technicalEventsData = {
       "Only raw HTML, CSS, and JavaScript are allowed (No frameworks)",
       "Internet usage is allowed if required and ai tools and copied code lead to instant disqualification",
       "Systems will be provided by the college (using VS Code)",
-      "Evaluation is strictly based on design accuracy, creativity, code quality, and time management"
+      "Evaluation is strictly based on design accuracy, creativity, code quality, and time management",
+      "Judges' decision is final."
     ],
     coordinators: [
       {
@@ -219,7 +220,8 @@ export const technicalEventsData = {
       "Mobile phones and any external help are strictly not allowed",
       "Any unfair practice will lead to disqualification and judges’ decision will be final",
       "Evaluation will be based on correctness of output, logic, and code accuracy",
-      "Teamwork, communication, and performance under time pressure will also be considered"
+      "Teamwork, communication, and performance under time pressure will also be considered",
+      "Judges' decision is final."
     ],
     coordinators: [
       {

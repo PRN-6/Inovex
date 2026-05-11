@@ -11,8 +11,8 @@ export const culturalEventsData = {
     entryFee: "₹500",
     description: "Showcase your confidence, professionalism, and stage presence in the Corporate Walk event. Participants will walk the stage in formal attire and be judged based on confidence, presentation, personality, and overall appearance.",
     rules: [
-      "The team size consists of a minimum of 4 and a maximum of 12 members.",
-      "The time limit is 5 minutes, with an additional 1 minutes allotted for stage setup.",
+      "ONE team COMPRISE of minimum of 4 and maximum of 12 members.",
+      "The time limit is 5 minutes, with an additional 1 minute allotted for stage setup.",
       "Participants are required to wear strict corporate or formal attire.",
       "Participants should submit their music in advance, preferably in MP3 format.",
       "Only minimal and safe props are allowed (no smoke, fireworks, etc.).",
@@ -20,7 +20,7 @@ export const culturalEventsData = {
       "Exceeding the time limit will lead to point deduction.",
       "Rule violations may lead to disqualification.",
       "Any number of teams from the same college can participate.",
-      "Judge’s decisions will be final and binding."
+      "Judges’ decisions will be final and binding."
     ],
     coordinators: [
       {
@@ -104,16 +104,17 @@ export const culturalEventsData = {
     rules: [
       "Any number of groups can participate from the same college.",
       "Time limit: 5+1 minutes (including stage setting).",
-      "Theme should be based on Folk.",
+      "Theme should be based on Folk or mythology.",
       "The team should consist of a minimum of 4 and a maximum of 12 participants (including special appearances).",
       "Music tracks must be provided in MP3 format on a flash drive and submitted to the coordinator 1 hour before the event.",
-      "Hazardous materials and indecency are not allowed.",
-      "Participants are responsible for removing all materials immediately after the performance.",
+      "Hazardous materials are not allowed.",
+      "Inappropriate dressing and indecent behaviour lead to disqualification.",
+      "Participants SHOULD Clear THE STAGE immediately after the performance.",
       "Judges’ decision will be final."
     ],
     coordinators: [
       {
-        name: "PRATHIKA RAI",
+        name: "Prathika Rai",
         contact: "7045685053",
         photo: "/images/event-heads/mca/PRATHIKA.webp"
       },

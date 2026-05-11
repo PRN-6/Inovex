@@ -81,7 +81,7 @@ export const managementEventsData = {
     entryFee: "₹150",
     description: "Represents the ultimate leadership challenge where participants are tested on their ability to think, decide, and lead with authority—just like the apex predator ruling the Jurassic world.",
     rules: [
-      "This is an individual (solo event) and each entry must consist of only one participant.",
+      "This is a Solo Event with one participant.",
       "Participants must bring their own laptops for the event."
     ],
     coordinators: [
@@ -152,12 +152,12 @@ export const managementEventsData = {
     entryFee: "₹300",
     description: "Cinesaur is a Jurassic-themed reel making competition! Shoot an original 30–60 second reel based on a surprise theme given on the spot. Entire shoot must happen inside the campus — classroom scenes are mandatory.",
     rules: [
-      "Teams of exactly 2 members; open to all students",
-      "Reel duration: minimum 30 seconds, maximum 60 seconds",
-      "Theme revealed on the spot; shoot must be done entirely inside campus",
-      "Vulgar, violent, or political content is strictly prohibited",
-      "Judges' decision on creativity, editing, and theme relevance is final",
-      "Use of only mobile phones are allowed no dslr cameras"
+      "Teams of exactly 2 members",
+      "Reel duration: minimum 30 seconds, maximum 60 seconds.",
+      "Content Theme revealed on the spot; shoot must be done entirely inside campus.",
+      "Vulgarity, violenCE, OR controversial content is strictly prohibited.",
+      "Judges' decision is final.",
+      "reel making has to be done only through mobile phone"
     ],
     coordinators: [
       {
