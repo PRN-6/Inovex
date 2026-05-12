@@ -87,10 +87,10 @@ const faqs = [
         q: 'What should I bring on event day?',
         a: 'Carry your original college ID and the Digital Access Pass (PNG) downloaded during registration. Show the pass at the entrance for scanning.',
       },
-      {
-        q: 'Are there prizes?',
-        a: 'Absolutely. Over ₹1,00,000 in total prize pools are allocated across all technical, cultural, and management categories. Certificates of excellence are provided to all finalists.',
-      },
+      // {
+      //   q: 'Are there prizes?',
+      //   a: 'Absolutely. Over ₹1,00,000 in total prize pools are allocated across all technical, cultural, and management categories. Certificates of excellence are provided to all finalists.',
+      // },
     ],
   },
   {
@@ -137,8 +137,8 @@ const FAQItem = ({ question, answer, index }) => {
     <div
       ref={itemRef}
       className={`border transition-all duration-300 overflow-hidden ${isOpen
-          ? 'border-red-600/50 bg-red-950/10'
-          : 'border-white/10 bg-[#0a0a0a] hover:border-white/20'
+        ? 'border-red-600/50 bg-red-950/10'
+        : 'border-white/10 bg-[#0a0a0a] hover:border-white/20'
         }`}
     >
       <button
