@@ -27,7 +27,31 @@ const faqs = [
     items: [
       {
         q: 'How do I register for events?',
-        a: 'Navigate to the Registration portal, enter your details, and select your events. The system will calculate your total fee and provide a secure QR code for payment.',
+        a: (
+          <div className="space-y-4">
+            <p>Registration for A J ASTRIX 2026 is a streamlined 8-step protocol designed for efficiency:</p>
+            <div className="grid gap-3 mt-4">
+              {[
+                { step: "01", title: "Access Portal", desc: "Navigate to the 'Register' page via the sidebar or main menu navigation." },
+                { step: "02", title: "Identity Log", desc: "Provide your full name, college, email, and phone number to create your Participant Profile." },
+                { step: "03", title: "Event Selection", desc: "Browse and select your desired events from Technical, Management, and Cultural categories." },
+                { step: "04", title: "Squad Intel", desc: "For team events, provide teammate names and phone numbers to sync your entire squad." },
+                { step: "05", title: "Financial Protocol", desc: "The system generates your total fee. Scan the dynamic QR code to initiate the transfer." },
+                { step: "06", title: "Evidence Upload", desc: "Upload a clear screenshot of your UPI transaction confirmation (Ensure Transaction ID is visible)." },
+                { step: "07", title: "Final Submission", desc: "Submit the form to finalize your entry and enter 'PENDING VERIFICATION' status." },
+                { step: "08", title: "Access Activation", desc: "Once our admins verify your payment, your Digital Pass will be activated and ready for download." }
+              ].map((item, i) => (
+                <div key={i} className="flex gap-4 items-start bg-white/[0.03] p-3 border border-white/5 rounded-sm group hover:border-red-500/30 transition-colors">
+                  <span className="text-red-500 font-black text-[10px] mt-1 group-hover:scale-110 transition-transform">{item.step}</span>
+                  <div>
+                    <div className="text-white font-bold text-xs uppercase tracking-wider mb-1">{item.title}</div>
+                    <div className="text-white/50 text-xs leading-relaxed">{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ),
       },
       {
         q: 'How does the payment process work?',

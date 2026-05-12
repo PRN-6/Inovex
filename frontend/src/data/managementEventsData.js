@@ -146,7 +146,7 @@ export const managementEventsData = {
     type: "management",
     category: "Creative",
     // date: "May 15, 2026",
-    time: "10:30",
+    time: "9:00",
     // location: "College Campus",
     participants: "Team of 2",
     entryFee: "₹300",

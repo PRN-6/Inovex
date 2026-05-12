@@ -253,9 +253,9 @@ export const culturalEventsData = {
         photo: "/images/event-heads/mca/surya.webp"
       },
       {
-        name: "Durgashree",
-        contact: "6362006510",
-        photo: "/images/event-heads/mca/durgashree.webp"
+        name: "Niyam",
+        contact: "8431984083",
+        photo: "/images/event-heads/mca/niyam-shetty.webp"
       }
     ],
     facultyCoordinators: [
