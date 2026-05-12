@@ -228,7 +228,7 @@ export const culturalEventsData = {
     category: "Gaming",
     date: "May 16, 2026",
     time: "Starts at 10:00 AM",
-    location: "Venue 426",
+    location: "Venue 325",
     participants: "Team of 4 (Squad)",
     // prize: "Trophy + Cash",
     entryFee: "₹400",
