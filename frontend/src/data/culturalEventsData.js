@@ -253,7 +253,7 @@ export const culturalEventsData = {
         photo: "/images/event-heads/mca/surya.webp"
       },
       {
-        name: "Niyam",
+        name: "Niyam Shetty",
         contact: "8431984083",
         photo: "/images/event-heads/mca/niyam-shetty.webp"
       }
