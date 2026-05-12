@@ -36,7 +36,7 @@ const faqs = [
                 { step: "02", title: "Identity Log", desc: "Provide your full name, college, email, and phone number to create your Participant Profile." },
                 { step: "03", title: "Event Selection", desc: "Browse and select your desired events from Technical, Management, and Cultural categories." },
                 { step: "04", title: "Squad Intel", desc: "For team events, provide teammate names and phone numbers to sync your entire squad." },
-                { step: "05", title: "Financial Protocol", desc: "The system generates your total fee. Scan the dynamic QR code to initiate the transfer." },
+                { step: "05", title: "Financial Protocol", desc: "The system generates your total fee. Scan the QR code or use the manual UPI ID to initiate the transfer." },
                 { step: "06", title: "Evidence Upload", desc: "Upload a clear screenshot of your UPI transaction confirmation (Ensure Transaction ID is visible)." },
                 { step: "07", title: "Final Submission", desc: "Submit the form to finalize your entry and enter 'PENDING VERIFICATION' status." },
                 { step: "08", title: "Access Activation", desc: "Once our admins verify your payment, your Digital Pass will be activated and ready for download." }
@@ -103,7 +103,7 @@ const faqs = [
       },
       {
         q: 'The payment QR is not loading. How can I pay?',
-        a: 'The QR is dynamic and requires a stable connection. If it fails, you can use the manual UPI ID listed below the QR area or contact our technical helpdesk.',
+        a: 'The QR is dynamic and requires a stable connection. If it fails, you can use the manual UPI ID: 251005247205848@cnrb or contact our technical helpdesk.',
       },
     ],
   },

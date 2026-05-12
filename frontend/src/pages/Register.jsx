@@ -613,6 +613,10 @@ const Register = () => {
                           <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] text-center max-w-[200px]">
                             Scan this QR with any UPI app (GPay, PhonePe, Paytm)
                           </p>
+                          <div className="mt-2 text-center">
+                            <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1">Manual ID Transfer</p>
+                            <p className="text-sm font-black text-white selection:bg-amber-500 selection:text-black px-3 py-1.5 bg-white/5 rounded-lg border border-white/10">251005247205848@cnrb</p>
+                          </div>
                         </div>
 
                         <div className="space-y-3">
