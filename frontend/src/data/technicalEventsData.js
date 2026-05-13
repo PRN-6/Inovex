@@ -204,7 +204,7 @@ export const technicalEventsData = {
   },
   6: {
     id: 6,
-    title: "CodeRex: Blind Coding",
+    title: "RexHack: CodeRex",
     type: "technical",
     category: "Technical",
     date: "May 15, 2026",
