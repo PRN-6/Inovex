@@ -710,7 +710,10 @@ const Register = () => {
                                 className={`w-full bg-white/5 border rounded-xl py-3 px-4 text-[11px] font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/10 ${errors.teammates?.[eventName]?.[i]?.name ? 'border-red-500/50' : 'border-white/5'}`}
                               />
                               <input
-                                {...register(`teammates.${eventName}.${i}.phone`, { required: i < min, pattern: /^[0-9]{10}$/ })}
+                                {...register(`teammates.${eventName}.${i}.phone`, { 
+                                  required: i < min, 
+                                  validate: (value) => !value || /^[0-9]{10}$/.test(value) || "Phone must be 10 digits" 
+                                })}
                                 placeholder={i < min ? "PHONE (REQUIRED)" : "PHONE (OPTIONAL)"}
                                 className={`w-full bg-white/5 border rounded-xl py-3 px-4 text-[11px] font-bold tracking-widest focus:border-amber-500/50 focus:bg-white/10 transition-all text-white placeholder:text-white/10 ${errors.teammates?.[eventName]?.[i]?.phone ? 'border-red-500/50' : 'border-white/5'}`}
                               />
