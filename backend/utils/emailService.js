@@ -6,7 +6,7 @@ const EVENT_FEES = {
     "HIDDEN HORIZON - TREASURE HUNT": 300,
     "CINESAUR: REEL MAKING": 300,
     "DINOX: WEB DESIGN": 300,
-    "CODEREX: BLIND CODING": 300,
+    "REXHACK: CODEREX": 300,
     "DNA ARCHITECTS (HR TEAM)": 300,
     "MARKETING TEAM – ROAR & REACH": 300,
     "T-REX COMMAND (BEST MANAGER)": 150,
@@ -23,7 +23,7 @@ const calculateTotal = (registrations) => {
     if (!Array.isArray(registrations)) return 0;
     return registrations.reduce((sum, reg) => {
         const name = reg.eventName?.toUpperCase().trim() || "";
-        return sum + (EVENT_FEES[name] || 100);
+        return sum + (EVENT_FEES[name] || 0);
     }, 0);
 };
 
