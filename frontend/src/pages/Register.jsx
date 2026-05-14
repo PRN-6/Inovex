@@ -620,7 +620,10 @@ const Register = () => {
                         </div>
 
                         <div className="space-y-3">
-                          <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1">Upload Payment Screenshot</label>
+                          <div>
+                            <label className="text-[10px] font-black text-white/40 uppercase tracking-widest ml-1 block mb-1">Upload Payment Screenshot</label>
+                            <span className="text-[9px] font-black text-amber-500/80 uppercase tracking-widest ml-1">Max Image Size: 5MB</span>
+                          </div>
                           <div className="relative group">
                             <input
                               type="file"
