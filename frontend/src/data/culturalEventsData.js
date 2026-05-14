@@ -179,48 +179,48 @@ export const culturalEventsData = {
     ],
     image: "/images/cards/card12.webp"
   },
-  18: {
-    id: 18,
-    title: "Clash of Auras: Face Off",
-    type: "cultural",
-    category: "Cultural",
-    date: "May 16, 2026",
-    time: "2:00 PM",
-    location: "Main Entrance",
-    participants: "Individual",
-    entryFee: "₹150",
-    description: "Get ready for an exciting battle of talent, confidence, and creativity in the Face Off event. Participants will compete head-to-head showcasing their skills, presence of mind, and performance abilities. Judging will be based on confidence, creativity, presentation, and overall impact.",
-    rules: [
-      "Dancers will be challenged to dance to unpredictable and varied DJ beats.",
-      "Music genres may include rap, pop, breakbeats, funk, electronic, house music, hip-hop, etc.",
-      "Judges will choose one dancer from each battle to advance to the next round until the battle progresses to 2 final dancers.",
-      "Any number of participants from the same college can participate.",
-      "Judges’ decisions will be final and binding."
-    ],
-    coordinators: [
-      {
-        name: "Sahana vidyadhar naik",
-        contact: "9011578429",
-        photo: "/images/event-heads/mca/Sahana.webp"
-      },
-      {
-        name: "Anvith H Naik",
-        contact: "6282177804",
-        photo: "/images/event-heads/mca/Anvith.webp"
-      }
-    ],
-    facultyCoordinators: [
-      // {
-      //   name: "Anvith H Naik",
-      //   contact: "TBD",
-      // },
-      {
-        name: "Mr Chandrakanth S",
-        // contact: "TBD",
-      }
-    ],
-    image: "/images/cards/card17.webp"
-  },
+  // 18: {
+  //   id: 18,
+  //   title: "Clash of Auras: Face Off",
+  //   type: "cultural",
+  //   category: "Cultural",
+  //   date: "May 16, 2026",
+  //   time: "2:00 PM",
+  //   location: "Main Entrance",
+  //   participants: "Individual",
+  //   entryFee: "₹150",
+  //   description: "Get ready for an exciting battle of talent, confidence, and creativity in the Face Off event. Participants will compete head-to-head showcasing their skills, presence of mind, and performance abilities. Judging will be based on confidence, creativity, presentation, and overall impact.",
+  //   rules: [
+  //     "Dancers will be challenged to dance to unpredictable and varied DJ beats.",
+  //     "Music genres may include rap, pop, breakbeats, funk, electronic, house music, hip-hop, etc.",
+  //     "Judges will choose one dancer from each battle to advance to the next round until the battle progresses to 2 final dancers.",
+  //     "Any number of participants from the same college can participate.",
+  //     "Judges’ decisions will be final and binding."
+  //   ],
+  //   coordinators: [
+  //     {
+  //       name: "Sahana vidyadhar naik",
+  //       contact: "9011578429",
+  //       photo: "/images/event-heads/mca/Sahana.webp"
+  //     },
+  //     {
+  //       name: "Anvith H Naik",
+  //       contact: "6282177804",
+  //       photo: "/images/event-heads/mca/Anvith.webp"
+  //     }
+  //   ],
+  //   facultyCoordinators: [
+  //     // {
+  //     //   name: "Anvith H Naik",
+  //     //   contact: "TBD",
+  //     // },
+  //     // {
+  //     //   name: "Mr Chandrakanth S",
+  //     //   // contact: "TBD",
+  //     // }
+  //   ],
+  //   image: "/images/cards/card17.webp"
+  // },
   20: {
     id: 20,
     title: "BATTLE NEXUS: Gaming - Free Fire",
