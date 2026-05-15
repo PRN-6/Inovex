@@ -40,7 +40,19 @@ const Media = () => {
   return (
     <div id="media" className="h-screen w-screen bg-black text-white overflow-hidden relative font-['Inter',sans-serif] md:pl-16">
       {/* Background Video Layer */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      <div className="absolute inset-0 z-0 overflow-hidden bg-black flex items-center justify-center">
+        {/* Blurred ambient background to fill empty space for vertical videos */}
+        <video
+          key={`ambient-${currentItem.videoUrl}`}
+          src={currentItem.videoUrl}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-40 blur-3xl scale-110"
+        />
+        
+        {/* Main crisp video */}
         <video
           key={currentItem.videoUrl}
           ref={bgRef}
@@ -50,13 +62,14 @@ const Media = () => {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover transition-opacity duration-1000 scale-100 md:scale-105"
+          className="w-full h-full object-contain transition-opacity duration-1000 relative z-10"
         />
+        
         {/* Technical Grid Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-20"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-20 z-20"></div>
         {/* Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent z-20 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 z-20 pointer-events-none"></div>
       </div>
 
       {/* Top Left: Title */}
